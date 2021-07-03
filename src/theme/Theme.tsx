@@ -12,4 +12,11 @@ export const theme = createMuiTheme({
       contrastText: "#fff"
     },
   },
+  overrides:{
+    MuiTextField:{
+      root:{
+        background:"#fff",
+      }
+    }
+  }
 });

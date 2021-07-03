@@ -72,6 +72,7 @@ const createWindow = async () => {
     width: 1280,
     height: 480,
     frame:false,
+    resizable: false,
     // fullscreenable:true,
     // fullscreen:true,
     icon: getAssetPath('icon.png'),

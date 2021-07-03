@@ -2,15 +2,19 @@ import React from 'react';
 import { Button, Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
+import NavButton from '../component/NavButton';
 
 const useStyles = makeStyles(() => ({
   root: {
     background:
       'linear-gradient(180deg, rgba(250, 93, 185, 1) 0%, rgba(239, 35, 35, 1) 100% )',
   },
-  grid:{
-    height:"90%"
-  }
+  grid: {
+    height: '90%',
+  },
+  NumberPoint: {
+    fontWeight: 900,
+  },
 }));
 
 export default function Home() {
@@ -19,10 +23,10 @@ export default function Home() {
     <Box height="100vh" p={2}>
       <Box
         position="absolute"
-        top="-5%"
+        top="-15%"
         left="-30%"
         zIndex="-9999"
-        minHeight="120vh"
+        minHeight="150vh"
         width="70%"
         borderRadius="50%"
         className={classes.root}
@@ -39,12 +43,12 @@ export default function Home() {
       <Grid
         container
         direction="row"
-        justify="space-around"
+        justify="space-between"
         alignItems="center"
-        spacing={2}
+        spacing={4}
         className={classes.grid}
       >
-        <Grid item lg={5}>
+        <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
           <Grid
             container
             alignItems="flex-end"
@@ -52,7 +56,11 @@ export default function Home() {
             direction="column"
           >
             <Grid item>
-              <Typography variant="h2" component="h2">
+              <Typography
+                variant="h2"
+                component="h2"
+                className={classes.NumberPoint}
+              >
                 99999999{' '}
               </Typography>
             </Grid>
@@ -63,24 +71,29 @@ export default function Home() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item lg={3}>
-          <Typography variant="h4" component="h1">
-            Juancho Castro{' '}
-          </Typography>
+        <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
+       
+        <Grid
+            container
+            alignItems="flex-end"
+            justify="center"
+            direction="column"
+          >
+            <Grid item>
+              <Typography
+                variant="h4"
+                component="h2"
+                color="secondary"
+                align="right"
+                className={classes.NumberPoint}
+              >
+                Juan Carlos
+              </Typography>
+            </Grid>
         </Grid>
-        <Grid item lg={4}>
-          <Grid container direction="column" spacing={2}>
-            <Grid item>
-              <Button variant="contained" color="primary">
-                Ayuda{' '}
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button variant="contained" color="primary">
-                Bar{' '}
-              </Button>
-            </Grid>
-          </Grid>
+        </Grid>
+        <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
+         <NavButton />
         </Grid>
       </Grid>
     </Box>
