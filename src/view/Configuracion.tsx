@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   buttonWhite: {
-    color: '#fff !important',
+    color: '#fff',
     marginRight: theme.spacing(1),
   },
 }));
@@ -149,26 +149,10 @@ function getStepContent(step) {
 export default function Configuracion() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
 
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
-
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
-  };
-
   const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
   };
 
   const handleBack = () => {
@@ -196,14 +180,22 @@ export default function Configuracion() {
         {activeStep === steps.length ? (
           <Grid>
             <Typography className={classes.instructions}>
-              All steps completed - you&apos;re finished
+              Ya configuraste la Fidelizacion
             </Typography>
             <Button
               variant="text"
               onClick={handleReset}
               className={classes.buttonWhite}
             >
-              Reset
+              Reiniciar
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleReset}
+              className={classes.buttonWhite}
+            >
+              Ir a la App
             </Button>
           </Grid>
         ) : (
