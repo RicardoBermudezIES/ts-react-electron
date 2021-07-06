@@ -27,7 +27,7 @@ export default function Login() {
                   name="username"
                   fullWidth
                   id="filled-basic"
-                  label="Filled"
+                  label="Usuario"
                   variant="filled"
                 />
               </Grid>
@@ -36,7 +36,7 @@ export default function Login() {
                   name="password"
                   fullWidth
                   id="filled-basic"
-                  label="Filled"
+                  label="Contraseña"
                   variant="filled"
                 />
               </Grid>

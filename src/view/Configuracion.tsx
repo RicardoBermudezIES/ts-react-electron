@@ -9,7 +9,7 @@ import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import VideoLabelIcon from '@material-ui/icons/VideoLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { StepConnector } from '@material-ui/core';
+import { Box, Grid, StepConnector, TextField } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,76 +22,116 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
   },
+  buttonWhite: {
+    color: '#fff !important',
+    marginRight: theme.spacing(1),
+  },
 }));
 
 const ColorlibConnector = withStyles({
-    alternativeLabel: {
-      top: 22,
-    },
-    active: {
-      '& $line': {
-        backgroundImage:
-          'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
-      },
-    },
-    completed: {
-      '& $line': {
-        backgroundImage:
-          'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
-      },
-    },
-    line: {
-      height: 3,
-      border: 0,
-      backgroundColor: '#eaeaf0',
-      borderRadius: 1,
-    },
-  })(StepConnector);
-  
-  const useColorlibStepIconStyles = makeStyles({
-    root: {
-      backgroundColor: '#ccc',
-      zIndex: 1,
-      color: '#fff',
-      width: 50,
-      height: 50,
-      display: 'flex',
-      borderRadius: '50%',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    active: {
+  alternativeLabel: {
+    top: 22,
+  },
+  active: {
+    '& $line': {
       backgroundImage:
-        'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
-      boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+        'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
     },
-    completed: {
+  },
+  completed: {
+    '& $line': {
       backgroundImage:
-        'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
+        'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
     },
-  });
-  
-  function ColorlibStepIcon(props) {
-    const classes = useColorlibStepIconStyles();
-    const { active, completed } = props;
-  
-    const icons = {
-      1: <SettingsIcon />,
-      2: <GroupAddIcon />,
-      3: <VideoLabelIcon />,
-    };
-  
-    return (
-      <div
-        className={clsx(classes.root, {
-          [classes.active]: active,
-          [classes.completed]: completed,
-        })}
-      >
-        {icons[String(props.icon)]}
-      </div>
-    );
-  }
+  },
+  line: {
+    height: 3,
+    border: 0,
+    backgroundColor: '#eaeaf0',
+    borderRadius: 1,
+  },
+})(StepConnector);
+
+const useColorlibStepIconStyles = makeStyles({
+  root: {
+    backgroundColor: '#ccc',
+    zIndex: 1,
+    color: '#fff',
+    width: 50,
+    height: 50,
+    display: 'flex',
+    borderRadius: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  active: {
+    backgroundImage:
+      'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
+    boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+  },
+  completed: {
+    backgroundImage:
+      'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
+  },
+});
+
+function ColorlibStepIcon(props) {
+  const classes = useColorlibStepIconStyles();
+  const { active, completed } = props;
+
+  const icons = {
+    1: <SettingsIcon />,
+    2: <GroupAddIcon />,
+    3: <VideoLabelIcon />,
+  };
+
+  return (
+    <div
+      className={clsx(classes.root, {
+        [classes.active]: active,
+        [classes.completed]: completed,
+      })}
+    >
+      {icons[String(props.icon)]}
+    </div>
+  );
+}
+
+function Form1() {
+  return (
+    <Box p={2}>
+      <Grid container direction="row" spacing={2}>
+        <Grid item lg={4} md={4} sm={4} xs={4}>
+          <TextField name="user" label="Usuario" variant="filled" />
+        </Grid>
+        <Grid item lg={4} md={4} sm={4} xs={4}>
+          <TextField name="password" label="password" variant="filled" />
+        </Grid>
+        <Grid item lg={4} md={4} sm={4} xs={4}>
+          <TextField name="host" label="host" variant="filled" />
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+function Form2() {
+  return (
+    <Box p={2}>
+      <Grid container direction="row" spacing={2}>
+        <Grid item lg={4} md={4} sm={4} xs={4}>
+          <TextField name="tipo" label="Tipo de App" variant="filled" />
+        </Grid>
+        <Grid item lg={4} md={4} sm={4} xs={4}>
+          <TextField name="casino" label="casino" variant="filled" />
+        </Grid>
+        <Grid item lg={4} md={4} sm={4} xs={4}>
+          <TextField name="maquina" label="maquina" variant="filled" />
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
 
 function getSteps() {
   return ['Datos de conexión', 'Configuración de Fidelización'];
@@ -100,11 +140,9 @@ function getSteps() {
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return 'Select campaign settings...';
-    case 1:
-      return 'What is an ad group anyways?';
+      return <Form1 />;
     default:
-      return 'Unknown step';
+      return <Form2 />;
   }
 }
 
@@ -137,74 +175,62 @@ export default function Configuracion() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
   const handleReset = () => {
     setActiveStep(0);
   };
 
   return (
     <div className={classes.root}>
-      <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+      <Stepper
+        alternativeLabel
+        activeStep={activeStep}
+        connector={<ColorlibConnector />}
+      >
         {steps.map((label) => (
           <Step key={label}>
             <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
           </Step>
         ))}
       </Stepper>
-      <div>
+      <Grid>
         {activeStep === steps.length ? (
-          <div>
+          <Grid>
             <Typography className={classes.instructions}>
               All steps completed - you&apos;re finished
             </Typography>
-            <Button onClick={handleReset} className={classes.button}>
+            <Button
+              variant="text"
+              onClick={handleReset}
+              className={classes.buttonWhite}
+            >
               Reset
             </Button>
-          </div>
+          </Grid>
         ) : (
-          <div>
-            <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
-            <div>
-              <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-                Back
+          <Grid>
+            <Grid className={classes.instructions}>
+              {getStepContent(activeStep)}
+            </Grid>
+            <Grid container justify="space-between">
+              <Button
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                className={classes.buttonWhite}
+              >
+                Atras
               </Button>
-              {isStepOptional(activeStep) && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSkip}
-                  className={classes.button}
-                >
-                  Skip
-                </Button>
-              )}
-
               <Button
                 variant="contained"
                 color="primary"
                 onClick={handleNext}
                 className={classes.button}
               >
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                {activeStep === steps.length - 1 ? 'Terminar' : 'Siguiente'}
               </Button>
-            </div>
-          </div>
+            </Grid>
+          </Grid>
         )}
-      </div>
+      </Grid>
     </div>
   );
 }
