@@ -16,6 +16,21 @@ export const theme = createMuiTheme({
     MuiTextField:{
       root:{
         background:"#fff",
+       
+      }
+    },
+    MuiSelect:{
+      root:{
+        background:"#fff",
+      
+      },
+      filled:{
+        background:"#fff",
+      },
+      select:{
+        "&:focus":{
+          backgroundColor: "rgba(255,255,255,0.9)"
+        }
       }
     }
   }
