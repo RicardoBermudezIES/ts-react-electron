@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { MutableRefObject, useRef, useState } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
 import SettingsIcon from '@material-ui/icons/Settings';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import VideoLabelIcon from '@material-ui/icons/VideoLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { Box, Grid, StepConnector, TextField } from '@material-ui/core';
+import {
+  Stepper,
+  Step,
+  StepLabel,
+  Button,
+  Typography,
+  Box,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  StepConnector,
+  TextField,
+} from '@material-ui/core';
+import Keyboard from 'react-simple-keyboard';
+import { useHistory } from 'react-router';
+
+const useStyles2 = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ColorlibConnector = withStyles({
   alternativeLabel: {
-    top: 22,
+    top: 20,
   },
   active: {
     '& $line': {
@@ -45,7 +66,7 @@ const ColorlibConnector = withStyles({
     },
   },
   line: {
-    height: 3,
+    height: 2,
     border: 0,
     backgroundColor: '#eaeaf0',
     borderRadius: 1,
@@ -57,8 +78,8 @@ const useColorlibStepIconStyles = makeStyles({
     backgroundColor: '#ccc',
     zIndex: 1,
     color: '#fff',
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     display: 'flex',
     borderRadius: '50%',
     justifyContent: 'center',
@@ -75,7 +96,7 @@ const useColorlibStepIconStyles = makeStyles({
   },
 });
 
-function ColorlibStepIcon(props) {
+function ColorlibStepIcon(props: any) {
   const classes = useColorlibStepIconStyles();
   const { active, completed } = props;
 
@@ -97,36 +118,189 @@ function ColorlibStepIcon(props) {
   );
 }
 
-function Form1() {
+function Form1({ setInputs, inputs, setIsSync }) {
+  const [layoutName, setLayoutName] = useState('default');
+  const [inputName, setInputName] = useState();
+  const [keyboardOpen, setkeyboardOpen] = useState(false);
+  const keyboard = useRef();
+
+  const onChangeAll = (inputs) => {
+    setInputs({ ...inputs });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setIsSync(false)
+    console.log(inputs);
+  };
+
+  const onChangeInput = (event) => {
+    const inputVal = event.target.value;
+
+    setInputs({
+      ...inputs,
+      [inputName]: inputVal,
+    });
+  };
+  const handleShift = () => {
+    const newLayoutName = layoutName === 'default' ? 'shift' : 'default';
+    setLayoutName(newLayoutName);
+  };
+
+  const onKeyPress = (button) => {
+    if (button === '{shift}' || button === '{lock}') handleShift();
+  };
+
+  const getInputValue = (inputName) => {
+    return inputs[inputName] || '';
+  };
+
+  const closeKeyboard = () => {
+    setkeyboardOpen(false);
+  };
+
+  const setActiveInput = (inputName) => {
+    setInputName(inputName);
+    setkeyboardOpen(true);
+  };
+
   return (
     <Box p={2}>
-      <Grid container direction="row" spacing={2}>
-        <Grid item lg={4} md={4} sm={4} xs={4}>
-          <TextField name="user" label="Usuario" variant="filled" />
+      <form onSubmit={onSubmit}>
+        <Grid container direction="row" spacing={2}>
+          <Grid item lg={4} md={4} sm={4} xs={4}>
+            <TextField
+              fullWidth
+              name="user"
+              label="Usuario"
+              value={getInputValue('user')}
+              onChange={onChangeInput}
+              onFocus={() => setActiveInput('user')}
+              variant="filled"
+            />
+          </Grid>
+          <Grid item lg={4} md={4} sm={4} xs={4}>
+            <TextField
+              fullWidth
+              name="password"
+              label="password"
+              variant="filled"
+              value={getInputValue('password')}
+              onFocus={() => setActiveInput('password')}
+              onChange={onChangeInput}
+            />
+          </Grid>
+          <Grid item lg={4} md={4} sm={4} xs={4}>
+            <TextField
+              fullWidth
+              name="host"
+              label="host"
+              value={getInputValue('host')}
+              onFocus={() => setActiveInput('host')}
+              variant="filled"
+              onChange={onChangeInput}
+            />
+          </Grid>
         </Grid>
-        <Grid item lg={4} md={4} sm={4} xs={4}>
-          <TextField name="password" label="password" variant="filled" />
+        <Grid container style={{ marginTop: 20 }}>
+          <Grid item lg={3} md={3} sm={3} xs={3}>
+            <Button type="submit" variant="contained" color="primary">
+              Sincronizar
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item lg={4} md={4} sm={4} xs={4}>
-          <TextField name="host" label="host" variant="filled" />
-        </Grid>
+      </form>
+      <Grid className={`keyboardContainer ${!keyboardOpen ? 'hidden' : ''}`}>
+        <button className="closeKeyBoard" onClick={closeKeyboard}>
+          x
+        </button>
+        <Keyboard
+          keyboardRef={(r) => (keyboard.current = r)}
+          inputName={inputName}
+          onChangeAll={onChangeAll}
+          layoutName={layoutName}
+          onKeyPress={onKeyPress}
+        />
       </Grid>
     </Box>
   );
 }
 
-function Form2() {
+function Form2({
+  handleChange,
+  handleChangeCasino,
+  handleChangeMaquina,
+  funcionalidad,
+  casino,
+  maquina,
+}) {
+  const classes = useStyles2();
+
   return (
     <Box p={2}>
       <Grid container direction="row" spacing={2}>
         <Grid item lg={4} md={4} sm={4} xs={4}>
-          <TextField name="tipo" label="Tipo de App" variant="filled" />
+          <FormControl
+            fullWidth
+            variant="filled"
+            className={classes.formControl}
+          >
+            <InputLabel id="Funcionalidad">Funcionalidad</InputLabel>
+            <Select
+              value={funcionalidad}
+              labelId="Funcionalidad"
+              onChange={handleChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item lg={4} md={4} sm={4} xs={4}>
-          <TextField name="casino" label="casino" variant="filled" />
+          <FormControl
+            fullWidth
+            variant="filled"
+            className={classes.formControl}
+          >
+            <InputLabel id="Casino">Casino</InputLabel>
+            <Select
+              value={casino}
+              labelId="Casino"
+              onChange={handleChangeCasino}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item lg={4} md={4} sm={4} xs={4}>
-          <TextField name="maquina" label="maquina" variant="filled" />
+          <FormControl
+            fullWidth
+            variant="filled"
+            className={classes.formControl}
+          >
+            <InputLabel id="Maquina">Maquina</InputLabel>
+            <Select
+              value={maquina}
+              labelId="Maquina"
+              onChange={handleChangeMaquina}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
       </Grid>
     </Box>
@@ -137,16 +311,44 @@ function getSteps() {
   return ['Datos de conexión', 'Configuración de Fidelización'];
 }
 
-function getStepContent(step) {
+function getStepContent(
+  step,
+  setInputs,
+  inputs,
+  handleChange,
+  handleChangeCasino,
+  handleChangeMaquina,
+  funcionalidad,
+  casino,
+  maquina,
+  setIsSync
+) {
   switch (step) {
     case 0:
-      return <Form1 />;
+      return <Form1 setIsSync={setIsSync} setInputs={setInputs} inputs={inputs} />;
     default:
-      return <Form2 />;
+      return (
+        <Form2
+          funcionalidad={funcionalidad}
+          casino={casino}
+          maquina={maquina}
+          handleChange={handleChange}
+          handleChangeCasino={handleChangeCasino}
+          handleChangeMaquina={handleChangeMaquina}
+        />
+      );
   }
 }
 
 export default function Configuracion() {
+  const history = useHistory()
+  const [isSync, setIsSync] = useState(true)
+  const [inputs, setInputs] = useState({
+    user: null,
+    password: null,
+    host: null,
+  });
+
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
@@ -163,6 +365,23 @@ export default function Configuracion() {
     setActiveStep(0);
   };
 
+  const [funcionalidad, setFuncionalidad] = React.useState('');
+  const [casino, setCasino] = React.useState('');
+  const [maquina, setMaquina] = React.useState('');
+
+  const handleChange = (event) => {
+    setFuncionalidad(event.target.value);
+  };
+  const handleChangeCasino = (event) => {
+    setCasino(event.target.value);
+  };
+  const handleChangeMaquina = (event) => {
+    setMaquina(event.target.value);
+  };
+
+  const handleApp = (event) => {
+    history.push('/login')
+  }
   return (
     <div className={classes.root}>
       <Stepper
@@ -192,7 +411,7 @@ export default function Configuracion() {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleReset}
+              onClick={handleApp}
               className={classes.buttonWhite}
             >
               Ir a la App
@@ -201,7 +420,18 @@ export default function Configuracion() {
         ) : (
           <Grid>
             <Grid className={classes.instructions}>
-              {getStepContent(activeStep)}
+              {getStepContent(
+                activeStep,
+                setInputs,
+                inputs,
+                handleChange,
+                handleChangeCasino,
+                handleChangeMaquina,
+                funcionalidad,
+                casino,
+                maquina,
+                setIsSync
+              )}
             </Grid>
             <Grid container justify="space-between">
               <Button
@@ -211,14 +441,26 @@ export default function Configuracion() {
               >
                 Atras
               </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-                className={classes.button}
-              >
-                {activeStep === steps.length - 1 ? 'Terminar' : 'Siguiente'}
-              </Button>
+              {activeStep === steps.length - 1 ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  className={classes.button}
+                >
+                  Terminar{' '}
+                </Button>
+              ) : (
+                <Button
+                  disabled={isSync}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  className={classes.button}
+                >
+                  Siguiente
+                </Button>
+              )}
             </Grid>
           </Grid>
         )}
