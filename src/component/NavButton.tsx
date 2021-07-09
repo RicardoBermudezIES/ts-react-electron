@@ -6,8 +6,12 @@ export default function NavButton() {
   const history = useHistory();
 
   const goBar = () => {
-    history.push('/bar')
-  }
+    history.push('/bar');
+  };
+
+  const goPuntos = () => {
+    history.push('/puntos');
+  };
   return (
     <Grid justify="flex-end" container spacing={2}>
       <Grid item>
@@ -18,7 +22,7 @@ export default function NavButton() {
             </Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="primary">
+            <Button onClick={goPuntos} variant="contained" color="primary">
               Puntos
             </Button>
           </Grid>

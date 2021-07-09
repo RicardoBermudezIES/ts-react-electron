@@ -5,33 +5,48 @@ export const theme = createMuiTheme({
   palette: {
     primary: {
       main: pink[500],
-      contrastText: "#fff"
+      contrastText: '#fff',
     },
     secondary: {
       main: lightBlue[500],
-      contrastText: "#fff"
+      contrastText: '#fff',
     },
   },
-  overrides:{
-    MuiTextField:{
-      root:{
-        background:"#fff",
-       
-      }
+  overrides: {
+    MuiTextField: {
+      root: {
+        background: '#fff',
+      },
     },
-    MuiSelect:{
-      root:{
-        background:"#fff",
-      
+    MuiStepper: {
+      root: {
+        background: 'transparent',
       },
-      filled:{
-        background:"#fff",
+    },
+    MuiStepLabel: {
+      alternativeLabel: {
+        color: '#ffffffab',
+        '& .MuiStepLabel-active': { color: '#ffffff' },
+        '& .MuiStepLabel-completed': { color: '#ffffff' },
       },
-      select:{
-        "&:focus":{
-          backgroundColor: "rgba(255,255,255,0.9)"
-        }
-      }
-    }
-  }
+    },
+    MuiDialog: {
+      root: {
+        marginTop: -150,
+      },
+    },
+    MuiSelect: {
+      root: {
+        background: '#fff',
+      },
+      filled: {
+        background: '#fff',
+      },
+      select: {
+        '&:focus': {
+          backgroundColor: 'rgba(255,255,255,0.9)',
+        },
+      },
+    },
+  },
 });

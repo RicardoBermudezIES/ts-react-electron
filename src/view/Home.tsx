@@ -24,7 +24,7 @@ export default function Home() {
       <Box
         position="absolute"
         top="-15%"
-        left="-30%"
+        left="-33%"
         zIndex="-9999"
         minHeight="150vh"
         width="70%"
@@ -72,16 +72,15 @@ export default function Home() {
           </Grid>
         </Grid>
         <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
-       
-        <Grid
+          <Grid
             container
             alignItems="flex-end"
             justify="center"
             direction="column"
           >
-            <Grid item>
+            <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
               <Typography
-                variant="h4"
+                variant="h2"
                 component="h2"
                 color="secondary"
                 align="right"
@@ -90,10 +89,10 @@ export default function Home() {
                 Juan Carlos
               </Typography>
             </Grid>
-        </Grid>
+          </Grid>
         </Grid>
         <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
-         <NavButton />
+          <NavButton />
         </Grid>
       </Grid>
     </Box>

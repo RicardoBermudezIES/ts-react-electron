@@ -35,6 +35,7 @@ const useStyles2 = makeStyles((theme) => ({
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
+    color:"#fff"
   },
   button: {
     marginRight: theme.spacing(1),
@@ -68,6 +69,7 @@ const ColorlibConnector = withStyles({
   line: {
     height: 2,
     border: 0,
+    color: '#fff',
     backgroundColor: '#eaeaf0',
     borderRadius: 1,
   },
