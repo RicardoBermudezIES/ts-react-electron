@@ -6,6 +6,7 @@ import paths from 'path';
 import { ThemeProvider } from '@material-ui/core';
 import { theme } from './theme/Theme';
 import { router } from './router';
+import DataProvider from './context/Context';
 
 
 // const Hello = () => {
@@ -50,6 +51,7 @@ import { router } from './router';
 export default function App() {
 
   return (
+    <DataProvider>
     <Router>
       <ThemeProvider theme={theme}>
         <Switch>
@@ -59,5 +61,6 @@ export default function App() {
         </Switch>
       </ThemeProvider>
     </Router>
+    </DataProvider>
   );
 }
