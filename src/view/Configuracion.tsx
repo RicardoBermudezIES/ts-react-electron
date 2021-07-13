@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -12,11 +12,14 @@ import {
   Typography,
   Grid,
   StepConnector,
+  Snackbar,
 } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { ipcRenderer } from 'electron';
 import Form1 from '../component/configuracion/Form1';
 import Form2 from '../component/configuracion/Form2';
+import { DataContext } from '../context/Context';
+import Alert from '../component/Alert/Alert';
 
 const ipc = ipcRenderer;
 
@@ -108,7 +111,6 @@ function ColorlibStepIcon(props: any) {
   );
 }
 
-
 function getSteps() {
   return ['Datos de conexión', 'Configuración de Fidelización'];
 }
@@ -141,6 +143,9 @@ function getStepContent(
 }
 
 export default function Configuracion() {
+  //estado Globales
+  const { token } = useContext(DataContext);
+
   const history = useHistory();
   const [isSync, setIsSync] = useState(true);
   const [inputs, setInputs] = useState({
@@ -167,7 +172,27 @@ export default function Configuracion() {
 
   const [casino, setCasino] = React.useState('');
   const [maquina, setMaquina] = React.useState('');
+  const [errorVinculacion, setErrorVinculacion] = React.useState('');
+  const [open, setOpen] = React.useState(false);
 
+  const handleFidelizar = () => {
+    let args = {
+      host: inputs.host,
+      token: token,
+      serial: maquina,
+    };
+    maquina !== '' ? ipc.send('VincularMaquina', args) : null;
+  };
+
+  useEffect(() => {
+    ipc.on('VincularMaquina', (event, arg) => {
+      console.log(arg, 'VincularMaquina configuracion.tsx');
+      if (arg.statusDTO.code !== '00')
+        setErrorVinculacion(arg.statusDTO.message);
+        setOpen(true);
+    });
+    console.log(errorVinculacion);
+  }, []);
 
   const handleChangeCasino = (event) => {
     setCasino(event.target.value);
@@ -192,6 +217,13 @@ export default function Configuracion() {
           </Step>
         ))}
       </Stepper>
+      {errorVinculacion ? (
+        <Alert
+          onClose={() => setOpen(false)}
+          open={open}
+          message={errorVinculacion}
+        />
+      ) : null}
       <Grid>
         {activeStep === steps.length ? (
           <Grid>
@@ -240,10 +272,10 @@ export default function Configuracion() {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleNext}
+                  onClick={handleFidelizar}
                   className={classes.button}
                 >
-                  Terminar{' '}
+                  Terminar
                 </Button>
               ) : (
                 <Button
