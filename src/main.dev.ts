@@ -1,3 +1,4 @@
+import { loginSmol } from './servicios/auth';
 /* eslint global-require: off, no-console: off */
 
 /**
@@ -11,10 +12,16 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+import { getCasino } from './servicios/getCasinos';
+import { getMaquinas } from './servicios/getMaquinas';
+
+
+
+const ipc = ipcMain
 
 export default class AppUpdater {
   constructor() {
@@ -119,6 +126,31 @@ const createWindow = async () => {
 /**
  * Add event listeners...
  */
+
+//recibe y envia el token a la configuración
+ipc.on('message-config', async (event, arg) => {
+  let token= await loginSmol(arg)
+  console.log(token, "en el main.dev")
+  event.reply('message-config', token) 
+})
+
+//peticion para listar casino
+ipc.on('get-casinos', async (event,arg) => {
+ 
+  console.log(arg)
+  let casinos= await getCasino(arg)
+  console.log(casinos, "en el main.dev")
+  event.reply('get-casinos', casinos) 
+})
+
+//peticion de listar maquinas
+ipc.on('get-maquinas', async (event,arg) => {
+ 
+  console.log(arg)
+ let maquinas= await getMaquinas(arg)
+ console.log(maquinas, "en el main.dev")
+ event.reply('get-maquinas', maquinas) 
+})
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
