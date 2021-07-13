@@ -18,6 +18,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { getCasino } from './servicios/getCasinos';
 import { getMaquinas } from './servicios/getMaquinas';
+import { VincularMaquina } from './servicios/VincularMaquina';
 
 
 
@@ -151,6 +152,17 @@ ipc.on('get-maquinas', async (event,arg) => {
  console.log(maquinas, "en el main.dev")
  event.reply('get-maquinas', maquinas) 
 })
+
+
+//vincularMaquina 
+ipc.on('VincularMaquina', async (event,arg) => {
+ 
+  console.log(arg)
+ let res = await VincularMaquina(arg)
+ console.log(res, "en el main.dev")
+ event.reply('VincularMaquina', res) 
+})
+
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
