@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -10,32 +10,20 @@ import {
   StepLabel,
   Button,
   Typography,
-  Box,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   StepConnector,
-  TextField,
 } from '@material-ui/core';
-import Keyboard from 'react-simple-keyboard';
 import { useHistory } from 'react-router';
+import { ipcRenderer } from 'electron';
+import Form1 from '../component/configuracion/Form1';
+import Form2 from '../component/configuracion/Form2';
 
-const useStyles2 = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}));
+const ipc = ipcRenderer;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    color:"#fff"
+    color: '#fff',
   },
   button: {
     marginRight: theme.spacing(1),
@@ -120,194 +108,6 @@ function ColorlibStepIcon(props: any) {
   );
 }
 
-function Form1({ setInputs, inputs, setIsSync }) {
-  const [layoutName, setLayoutName] = useState('default');
-  const [inputName, setInputName] = useState();
-  const [keyboardOpen, setkeyboardOpen] = useState(false);
-  const keyboard = useRef();
-
-  const onChangeAll = (inputs) => {
-    setInputs({ ...inputs });
-  };
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    setIsSync(false)
-    console.log(inputs);
-  };
-
-  const onChangeInput = (event) => {
-    const inputVal = event.target.value;
-
-    setInputs({
-      ...inputs,
-      [inputName]: inputVal,
-    });
-  };
-  const handleShift = () => {
-    const newLayoutName = layoutName === 'default' ? 'shift' : 'default';
-    setLayoutName(newLayoutName);
-  };
-
-  const onKeyPress = (button) => {
-    if (button === '{shift}' || button === '{lock}') handleShift();
-  };
-
-  const getInputValue = (inputName) => {
-    return inputs[inputName] || '';
-  };
-
-  const closeKeyboard = () => {
-    setkeyboardOpen(false);
-  };
-
-  const setActiveInput = (inputName) => {
-    setInputName(inputName);
-    setkeyboardOpen(true);
-  };
-
-  return (
-    <Box p={2}>
-      <form onSubmit={onSubmit}>
-        <Grid container direction="row" spacing={2}>
-          <Grid item lg={4} md={4} sm={4} xs={4}>
-            <TextField
-              fullWidth
-              name="user"
-              label="Usuario"
-              value={getInputValue('user')}
-              onChange={onChangeInput}
-              onFocus={() => setActiveInput('user')}
-              variant="filled"
-            />
-          </Grid>
-          <Grid item lg={4} md={4} sm={4} xs={4}>
-            <TextField
-              fullWidth
-              name="password"
-              label="password"
-              variant="filled"
-              value={getInputValue('password')}
-              onFocus={() => setActiveInput('password')}
-              onChange={onChangeInput}
-            />
-          </Grid>
-          <Grid item lg={4} md={4} sm={4} xs={4}>
-            <TextField
-              fullWidth
-              name="host"
-              label="host"
-              value={getInputValue('host')}
-              onFocus={() => setActiveInput('host')}
-              variant="filled"
-              onChange={onChangeInput}
-            />
-          </Grid>
-        </Grid>
-        <Grid container style={{ marginTop: 20 }}>
-          <Grid item lg={3} md={3} sm={3} xs={3}>
-            <Button type="submit" variant="contained" color="primary">
-              Sincronizar
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
-      <Grid className={`keyboardContainer ${!keyboardOpen ? 'hidden' : ''}`}>
-        <button className="closeKeyBoard" onClick={closeKeyboard}>
-          x
-        </button>
-        <Keyboard
-          keyboardRef={(r) => (keyboard.current = r)}
-          inputName={inputName}
-          onChangeAll={onChangeAll}
-          layoutName={layoutName}
-          onKeyPress={onKeyPress}
-        />
-      </Grid>
-    </Box>
-  );
-}
-
-function Form2({
-  handleChange,
-  handleChangeCasino,
-  handleChangeMaquina,
-  funcionalidad,
-  casino,
-  maquina,
-}) {
-  const classes = useStyles2();
-
-  return (
-    <Box p={2}>
-      <Grid container direction="row" spacing={2}>
-        <Grid item lg={4} md={4} sm={4} xs={4}>
-          <FormControl
-            fullWidth
-            variant="filled"
-            className={classes.formControl}
-          >
-            <InputLabel id="Funcionalidad">Funcionalidad</InputLabel>
-            <Select
-              value={funcionalidad}
-              labelId="Funcionalidad"
-              onChange={handleChange}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item lg={4} md={4} sm={4} xs={4}>
-          <FormControl
-            fullWidth
-            variant="filled"
-            className={classes.formControl}
-          >
-            <InputLabel id="Casino">Casino</InputLabel>
-            <Select
-              value={casino}
-              labelId="Casino"
-              onChange={handleChangeCasino}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item lg={4} md={4} sm={4} xs={4}>
-          <FormControl
-            fullWidth
-            variant="filled"
-            className={classes.formControl}
-          >
-            <InputLabel id="Maquina">Maquina</InputLabel>
-            <Select
-              value={maquina}
-              labelId="Maquina"
-              onChange={handleChangeMaquina}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
-    </Box>
-  );
-}
 
 function getSteps() {
   return ['Datos de conexión', 'Configuración de Fidelización'];
@@ -317,24 +117,22 @@ function getStepContent(
   step,
   setInputs,
   inputs,
-  handleChange,
   handleChangeCasino,
   handleChangeMaquina,
-  funcionalidad,
   casino,
   maquina,
   setIsSync
 ) {
   switch (step) {
     case 0:
-      return <Form1 setIsSync={setIsSync} setInputs={setInputs} inputs={inputs} />;
+      return (
+        <Form1 setIsSync={setIsSync} setInputs={setInputs} inputs={inputs} />
+      );
     default:
       return (
         <Form2
-          funcionalidad={funcionalidad}
           casino={casino}
           maquina={maquina}
-          handleChange={handleChange}
           handleChangeCasino={handleChangeCasino}
           handleChangeMaquina={handleChangeMaquina}
         />
@@ -343,8 +141,8 @@ function getStepContent(
 }
 
 export default function Configuracion() {
-  const history = useHistory()
-  const [isSync, setIsSync] = useState(true)
+  const history = useHistory();
+  const [isSync, setIsSync] = useState(true);
   const [inputs, setInputs] = useState({
     user: null,
     password: null,
@@ -367,13 +165,10 @@ export default function Configuracion() {
     setActiveStep(0);
   };
 
-  const [funcionalidad, setFuncionalidad] = React.useState('');
   const [casino, setCasino] = React.useState('');
   const [maquina, setMaquina] = React.useState('');
 
-  const handleChange = (event) => {
-    setFuncionalidad(event.target.value);
-  };
+
   const handleChangeCasino = (event) => {
     setCasino(event.target.value);
   };
@@ -382,8 +177,8 @@ export default function Configuracion() {
   };
 
   const handleApp = (event) => {
-    history.push('/login')
-  }
+    history.push('/login');
+  };
   return (
     <div className={classes.root}>
       <Stepper
@@ -426,10 +221,8 @@ export default function Configuracion() {
                 activeStep,
                 setInputs,
                 inputs,
-                handleChange,
                 handleChangeCasino,
                 handleChangeMaquina,
-                funcionalidad,
                 casino,
                 maquina,
                 setIsSync
