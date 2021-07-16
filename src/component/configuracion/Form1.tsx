@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Button,
   Box,
@@ -7,51 +7,49 @@ import {
 } from '@material-ui/core';
 import Keyboard from 'react-simple-keyboard';
 import { ipcRenderer } from 'electron';
-import { DataContext } from '../../context/Context';
 
 const ipc = ipcRenderer;
 
 export default function Form1({ setInputs, inputs, setIsSync }) {
 
 
-    //estado Globales 
-    const { setToken, setConfig } = useContext(DataContext);
+    //estado Globales
 
     const [layoutName, setLayoutName] = useState('default');
     const [inputName, setInputName] = useState();
     const [keyboardOpen, setkeyboardOpen] = useState(false);
     const keyboard = useRef();
-  
+
     const onChangeAll = (inputs) => {
       setInputs({ ...inputs });
     };
-  
+
     const onSubmit = (e) => {
       e.preventDefault();
-  
+
       console.log(inputs);
       ipc.send('message-config', inputs);
-      setConfig(inputs);
+      localStorage.setItem('authConfig', JSON.stringify(inputs));
     };
-  
+
     // recibir el token del ipcMain
-  
+
     useEffect(() => {
       getToken();
     }, []);
-  
+
     const getToken = () => {
       ipc.on('message-config', (event, arg) => {
-        if (arg.token !== null) {
-          setToken(arg.token);
+        if (arg?.token !== null) {
+          localStorage.setItem('token',arg?.token);
           setIsSync(false);
         }
       });
     };
-  
+
     const onChangeInput = (event) => {
       const inputVal = event.target.value;
-  
+
       setInputs({
         ...inputs,
         [inputName]: inputVal,
@@ -61,24 +59,24 @@ export default function Form1({ setInputs, inputs, setIsSync }) {
       const newLayoutName = layoutName === 'default' ? 'shift' : 'default';
       setLayoutName(newLayoutName);
     };
-  
+
     const onKeyPress = (button) => {
       if (button === '{shift}' || button === '{lock}') handleShift();
     };
-  
+
     const getInputValue = (inputName) => {
       return inputs[inputName] || '';
     };
-  
+
     const closeKeyboard = () => {
       setkeyboardOpen(false);
     };
-  
+
     const setActiveInput = (inputName) => {
       setInputName(inputName);
       setkeyboardOpen(true);
     };
-  
+
     return (
       <Box p={2}>
         <form onSubmit={onSubmit}>
@@ -140,4 +138,3 @@ export default function Form1({ setInputs, inputs, setIsSync }) {
       </Box>
     );
   }
-  
