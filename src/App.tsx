@@ -24,9 +24,9 @@ export default function App() {
     if (localStorage.getItem('authConfig')) {
       setInterval(() => {
         sendAuth();
-      }, 1000 * 60)
+      }, 1000 * 60 * 4)
     }
-  },[token]);
+  },[]);
 
 
   const getAuth = () => {
