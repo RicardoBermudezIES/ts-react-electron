@@ -144,7 +144,14 @@ function getStepContent(
 
 export default function Configuracion() {
   //estado Globales
-  const { token } = useContext(DataContext);
+  const {
+    setVinculacion,
+    vinculacion,
+    setCasino,
+    casino,
+    setMaquina,
+    maquina,
+  } = useContext(DataContext);
 
   const history = useHistory();
   const [isSync, setIsSync] = useState(true);
@@ -170,15 +177,15 @@ export default function Configuracion() {
     setActiveStep(0);
   };
 
-  const [casino, setCasino] = React.useState('');
-  const [maquina, setMaquina] = React.useState('');
   const [errorVinculacion, setErrorVinculacion] = React.useState('');
   const [open, setOpen] = React.useState(false);
 
   const handleFidelizar = () => {
+    const localToken = localStorage.getItem('token')
+    console.log(localToken)
     let args = {
       host: inputs.host,
-      token: token,
+      token: localToken,
       serial: maquina,
     };
     maquina !== '' ? ipc.send('VincularMaquina', args) : null;
@@ -187,17 +194,23 @@ export default function Configuracion() {
   useEffect(() => {
     ipc.on('VincularMaquina', (event, arg) => {
       console.log(arg, 'VincularMaquina configuracion.tsx');
-      if (arg.statusDTO.code !== '00')
+      if (arg.statusDTO.code !== '00') {
         setErrorVinculacion(arg.statusDTO.message);
         setOpen(true);
+      }
+      if (arg.statusDTO.code == '00') setVinculacion(true);
+      handleNext();
     });
-    console.log(errorVinculacion);
+
+    console.log(vinculacion);
   }, []);
 
   const handleChangeCasino = (event) => {
+    localStorage.setItem('casino', event.target.value)
     setCasino(event.target.value);
   };
   const handleChangeMaquina = (event) => {
+    localStorage.setItem('maquina', event.target.value)
     setMaquina(event.target.value);
   };
 
