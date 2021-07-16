@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -14,8 +14,12 @@ import {
 } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import Keyboard from 'react-simple-keyboard';
+import { ipcRenderer } from 'electron';
+import { DataContext } from '../context/Context';
 
-const useStyles = makeStyles((theme) => ({
+const ipc = ipcRenderer;
+
+const useStyles = makeStyles(() => ({
   login: {
     marginBottom: 'min(10%,25%)',
   },
@@ -33,6 +37,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login() {
+  // estado Globales
+  const { config, setData, maquina } = useContext(DataContext);
+
+  const localToken = localStorage.getItem('token')
+  console.log(localToken)
+
+  const authConfig = JSON.parse(localStorage.getItem('authConfig')) ? JSON.parse(localStorage.getItem('authConfig')) : null
+  console.log(authConfig)
+
+  const localMaquina = localStorage.getItem('maquina')
+  console.log(localMaquina)
+
   const classes = useStyles();
 
   const history = useHistory();
@@ -44,7 +60,18 @@ export default function Login() {
   const [layoutName, setLayoutName] = useState('default');
   const [inputName, setInputName] = useState();
   const [keyboardOpen, setkeyboardOpen] = useState(false);
+  const [errorLogin, setErrorLogin] = useState(false);
   const keyboard = useRef();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const onChangeAll = (inputs) => {
     setInputs({ ...inputs });
@@ -53,8 +80,36 @@ export default function Login() {
   const onSubmit = (e) => {
     e.preventDefault();
     console.log(inputs);
-    handleClickOpen();
+
+    let args = {
+      host: authConfig.host,
+      serial: localMaquina,
+      numeroDocumento: inputs.username,
+      token: localToken,
+    };
+
+    ipc.send('fidelizarMaquina', args);
   };
+
+  useEffect(() => {
+    ipc.on('fidelizarMaquina', (event, arg) => {
+      console.log(arg, 'fidelizarMaquina login.tsx');
+      if (arg?.statusDTO.code !== '00') {
+        console.error(arg?.statusDTO.message);
+
+      }
+
+      if (arg?.statusDTO.code == '01') {
+        console.log(arg?.statusDTO.message);
+      }
+
+      if (arg?.statusDTO.code == '00') {
+        localStorage.setItem('user', JSON.stringify({numeroDocumento: inputs.username,nombre : arg.nombreCompleto, clave: arg.clave, billetero: arg.enableBilletero }))
+        setData({numeroDocumento: inputs.username,nombre : arg.nombreCompleto, clave: arg.clave, billetero: arg.enableBilletero })
+        history.push('/');
+      }
+    });
+  });
 
   const onChangeInput = (event) => {
     const inputVal = event.target.value;
@@ -86,18 +141,7 @@ export default function Login() {
     setkeyboardOpen(true);
   };
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const handleSendToken = () => {
-    console.log(inputs.token);
     inputs.token != null && history.push('/');
   };
 
@@ -154,7 +198,7 @@ export default function Login() {
                   onFocus={() => setActiveInput('password')}
                 />
               </Grid>
-              <Grid item >
+              <Grid item>
                 <Button
                   type="submit"
                   variant="contained"
