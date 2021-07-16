@@ -13,8 +13,6 @@ const ipc = ipcRenderer;
 
 export default function App() {
 
-  const [token] = useState(JSON.parse(localStorage.getItem('authConfig')) ? JSON.parse(localStorage.getItem('authConfig')) : '')
-
   const sendAuth = () => {
     const auth = JSON.parse(localStorage.getItem('authConfig'));
     ipc.send('allways-auth', auth);
