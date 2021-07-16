@@ -1,8 +1,12 @@
-import React from 'react';
+import { ipcRenderer } from 'electron';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import NavButton from '../component/NavButton';
+import { DataContext } from '../context/Context';
+
+const ipc = ipcRenderer;
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -18,6 +22,85 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function Home() {
+  const history = useHistory();
+
+  const localToken = localStorage.getItem('token');
+
+  const authConfig = JSON.parse(localStorage.getItem('authConfig'))
+    ? JSON.parse(localStorage.getItem('authConfig'))
+    : null;
+
+  const localMaquina = localStorage.getItem('maquina');
+
+  const localCasino = localStorage.getItem('casino');
+
+  const user = JSON.parse(localStorage.getItem('user'))
+    ? JSON.parse(localStorage.getItem('user'))
+    : null;
+
+  console.log(user, authConfig, localMaquina, localCasino, localToken);
+
+  const [puntos, setPuntos] = useState({
+    cantidadPuntosDisponibles: null,
+    cantidadPuntosRedimidos: null,
+  });
+
+  useEffect(() => {
+    user === null ? history.push('/login') : null;
+  }, []);
+
+  useEffect(() => {
+    setInterval(() => {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const localToken = localStorage.getItem('token');
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const user = JSON.parse(localStorage.getItem('user'));
+      const args = {
+        host: authConfig?.host,
+        casino: localCasino,
+        maquina: localMaquina,
+        numeroDocumento: user?.numeroDocumento,
+        token: localToken,
+      };
+      if (user !== null) {
+        ipc.send('visualizarPuntos', args);
+      }
+    }, 1000 * 20);
+  }, []);
+
+  const getPuntos = () => {
+    ipc.on('visualizarPuntos', (event, arg) => {
+      if (arg?.Error) {
+        console.log(arg?.Error);
+      }
+
+      if (arg?.statusDTO?.code !== '00') {
+        console.log(arg?.statusDTO?.message);
+      }
+      if (arg?.statusDTO?.code == '00') {
+        localStorage.setItem(
+          'puntos',
+          JSON.stringify({
+          cantidadPuntosDisponibles: arg.cantidadPuntosDisponibles,
+          cantidadPuntosRedimidos: arg.cantidadPuntosRedimidos,
+        }))
+        setPuntos({
+          cantidadPuntosDisponibles: arg.cantidadPuntosDisponibles,
+          cantidadPuntosRedimidos: arg.cantidadPuntosRedimidos,
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    getPuntos();
+  }, []);
+
+  const leaveLobby = () => {
+    localStorage.removeItem('user');
+    history.push('/login');
+  };
+
   const classes = useStyles();
   return (
     <Box height="100vh" p={2}>
@@ -30,14 +113,12 @@ export default function Home() {
         width="70%"
         borderRadius="50%"
         className={classes.root}
-      ></Box>
+       />
       <Grid container justify="flex-end">
         <Grid item>
-          <Link to="/login">
-            <Button variant="contained" color="secondary">
-              Salir
-            </Button>
-          </Link>
+          <Button onClick={leaveLobby} variant="contained" color="secondary">
+            Salir
+          </Button>
         </Grid>
       </Grid>
       <Grid
@@ -59,9 +140,12 @@ export default function Home() {
               <Typography
                 variant="h2"
                 component="h2"
+                align="right"
                 className={classes.NumberPoint}
               >
-                99999999{' '}
+                {puntos?.cantidadPuntosDisponibles
+                  ? puntos?.cantidadPuntosDisponibles
+                  : 'cargando puntos'}
               </Typography>
             </Grid>
             <Grid item>
@@ -86,7 +170,7 @@ export default function Home() {
                 align="right"
                 className={classes.NumberPoint}
               >
-                Juan Carlos
+                {user ? user.nombre : ''}
               </Typography>
             </Grid>
           </Grid>
