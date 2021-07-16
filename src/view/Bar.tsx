@@ -23,6 +23,9 @@ const useStyles = makeStyles({
 export default function Bar() {
   const classes = useStyles();
   const history = useHistory();
+
+  const puntos = JSON.parse(localStorage.getItem('puntos'))
+  const user = JSON.parse(localStorage.getItem('user'))
   return (
     <Box p={2}>
       <Grid container direction="column" spacing={3}>
@@ -39,15 +42,17 @@ export default function Bar() {
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={4}>
               <Typography variant="h4" component="p">
-                Yelitza Anabuzimake
+               {user ? user.nombre : 'cargando..'}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={4}>
               <Typography variant="h3" align="right" component="p">
-                999999
+              {puntos.cantidadPuntosDisponibles
+                  ? puntos.cantidadPuntosDisponibles
+                  : 'cargando..'}
               </Typography>
               <Typography variant="h5" align="right" component="p">
-                Puntos
+                puntos
               </Typography>
             </Grid>
           </Grid>
