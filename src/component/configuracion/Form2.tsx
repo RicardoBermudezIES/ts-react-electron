@@ -31,18 +31,27 @@ export default function Form2({
   maquina,
 }) {
   //estado Globales
-  const { token, config } = useContext(DataContext);
+  const {  config } = useContext(DataContext);
 
   const classes = useStyles2();
   const [casinos, setCasinos] = useState([]);
   const [maquinas, setMaquinas] = useState([]);
 
   //hacer peticiones para obtener los casinos
+  const localToken = localStorage.getItem('token')
+    console.log(localToken)
+
+    const authConfig = JSON.parse(localStorage.getItem('authConfig'))
+    console.log(authConfig)
+
 
   const getCasinos = () => {
+
+
+
     let arg = {
-      token: token,
-      host: config.host,
+      token: localToken,
+      host: authConfig.host,
     };
     ipc.send('get-casinos', arg);
   };
@@ -50,14 +59,14 @@ export default function Form2({
   useEffect(() => {
     ipc.on('get-casinos', (event, arg) => {
       console.log(arg, 'casinos configuracion.tsx');
-      setCasinos(arg);
-    });
+      setCasinos(arg)
+    })
   }, []);
 
   const getMaquinas = () => {
     let arg = {
-        token: token,
-        host: config.host,
+        token: localToken,
+        host: authConfig.host,
         idCasino:casino
       };
 
