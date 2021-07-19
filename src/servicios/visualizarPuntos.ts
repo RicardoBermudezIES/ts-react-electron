@@ -10,7 +10,7 @@ export const visualizarPuntos = (arg) => {
     parametros: [
       {
         nombreParametro: 'serial',
-        valorParametro: maquina,
+        valorParametro: `${maquina}`,
       },
       {
         nombreParametro: 'numeroDocumento',
@@ -22,7 +22,7 @@ export const visualizarPuntos = (arg) => {
       },
       {
         nombreParametro: 'codigoCasino',
-        valorParametro: casino,
+        valorParametro: `${casino}`,
       },
     ],
   };
