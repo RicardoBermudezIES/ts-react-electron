@@ -16,9 +16,20 @@ body {
   position: relative;
   z-index: 9999999;
   width: 100%;
-  color: black; 
+  color: black;
   bottom: 50px;
-  
+
+}
+
+.keyboardContainer-config {
+  position: absolute;
+  z-index: 9999999;
+  width: 95%;
+  font-weight: 900;
+  color: black;
+  left: 20px;
+    right: auto;
+    bottom: 0px;
 }
 
 .keyboardContainer-login {
@@ -26,7 +37,7 @@ body {
   z-index: 9999999;
   width: 95%;
   font-weight: 900;
-  color: black; 
+  color: black;
   bottom: 0px;
 }
 
