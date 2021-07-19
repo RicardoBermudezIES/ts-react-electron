@@ -46,6 +46,7 @@ export default function Home() {
   });
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     user === null ? history.push('/login') : null;
   }, []);
 
@@ -81,9 +82,10 @@ export default function Home() {
         localStorage.setItem(
           'puntos',
           JSON.stringify({
-          cantidadPuntosDisponibles: arg.cantidadPuntosDisponibles,
-          cantidadPuntosRedimidos: arg.cantidadPuntosRedimidos,
-        }))
+            cantidadPuntosDisponibles: arg.cantidadPuntosDisponibles,
+            cantidadPuntosRedimidos: arg.cantidadPuntosRedimidos,
+          })
+        );
         setPuntos({
           cantidadPuntosDisponibles: arg.cantidadPuntosDisponibles,
           cantidadPuntosRedimidos: arg.cantidadPuntosRedimidos,
@@ -98,6 +100,7 @@ export default function Home() {
 
   const leaveLobby = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('puntos');
     history.push('/login');
   };
 
@@ -113,10 +116,15 @@ export default function Home() {
         width="70%"
         borderRadius="50%"
         className={classes.root}
-       />
+      />
       <Grid container justify="flex-end">
         <Grid item>
-          <Button onClick={leaveLobby} variant="contained" color="secondary">
+          <Button
+            size="large"
+            onClick={leaveLobby}
+            variant="contained"
+            color="secondary"
+          >
             Salir
           </Button>
         </Grid>
@@ -138,14 +146,18 @@ export default function Home() {
           >
             <Grid item>
               <Typography
-                variant="h2"
+                variant="h1"
                 component="h2"
                 align="right"
                 className={classes.NumberPoint}
               >
-                {puntos?.cantidadPuntosDisponibles
-                  ? puntos?.cantidadPuntosDisponibles
-                  : 'cargando puntos'}
+                {puntos?.cantidadPuntosDisponibles ? (
+                  puntos?.cantidadPuntosDisponibles
+                ) : (
+                  <Typography variant="body2" component="span" align="right">
+                    cargando puntos
+                  </Typography>
+                )}
               </Typography>
             </Grid>
             <Grid item>
@@ -170,7 +182,7 @@ export default function Home() {
                 align="right"
                 className={classes.NumberPoint}
               >
-                {user ? user.nombre : ''}
+                {user ? user?.nombre : ''}
               </Typography>
             </Grid>
           </Grid>
