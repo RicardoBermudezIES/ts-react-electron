@@ -18,6 +18,11 @@ export const theme = createMuiTheme({
         background: '#fff',
       },
     },
+    MuiCardContent:{
+      root:{
+        padding :0,
+      }
+    },
     MuiStepper: {
       root: {
         background: 'transparent',
