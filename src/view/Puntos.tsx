@@ -45,6 +45,7 @@ export default function Puntos() {
           <Grid container direction="row" spacing={2} alignItems="center">
             <Grid item lg={4} md={4} sm={2} xs={2}>
               <Button
+                size="large"
                 variant="contained"
                 color="primary"
                 onClick={() => history.goBack()}
