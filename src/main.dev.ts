@@ -1,4 +1,4 @@
-import { loginSmol } from './servicios/auth';
+
 /* eslint global-require: off, no-console: off */
 
 /**
@@ -21,6 +21,7 @@ import { getMaquinas } from './servicios/getMaquinas';
 import { VincularMaquina } from './servicios/VincularMaquina';
 import { fidelzarMaquina } from './servicios/Login';
 import { visualizarPuntos } from './servicios/visualizarPuntos';
+import { loginSmol } from './servicios/auth';
 
 const ipc = ipcMain;
 
