@@ -19,10 +19,10 @@ import MenuBuilder from './menu';
 import { getCasino } from './servicios/getCasinos';
 import { getMaquinas } from './servicios/getMaquinas';
 import { VincularMaquina } from './servicios/VincularMaquina';
+import { fidelzarMaquina } from './servicios/Login';
+import { visualizarPuntos } from './servicios/visualizarPuntos';
 
-
-
-const ipc = ipcMain
+const ipc = ipcMain;
 
 export default class AppUpdater {
   constructor() {
@@ -79,14 +79,14 @@ const createWindow = async () => {
     show: false,
     width: 1280,
     height: 480,
-    frame:false,
+    frame: false,
     resizable: false,
     // fullscreenable:true,
-    // fullscreen:true,
+    fullscreen:true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
-      enableRemoteModule:true,
+      enableRemoteModule: true,
     },
   });
 
@@ -130,39 +130,71 @@ const createWindow = async () => {
 
 //recibe y envia el token a la configuración
 ipc.on('message-config', async (event, arg) => {
-  let token= await loginSmol(arg)
-  console.log(token, "en el main.dev")
-  event.reply('message-config', token) 
+  let token = await loginSmol(arg);
+  console.log(token, 'en el main.dev');
+  event.reply('message-config', token);
+});
+
+//peticiones de tokens
+ipc.on('allways-auth', async (event, arg)=> {
+  let token
+  // eslint-disable-next-line prefer-const
+  token = await loginSmol(arg);
+  console.log(token, 'nuevo');
+  event.reply('allways-auth', token);
 })
+
+
 
 //peticion para listar casino
-ipc.on('get-casinos', async (event,arg) => {
- 
-  console.log(arg)
-  let casinos= await getCasino(arg)
-  console.log(casinos, "en el main.dev")
-  event.reply('get-casinos', casinos) 
-})
+ipc.on('get-casinos', async (event, arg) => {
+  console.log(arg);
+  let casinos = await getCasino(arg);
+  console.log(casinos, 'en el main.dev');
+  event.reply('get-casinos', casinos);
+});
 
 //peticion de listar maquinas
-ipc.on('get-maquinas', async (event,arg) => {
- 
-  console.log(arg)
- let maquinas= await getMaquinas(arg)
- console.log(maquinas, "en el main.dev")
- event.reply('get-maquinas', maquinas) 
-})
+ipc.on('get-maquinas', async (event, arg) => {
+  console.log(arg);
+  let maquinas = await getMaquinas(arg);
+  console.log(maquinas, 'en el main.dev');
+  event.reply('get-maquinas', maquinas);
+});
 
+//vincularMaquina
+ipc.on('VincularMaquina', async (event, arg) => {
+  console.log(arg);
+  let res = await VincularMaquina(arg);
+  console.log(res, 'en el main.dev');
+  event.reply('VincularMaquina', res);
+});
 
-//vincularMaquina 
-ipc.on('VincularMaquina', async (event,arg) => {
- 
-  console.log(arg)
- let res = await VincularMaquina(arg)
- console.log(res, "en el main.dev")
- event.reply('VincularMaquina', res) 
-})
+//fidelizarMaquina
+ipc.on('fidelizarMaquina', async (event, arg) => {
+  console.log(arg);
+  let res = await fidelzarMaquina(arg);
+  console.log(res, 'en el main.dev');
+  event.reply('fidelizarMaquina', res);
+});
 
+//VisualizarPuntos
+ipc.on('visualizarPuntos', async (event, arg) => {
+  let res;
+  console.log(arg);
+  // eslint-disable-next-line prefer-const
+  res = await visualizarPuntos(arg);
+  if (res.response?.status === 400){
+    console.log('peticion incorrecta en visualizar el main.dev');
+    event.reply('visualizarPuntos', { Error: 'bad request' });
+  }
+
+  if (res.statusDTO?.code === '00') {
+    console.log(res, 'en el main.dev');
+    event.reply('visualizarPuntos', res);
+  }
+
+});
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
