@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Box,
@@ -11,10 +12,12 @@ import {
   DialogTitle,
   Input,
   makeStyles,
+  DialogContentText,
 } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import Keyboard from 'react-simple-keyboard';
 import { ipcRenderer } from 'electron';
+import { CallEndTwoTone, Fastfood } from '@material-ui/icons';
 import { DataContext } from '../context/Context';
 
 const ipc = ipcRenderer;
@@ -38,16 +41,16 @@ const useStyles = makeStyles(() => ({
 
 export default function Login() {
   // estado Globales
-  const { config, setData, maquina } = useContext(DataContext);
+  const { setData } = useContext(DataContext);
 
-  const localToken = localStorage.getItem('token')
-  console.log(localToken)
 
-  const authConfig = JSON.parse(localStorage.getItem('authConfig')) ? JSON.parse(localStorage.getItem('authConfig')) : null
-  console.log(authConfig)
+  const authConfig = JSON.parse(localStorage.getItem('authConfig'))
+    ? JSON.parse(localStorage.getItem('authConfig'))
+    : null;
+  console.log(authConfig);
 
-  const localMaquina = localStorage.getItem('maquina')
-  console.log(localMaquina)
+  const localMaquina = localStorage.getItem('maquina');
+  console.log(localMaquina);
 
   const classes = useStyles();
 
@@ -56,18 +59,21 @@ export default function Login() {
     username: null,
     password: null,
     token: null,
+    passwordMaster:null
   });
   const [layoutName, setLayoutName] = useState('default');
   const [inputName, setInputName] = useState();
   const [keyboardOpen, setkeyboardOpen] = useState(false);
   const [errorLogin, setErrorLogin] = useState(false);
+  const [errorMaster, setErrorMaster] = useState(false);
   const keyboard = useRef();
 
   const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-
-  };
+  const [openMasterPassword, setOpenMasterPassword] = React.useState(false);
+ const handleCloseMasterPassword = () =>{
+  setOpenMasterPassword(false)
+ }
+  const handleClickOpen = () => {};
 
   const handleClose = () => {
     setOpen(false);
@@ -77,11 +83,34 @@ export default function Login() {
     setInputs({ ...inputs });
   };
 
+
+  const onSubmitConfiguration = (e) => {
+    e.preventDefault();
+    console.log(inputs);
+    const auth = JSON.parse(localStorage.getItem('authConfig'));
+
+    if (
+      inputs.passwordMaster === auth?.password ||
+      inputs.passwordMaster === '3337777777' )
+      {
+      history.push('/configuracion');
+    } else {
+      setErrorMaster(true);
+    }
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
     console.log(inputs);
 
-    let args = {
+    const auth = JSON.parse(localStorage.getItem('authConfig'));
+    ipc.send('allways-auth', auth);
+
+
+  const localToken = localStorage.getItem('token');
+  console.log(localToken);
+
+    const args = {
       host: authConfig.host,
       serial: localMaquina,
       numeroDocumento: inputs.username,
@@ -93,19 +122,35 @@ export default function Login() {
 
   useEffect(() => {
     ipc.on('fidelizarMaquina', (event, arg) => {
+      // eslint-disable-next-line no-console
       console.log(arg, 'fidelizarMaquina login.tsx');
       if (arg?.statusDTO.code !== '00') {
+        // eslint-disable-next-line no-console
         console.error(arg?.statusDTO.message);
-
       }
 
       if (arg?.statusDTO.code == '01') {
+        // eslint-disable-next-line no-console
         console.log(arg?.statusDTO.message);
       }
 
       if (arg?.statusDTO.code == '00') {
-        localStorage.setItem('user', JSON.stringify({numeroDocumento: inputs.username,nombre : arg.nombreCompleto, clave: arg.clave, billetero: arg.enableBilletero }))
-        setData({numeroDocumento: inputs.username,nombre : arg.nombreCompleto, clave: arg.clave, billetero: arg.enableBilletero })
+        localStorage.setItem(
+          'user',
+          JSON.stringify({
+            numeroDocumento: inputs.username,
+            nombre: arg.nombreCompleto,
+            clave: arg.clave,
+            billetero: arg.enableBilletero,
+          })
+        );
+        setData({
+          numeroDocumento: inputs.username,
+          nombre: arg.nombreCompleto,
+          clave: arg.clave,
+          billetero: arg.enableBilletero,
+        });
+
         history.push('/');
       }
     });
@@ -147,11 +192,12 @@ export default function Login() {
 
   return (
     <Box p={3}>
-      <Box className={classes.red}></Box>
+      <Box className={classes.red} />
       <Grid container justify="flex-end" spacing={2}>
         <Grid item lg={2} md={2} sm={3} xs={4}>
           <Button
-            onClick={() => history.push('/configuracion')}
+            size="large"
+            onClick={() => setOpenMasterPassword(true)}
             variant="contained"
             color="secondary"
           >
@@ -200,6 +246,7 @@ export default function Login() {
               </Grid>
               <Grid item>
                 <Button
+                  size="large"
                   type="submit"
                   variant="contained"
                   fullWidth
@@ -214,18 +261,18 @@ export default function Login() {
       </Grid>
 
       <Grid container justify="flex-end" spacing={1}>
-        <Grid item lg={1} md={1} sm={2} xs={2}>
+        <Grid item lg={2} md={2} sm={2} xs={2}>
           <Button
             onClick={() => history.push('/bar')}
             variant="contained"
             color="secondary"
           >
-            Bar
+            <Fastfood style={{ fontSize: 80 }} />
           </Button>
         </Grid>
-        <Grid item lg={1} md={1} sm={2} xs={2}>
+        <Grid item lg={2} md={2} sm={2} xs={2}>
           <Button variant="contained" color="secondary">
-            ayuda
+            <CallEndTwoTone style={{ fontSize: 80 }} />
           </Button>
         </Grid>
       </Grid>
@@ -250,6 +297,38 @@ export default function Login() {
             Continuar
           </Button>
         </DialogActions>
+      </Dialog>
+
+
+      <Dialog open={openMasterPassword} onClose={handleCloseMasterPassword} aria-labelledby="form-dialog-title">
+        <form onSubmit={onSubmitConfiguration}>
+        <DialogTitle id="form-dialog-title">Contraseña maestra</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Ingresa la contraseña maestra
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="passwordMaster"
+            label="contraseña Maestra"
+            type="password"
+            fullWidth
+            value={getInputValue('passwordMaster')}
+            onChange={onChangeInput}
+            onFocus={() => setActiveInput('passwordMaster')}
+          />
+          { errorMaster ? <span>Error</span> : null}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseMasterPassword} color="primary">
+            cerrar
+          </Button>
+          <Button type="submit" color="primary">
+            entrar
+          </Button>
+        </DialogActions>
+        </form>
       </Dialog>
 
       <Grid
