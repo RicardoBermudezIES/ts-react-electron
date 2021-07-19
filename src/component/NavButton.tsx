@@ -1,6 +1,13 @@
 import { Button, Grid, makeStyles } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router';
+import {
+  CallEndTwoTone,
+  Fastfood,
+  ScatterPlot,
+  AccountBalanceWallet,
+  Style,
+} from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   disabled: {
@@ -26,27 +33,30 @@ export default function NavButton() {
       <Grid item>
         <Grid container alignItems="flex-end" direction="column" spacing={2}>
           <Grid item>
-            <Button onClick={goPuntos} variant="contained" color="primary">
-              Puntos
+            <Button size="large" onClick={goPuntos} variant="contained" color="primary">
+              <ScatterPlot style={{ fontSize: 40 }} />
             </Button>
           </Grid>
           <Grid item>
             <Button
+              size="large"
+              disabled
               className={classes.disabled}
               variant="contained"
               color="primary"
             >
-              Billetera
+              <AccountBalanceWallet style={{ fontSize: 40 }} />
             </Button>
           </Grid>
           <Grid item>
             <Button
+              size="large"
               className={classes.disabled}
               disabled
               variant="contained"
               color="primary"
             >
-              Redimir
+              <Style  style={{ fontSize: 40 }} />
             </Button>
           </Grid>
         </Grid>
@@ -54,13 +64,13 @@ export default function NavButton() {
       <Grid item>
         <Grid container alignItems="flex-end" direction="column" spacing={2}>
           <Grid item>
-            <Button variant="contained" color="primary">
-              Ayuda
+            <Button size="large" variant="contained" color="primary">
+            <CallEndTwoTone  style={{ fontSize: 40 }} />
             </Button>
           </Grid>
           <Grid item>
-            <Button onClick={goBar} variant="contained" color="primary">
-              Bar
+            <Button size="large"  onClick={goBar} variant="contained" color="primary">
+            <Fastfood  style={{ fontSize: 40 }} />
             </Button>
           </Grid>
         </Grid>
