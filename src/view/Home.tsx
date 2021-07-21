@@ -1,10 +1,9 @@
 import { ipcRenderer } from 'electron';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import NavButton from '../component/NavButton';
-import { DataContext } from '../context/Context';
 
 const ipc = ipcRenderer;
 
@@ -24,21 +23,10 @@ const useStyles = makeStyles(() => ({
 export default function Home() {
   const history = useHistory();
 
-  const localToken = localStorage.getItem('token');
-
-  const authConfig = JSON.parse(localStorage.getItem('authConfig'))
-    ? JSON.parse(localStorage.getItem('authConfig'))
-    : null;
-
-  const localMaquina = localStorage.getItem('maquina');
-
-  const localCasino = localStorage.getItem('casino');
-
   const user = JSON.parse(localStorage.getItem('user'))
     ? JSON.parse(localStorage.getItem('user'))
     : null;
 
-  console.log(user, authConfig, localMaquina, localCasino, localToken);
 
   const [puntos, setPuntos] = useState({
     cantidadPuntosDisponibles: null,
@@ -53,6 +41,13 @@ export default function Home() {
   useEffect(() => {
     setInterval(() => {
       // eslint-disable-next-line @typescript-eslint/no-shadow
+      const authConfig = JSON.parse(localStorage.getItem('authConfig'));
+
+      const localMaquina = localStorage.getItem('maquina');
+
+      const localCasino = localStorage.getItem('casino');
+
+      // eslint-disable-next-line @typescript-eslint/no-shadow
       const localToken = localStorage.getItem('token');
       // eslint-disable-next-line @typescript-eslint/no-shadow
       const user = JSON.parse(localStorage.getItem('user'));
@@ -66,7 +61,7 @@ export default function Home() {
       if (user !== null) {
         ipc.send('visualizarPuntos', args);
       }
-    }, 1000 * 20);
+    }, 1000 * 30);
   }, []);
 
   const getPuntos = () => {
