@@ -59,7 +59,7 @@ function Login() {
     token: null,
     passwordMaster: null,
   });
-  const [layoutName, setLayoutName] = useState('default');
+  const [layoutName, setLayoutName] = useState('shift');
   const [inputName, setInputName] = useState();
   const [keyboardOpen, setkeyboardOpen] = useState(false);
   const [errorMaster, setErrorMaster] = useState(false);
@@ -158,12 +158,12 @@ function Login() {
     });
   };
   const handleShift = () => {
-    const newLayoutName = layoutName === 'default' ? 'shift' : 'default';
+    const newLayoutName = layoutName === "default" ? "shift" : "default";
     setLayoutName(newLayoutName);
   };
 
   const onKeyPress = (button) => {
-    if (button === '{shift}' || button === '{lock}') handleShift();
+    if (button === "{shift}" || button === "{shift1}") handleShift();
   };
 
   const getInputValue = (inputName) => {
@@ -254,7 +254,7 @@ function Login() {
         </form>
       </Grid>
 
-      <Grid container justify="flex-end" spacing={1}>
+      <Grid container justify="center" spacing={1}>
         <Grid item lg={1} md={1} sm={1} xs={1} >
           <Button
             onClick={() => history.push('/bar')}
@@ -329,12 +329,13 @@ function Login() {
 
       {/* Errores */}
 
-      <Alert
+      {messageError ? (
+        <Alert
         open={openError}
         onClose={() => setOpenError(false)}
         message={messageError}
-      />
-
+        />
+      ) : null }
       {/* finales de los erroes */}
 
       <Grid
@@ -349,6 +350,32 @@ function Login() {
           onChangeAll={onChangeAll}
           layoutName={layoutName}
           onKeyPress={onKeyPress}
+          theme={"hg-theme-default hg-layout-default myTheme"}
+          layout={{
+            default: [
+              "1 2 3 4 5 6 7 8 9 0",
+              "q w e r t y u i o p",
+              "a s d f g h j k l",
+              "{shift1} z x c v b n m {bksp}"
+            ],
+            shift: ["1 2 3", "4 5 6", "7 8 9", "{shift} 0 {bksp}"],
+
+          }}
+          display={{
+            "{bksp}": "del",
+            "{shift1}": "123",
+            "{shift}": "abc"
+          }}
+          buttonTheme={[
+            {
+              class: "hg-red",
+              buttons: "{bksp}"
+            },
+            {
+              class: "hg-highlight",
+              buttons: "{bksp}"
+            }
+          ]}
         />
       </Grid>
     </Box>
