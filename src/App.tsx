@@ -45,7 +45,9 @@ export default function App() {
     <DataProvider>
       <Router>
         <ThemeProvider theme={theme}>
-          <Box position="absolute" bottom="5px" right="5px"> <img style={{width:100}} src={Juego} alt="juego Responsable" /> </Box>
+          <Box position="absolute" bottom="5px" right="5px">
+            <img style={{ width: 150 }} src={Juego} alt="juego Responsable" />
+          </Box>
           <Switch>
             {router.map((route, i) => (
               <Route key={i} path={route.path} component={route.component} />
