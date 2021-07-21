@@ -30,10 +30,6 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginRight: theme.spacing(1),
   },
-  instructions: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
   buttonWhite: {
     color: '#fff',
     marginRight: theme.spacing(1),
@@ -239,7 +235,7 @@ export default function Configuracion() {
       <Grid>
         {activeStep === steps.length ? (
           <Grid>
-            <Typography className={classes.instructions}>
+            <Typography>
               {errorVinculacion
                 ? errorVinculacion
                 : 'Ya configuraste la Fidelizacion'}
@@ -263,7 +259,7 @@ export default function Configuracion() {
           </Grid>
         ) : (
           <Grid>
-            <Grid className={classes.instructions}>
+            <Grid>
               {getStepContent(
                 activeStep,
                 setInputs,

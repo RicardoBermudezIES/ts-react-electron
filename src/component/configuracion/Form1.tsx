@@ -95,6 +95,7 @@ export default function Form1({ setInputs, inputs, setIsSync }) {
             <Grid item lg={4} md={4} sm={4} xs={4}>
               <TextField
                 fullWidth
+                type="password"
                 name="password"
                 label="password"
                 variant="filled"

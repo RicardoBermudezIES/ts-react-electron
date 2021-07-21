@@ -19,7 +19,7 @@ export const theme = createMuiTheme({
       root: {
         background: '#fff',
         '& input': {
-          fontSize: '1.3em',
+          fontSize: '1.5em',
         },
       },
     },
@@ -31,6 +31,7 @@ export const theme = createMuiTheme({
     MuiStepper: {
       root: {
         background: 'transparent',
+        padding: 5,
       },
     },
     MuiStepLabel: {

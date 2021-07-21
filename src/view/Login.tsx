@@ -228,6 +228,7 @@ function Login() {
               </Grid>
               <Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
                 <TextField
+                  type="password"
                   name="password"
                   fullWidth
                   id="filled-basic"
