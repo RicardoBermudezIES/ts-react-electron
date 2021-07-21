@@ -68,8 +68,13 @@ export default function Login() {
   const [errorMaster, setErrorMaster] = useState(false);
   const keyboard = useRef();
 
-  const [open, setOpen] = React.useState(false);
-  const [openMasterPassword, setOpenMasterPassword] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [openMasterPassword, setOpenMasterPassword] = useState(false);
+
+  const [openError, setOpenError] = useState(false);
+  const [ messageError, setmessageError] = useState("");
+
+
  const handleCloseMasterPassword = () =>{
   setOpenMasterPassword(false)
  }
@@ -126,12 +131,8 @@ export default function Login() {
       console.log(arg, 'fidelizarMaquina login.tsx');
       if (arg?.statusDTO.code !== '00') {
         // eslint-disable-next-line no-console
-        console.error(arg?.statusDTO.message);
-      }
-
-      if (arg?.statusDTO.code == '01') {
-        // eslint-disable-next-line no-console
-        console.log(arg?.statusDTO.message);
+        setOpenError(true)
+        setmessageError(arg?.statusDTO.message);
       }
 
       if (arg?.statusDTO.code == '00') {
@@ -261,18 +262,18 @@ export default function Login() {
       </Grid>
 
       <Grid container justify="flex-end" spacing={1}>
-        <Grid item lg={2} md={2} sm={2} xs={2}>
+        <Grid item lg={1} md={1} sm={1} xs={1}>
           <Button
             onClick={() => history.push('/bar')}
             variant="contained"
             color="secondary"
           >
-            <Fastfood style={{ fontSize: 80 }} />
+            <Fastfood style={{ fontSize: 60 }} />
           </Button>
         </Grid>
-        <Grid item lg={2} md={2} sm={2} xs={2}>
+        <Grid item lg={1} md={1} sm={1} xs={1}>
           <Button variant="contained" color="secondary">
-            <CallEndTwoTone style={{ fontSize: 80 }} />
+            <CallEndTwoTone style={{ fontSize: 60 }} />
           </Button>
         </Grid>
       </Grid>
@@ -299,8 +300,11 @@ export default function Login() {
         </DialogActions>
       </Dialog>
 
-
-      <Dialog open={openMasterPassword} onClose={handleCloseMasterPassword} aria-labelledby="form-dialog-title">
+      <Dialog
+        open={openMasterPassword}
+        onClose={handleCloseMasterPassword}
+        aria-labelledby="form-dialog-title"
+      >
         <form onSubmit={onSubmitConfiguration}>
         <DialogTitle id="form-dialog-title">Contraseña maestra</DialogTitle>
         <DialogContent>
@@ -331,6 +335,29 @@ export default function Login() {
         </form>
       </Dialog>
 
+
+      {/* Errores */}
+
+      <Dialog
+        open={openError}
+        onClose={()=>setOpenError(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Ha ocurrido un error"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+           {messageError}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>setOpenError(false)} color="primary">
+            cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+{/* finales de los erroes */}
       <Grid
         className={`keyboardContainer-login ${!keyboardOpen ? 'hidden' : ''}`}
       >
