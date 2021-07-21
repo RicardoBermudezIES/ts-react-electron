@@ -1,7 +1,7 @@
 {
-  "name": "electron-react-boilerplate",
-  "productName": "ElectronReact",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Fast Refresh for rapid application development",
+  "name": "fidelizacion",
+  "productName": "fidelizacion",
+  "description": "aplicacion de fidelizacion es Intelligent Electronic Solution",
   "scripts": {
     "build": "concurrently \"yarn build:main\" \"yarn build:renderer\"",
     "build:main": "cross-env NODE_ENV=production webpack --config ./.erb/configs/webpack.config.main.prod.babel.js",
@@ -30,8 +30,8 @@
     ]
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "fidelizacion",
+    "appId": "org.InsteligentElectronicSolution",
     "files": [
       "dist/",
       "node_modules/",
@@ -72,9 +72,13 @@
     },
     "linux": {
       "target": [
-        "AppImage"
-      ],
-      "category": "Development"
+        {
+          "target": "deb",
+          "arch": [
+            "armv7l",
+          ]
+        }
+      ]
     },
     "directories": {
       "app": "src",
@@ -86,7 +90,7 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
+      "owner": "fidelizacion",
       "repo": "electron-react-boilerplate"
     }
   },
