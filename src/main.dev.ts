@@ -145,8 +145,6 @@ ipc.on('allways-auth', async (event, arg)=> {
   event.reply('allways-auth', token);
 })
 
-
-
 //peticion para listar casino
 ipc.on('get-casinos', async (event, arg) => {
   console.log(arg);
