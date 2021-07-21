@@ -19,6 +19,7 @@ import Keyboard from 'react-simple-keyboard';
 import { ipcRenderer } from 'electron';
 import { CallEndTwoTone, Fastfood } from '@material-ui/icons';
 import { DataContext } from '../context/Context';
+import Alert from '../component/Alert/Alert';
 
 const ipc = ipcRenderer;
 
@@ -43,7 +44,6 @@ export default function Login() {
   // estado Globales
   const { setData } = useContext(DataContext);
 
-
   const authConfig = JSON.parse(localStorage.getItem('authConfig'))
     ? JSON.parse(localStorage.getItem('authConfig'))
     : null;
@@ -59,7 +59,7 @@ export default function Login() {
     username: null,
     password: null,
     token: null,
-    passwordMaster:null
+    passwordMaster: null,
   });
   const [layoutName, setLayoutName] = useState('default');
   const [inputName, setInputName] = useState();
@@ -72,12 +72,11 @@ export default function Login() {
   const [openMasterPassword, setOpenMasterPassword] = useState(false);
 
   const [openError, setOpenError] = useState(false);
-  const [ messageError, setmessageError] = useState("");
+  const [messageError, setmessageError] = useState('');
 
-
- const handleCloseMasterPassword = () =>{
-  setOpenMasterPassword(false)
- }
+  const handleCloseMasterPassword = () => {
+    setOpenMasterPassword(false);
+  };
   const handleClickOpen = () => {};
 
   const handleClose = () => {
@@ -88,7 +87,6 @@ export default function Login() {
     setInputs({ ...inputs });
   };
 
-
   const onSubmitConfiguration = (e) => {
     e.preventDefault();
     console.log(inputs);
@@ -96,8 +94,8 @@ export default function Login() {
 
     if (
       inputs.passwordMaster === auth?.password ||
-      inputs.passwordMaster === '3337777777' )
-      {
+      inputs.passwordMaster === '3337777777'
+    ) {
       history.push('/configuracion');
     } else {
       setErrorMaster(true);
@@ -111,9 +109,8 @@ export default function Login() {
     const auth = JSON.parse(localStorage.getItem('authConfig'));
     ipc.send('allways-auth', auth);
 
-
-  const localToken = localStorage.getItem('token');
-  console.log(localToken);
+    const localToken = localStorage.getItem('token');
+    console.log(localToken);
 
     const args = {
       host: authConfig.host,
@@ -131,7 +128,7 @@ export default function Login() {
       console.log(arg, 'fidelizarMaquina login.tsx');
       if (arg?.statusDTO.code !== '00') {
         // eslint-disable-next-line no-console
-        setOpenError(true)
+        setOpenError(true);
         setmessageError(arg?.statusDTO.message);
       }
 
@@ -277,6 +274,7 @@ export default function Login() {
           </Button>
         </Grid>
       </Grid>
+
       <Dialog open={open} onClose={handleClose} aria-labelledby="token">
         <DialogTitle id="token">Ingresa tu token</DialogTitle>
         <DialogContent>
@@ -306,58 +304,43 @@ export default function Login() {
         aria-labelledby="form-dialog-title"
       >
         <form onSubmit={onSubmitConfiguration}>
-        <DialogTitle id="form-dialog-title">Contraseña maestra</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Ingresa la contraseña maestra
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="passwordMaster"
-            label="contraseña Maestra"
-            type="password"
-            fullWidth
-            value={getInputValue('passwordMaster')}
-            onChange={onChangeInput}
-            onFocus={() => setActiveInput('passwordMaster')}
-          />
-          { errorMaster ? <span>Error</span> : null}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseMasterPassword} color="primary">
-            cerrar
-          </Button>
-          <Button type="submit" color="primary">
-            entrar
-          </Button>
-        </DialogActions>
+          <DialogTitle id="form-dialog-title">Contraseña maestra</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Ingresa la contraseña maestra</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="passwordMaster"
+              label="contraseña Maestra"
+              type="password"
+              fullWidth
+              value={getInputValue('passwordMaster')}
+              onChange={onChangeInput}
+              onFocus={() => setActiveInput('passwordMaster')}
+            />
+            {errorMaster ? <span>Error</span> : null}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseMasterPassword} color="primary">
+              cerrar
+            </Button>
+            <Button type="submit" color="primary">
+              entrar
+            </Button>
+          </DialogActions>
         </form>
       </Dialog>
 
-
       {/* Errores */}
 
-      <Dialog
+      <Alert
         open={openError}
-        onClose={()=>setOpenError(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Ha ocurrido un error"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-           {messageError}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={()=>setOpenError(false)} color="primary">
-            cerrar
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onClose={() => setOpenError(false)}
+        message={messageError}
+      />
 
-{/* finales de los erroes */}
+      {/* finales de los erroes */}
+
       <Grid
         className={`keyboardContainer-login ${!keyboardOpen ? 'hidden' : ''}`}
       >
