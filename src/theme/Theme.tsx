@@ -1,5 +1,7 @@
+/* eslint-disable import/prefer-default-export */
 import { createMuiTheme } from '@material-ui/core/styles';
 import { pink, lightBlue } from '@material-ui/core/colors/';
+
 
 export const theme = createMuiTheme({
   palette: {
@@ -16,12 +18,15 @@ export const theme = createMuiTheme({
     MuiTextField: {
       root: {
         background: '#fff',
+        '& input': {
+          fontSize: '1.3em',
+        },
       },
     },
-    MuiCardContent:{
-      root:{
-        padding :0,
-      }
+    MuiCardContent: {
+      root: {
+        padding: 0,
+      },
     },
     MuiStepper: {
       root: {
