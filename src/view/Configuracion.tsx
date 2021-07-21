@@ -12,7 +12,6 @@ import {
   Typography,
   Grid,
   StepConnector,
-  Snackbar,
 } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { ipcRenderer } from 'electron';
@@ -241,7 +240,9 @@ export default function Configuracion() {
         {activeStep === steps.length ? (
           <Grid>
             <Typography className={classes.instructions}>
-              Ya configuraste la Fidelizacion
+              {errorVinculacion
+                ? errorVinculacion
+                : 'Ya configuraste la Fidelizacion'}
             </Typography>
             <Button
               variant="text"
@@ -251,6 +252,7 @@ export default function Configuracion() {
               Reiniciar
             </Button>
             <Button
+            disabled={errorVinculacion}
               variant="contained"
               color="primary"
               onClick={handleApp}
