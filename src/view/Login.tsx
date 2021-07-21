@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo,useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -40,17 +40,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function Login() {
+function Login() {
   // estado Globales
   const { setData } = useContext(DataContext);
 
   const authConfig = JSON.parse(localStorage.getItem('authConfig'))
     ? JSON.parse(localStorage.getItem('authConfig'))
     : null;
-  console.log(authConfig);
 
   const localMaquina = localStorage.getItem('maquina');
-  console.log(localMaquina);
 
   const classes = useStyles();
 
@@ -64,7 +62,6 @@ export default function Login() {
   const [layoutName, setLayoutName] = useState('default');
   const [inputName, setInputName] = useState();
   const [keyboardOpen, setkeyboardOpen] = useState(false);
-  const [errorLogin, setErrorLogin] = useState(false);
   const [errorMaster, setErrorMaster] = useState(false);
   const keyboard = useRef();
 
@@ -110,7 +107,6 @@ export default function Login() {
     ipc.send('allways-auth', auth);
 
     const localToken = localStorage.getItem('token');
-    console.log(localToken);
 
     const args = {
       host: authConfig.host,
@@ -118,7 +114,6 @@ export default function Login() {
       numeroDocumento: inputs.username,
       token: localToken,
     };
-
     ipc.send('fidelizarMaquina', args);
   };
 
@@ -128,8 +123,8 @@ export default function Login() {
       console.log(arg, 'fidelizarMaquina login.tsx');
       if (arg?.statusDTO.code !== '00') {
         // eslint-disable-next-line no-console
-        setOpenError(true);
         setmessageError(arg?.statusDTO.message);
+        setOpenError(true);
       }
 
       if (arg?.statusDTO.code == '00') {
@@ -185,6 +180,7 @@ export default function Login() {
   };
 
   const handleSendToken = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     inputs.token != null && history.push('/');
   };
 
@@ -211,7 +207,7 @@ export default function Login() {
         spacing={2}
       >
         <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
-          <Typography variant="h5" align="center" component="h2">
+          <Typography variant="h4" align="center" component="h2">
             Iniciar Sesión
           </Typography>
         </Grid>
@@ -259,7 +255,7 @@ export default function Login() {
       </Grid>
 
       <Grid container justify="flex-end" spacing={1}>
-        <Grid item lg={1} md={1} sm={1} xs={1}>
+        <Grid item lg={1} md={1} sm={1} xs={1} >
           <Button
             onClick={() => history.push('/bar')}
             variant="contained"
@@ -268,7 +264,7 @@ export default function Login() {
             <Fastfood style={{ fontSize: 60 }} />
           </Button>
         </Grid>
-        <Grid item lg={1} md={1} sm={1} xs={1}>
+        <Grid item lg={1} md={1} sm={1} xs={1} style={{ marginLeft: 20 }}>
           <Button variant="contained" color="secondary">
             <CallEndTwoTone style={{ fontSize: 60 }} />
           </Button>
@@ -358,3 +354,4 @@ export default function Login() {
     </Box>
   );
 }
+export default Login;
