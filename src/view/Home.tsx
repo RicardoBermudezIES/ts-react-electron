@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function Home() {
+function Home() {
   const history = useHistory();
 
   const user = JSON.parse(localStorage.getItem('user'))
@@ -189,3 +189,5 @@ export default function Home() {
     </Box>
   );
 }
+
+export default React.memo(Home);
