@@ -128,6 +128,13 @@ function Login() {
       }
 
       if (arg?.statusDTO.code == '00') {
+        setData({
+          numeroDocumento: inputs.username,
+          nombre: arg.nombreCompleto,
+          clave: arg.clave,
+          billetero: arg.enableBilletero,
+        });
+
         localStorage.setItem(
           'user',
           JSON.stringify({
@@ -137,14 +144,7 @@ function Login() {
             billetero: arg.enableBilletero,
           })
         );
-        setData({
-          numeroDocumento: inputs.username,
-          nombre: arg.nombreCompleto,
-          clave: arg.clave,
-          billetero: arg.enableBilletero,
-        });
-
-        history.push('/');
+        if (localStorage.getItem('user')) history.push('/');
       }
     });
   });
@@ -342,6 +342,7 @@ function Login() {
       <Grid
         className={`keyboardContainer-login ${!keyboardOpen ? 'hidden' : ''}`}
       >
+
         <button className="closeKeyBoard" onClick={closeKeyboard}>
           x
         </button>
@@ -351,30 +352,30 @@ function Login() {
           onChangeAll={onChangeAll}
           layoutName={layoutName}
           onKeyPress={onKeyPress}
-          theme={"hg-theme-default hg-layout-default myTheme"}
+          theme="hg-theme-default hg-layout-default myTheme"
           layout={{
             default: [
-              "1 2 3 4 5 6 7 8 9 0",
-              "q w e r t y u i o p",
-              "a s d f g h j k l -",
-              "{shift1} z x c v b n m {bksp}"
+              '1 2 3 4 5 6 7 8 9 0',
+              'q w e r t y u i o p',
+              'a s d f g h j k l -',
+              '{shift1} z x c v b n m {bksp}',
             ],
-            shift: ["1 2 3", "4 5 6", "7 8 9", "{shift} 0 - {bksp}"],
+            shift: ['1 2 3', '4 5 6', '7 8 9', '{shift} 0 - {bksp}'],
 
           }}
           display={{
-            "{bksp}": "del",
-            "{shift1}": "123",
-            "{shift}": "abc"
+            '{bksp}': 'del',
+            '{shift1}': '123',
+            '{shift}': 'abc',
           }}
           buttonTheme={[
             {
-              class: "hg-red",
-              buttons: "{bksp}"
+              class: 'hg-red',
+              buttons: '{bksp}',
             },
             {
-              class: "hg-highlight",
-              buttons: "{bksp}"
+              class: 'hg-highlight',
+              buttons: '{bksp}',
             }
           ]}
         />
