@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core';
 import Keyboard from 'react-simple-keyboard';
 import { ipcRenderer } from 'electron';
+import Alert from '../Alert/Alert';
 
 const ipc = ipcRenderer;
 
@@ -14,6 +15,8 @@ export default function Form1({ setInputs, inputs, setIsSync }) {
 
 
     //estado Globales
+    const [openModal, setOpenModal] = useState(false);
+    const [message, setMessage] = useState('default');
 
     const [layoutName, setLayoutName] = useState('default');
     const [inputName, setInputName] = useState();
@@ -40,7 +43,31 @@ export default function Form1({ setInputs, inputs, setIsSync }) {
 
     const getToken = () => {
       ipc.on('message-config', (event, arg) => {
-        if (arg?.token !== null) {
+        console.log(arg)
+
+        if (arg == "Error: getaddrinfo ENOTFOUND null") {
+          setOpenModal(true)
+          setIsSync(true)
+          setMessage("La datos no son correctos")
+          return
+        }
+
+
+        if (arg == "Error: Request failed with status code 401") {
+          setOpenModal(true)
+          setIsSync(true)
+          setMessage("los datos de usuarios no tienen permisos")
+          return
+        }
+
+        if (arg == "Error: Request failed with status code 422") {
+          setOpenModal(true)
+          setIsSync(true)
+          setMessage("Faltan datos para loguearse")
+          return
+        }
+
+        if (arg?.token && arg?.token !== null) {
           localStorage.setItem('token',arg?.token);
           setIsSync(false);
         }
@@ -79,6 +106,13 @@ export default function Form1({ setInputs, inputs, setIsSync }) {
 
     return (
       <Box p={2}>
+        {
+        <Alert
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          message={message}
+        />
+        }
         <form onSubmit={onSubmit}>
           <Grid container direction="row" spacing={2}>
             <Grid item lg={4} md={4} sm={4} xs={4}>
