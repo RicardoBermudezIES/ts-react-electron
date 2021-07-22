@@ -17,7 +17,7 @@ export default function Alert({ open, onClose, message }) {
       <DialogTitle id="alert-dialog-title">{'Error'}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-        <Typography variant="h5">  {message} </Typography>
+          <Typography variant="h5"> {message} </Typography>
         </DialogContentText>
       </DialogContent>
       <DialogActions>
