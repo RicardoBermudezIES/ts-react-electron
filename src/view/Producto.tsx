@@ -92,9 +92,10 @@ export default function Producto() {
   const GotoRight = () => {
     const content = document.getElementById('content');
     let scroll2 = 0;
-    if (scroll >= content.scrollWidth + 100 - window.outerWidth) {
+    if (scroll > content.scrollWidth - (window.outerWidth-200)  ) {
       setIsMax(true);
     }
+    console.log(content.scrollWidth - window.outerWidth, scroll)
     scroll2 = content.scrollLeft += 300;
     setScroll(scroll2);
   };

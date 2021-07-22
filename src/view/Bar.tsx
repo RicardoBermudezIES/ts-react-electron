@@ -54,7 +54,7 @@ export default function Bar() {
     const content = document.getElementById('content');
     const scroll = (content.scrollLeft -= 300);
     setScroll(scroll);
-    if (scroll <= content.scrollWidth - window.outerWidth) {
+    if (scroll <= content.scrollWidth -( window.outerWidth+500)) {
       setIsMax(false);
     }
   };
