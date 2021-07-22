@@ -1,10 +1,10 @@
 import Https from 'https';
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 export const loginSmol = (arg) => {
   const { host, user, password } = arg;
-  var data = JSON.stringify({ login: user, password: password });
-  var config = {
+  let data = JSON.stringify({ login: user, password: password });
+  let config : AxiosRequestConfig = {
     method: 'post',
     url: `https://${host}:8443/MobilAppV2/authentication`,
     httpsAgent: new Https.Agent({ rejectUnauthorized: false }),
@@ -22,6 +22,6 @@ export const loginSmol = (arg) => {
      return res.data;
     })
     .catch((error: AxiosError) => {
-      console.log(error);
+      return error;
     });
 };
