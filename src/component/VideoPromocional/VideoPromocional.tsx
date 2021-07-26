@@ -1,17 +1,17 @@
+import path from 'path';
 import React, { useEffect, useState } from 'react';
 import useInactivy from '../../Hook/useInactivy';
-const fs = require('fs');
+import fs from 'fs'
+import os from 'os'
 
 export default function VideoPromocional() {
-  const URL_BASE = '/home/front/fidelizacion';
-  const path = '/home/front/fidelizacion/';
+  const URL_BASE = path.join(os.homedir(), "fidelizacion");
 
-  const [numberMax, setNumberMax] = useState(0);
-  const [songs, setSongs] = useState([]);
+  const URL =  `${URL_BASE}/video-fidelizacion-`;
+  const [numberSong, setNumberSong] = useState(1);
+  const [numberMax, setNumberMax] = useState<number>(0);
   const [error, setError] = useState(false);
   const { isVideoPlay, setIsVideoPlay } = useInactivy();
-
-  let numberSong = 1;
 
   const OnClickHiddenVideo = () => {
     const videoEl = document.querySelector('#video');
@@ -21,46 +21,48 @@ export default function VideoPromocional() {
     videoEl.muted = true;
   };
 
-  const getListVideos = () => {
-    const nameVideo = fs
-      .readdirSync(URL_BASE, { withFileTypes: true })
-      .filter((item) => !item.isDirectory())
-      .map((item) => item.name);
-    setSongs(nameVideo);
-    setNumberMax(nameVideo.length);
+  const getListVideos = (URL_BASE) => {
+    return new Promise((resolve, reject): void => {
+      fs.readdir(URL_BASE, { withFileTypes: true }, (err, files) => {
+        if (err) reject(err);
+        else {
+          resolve(files.map((item) => item.name));
+        }
+      });
+    });
   };
 
   useEffect(() => {
-    getListVideos();
+    getListVideos(URL_BASE)
+      .then((res: Array<any>) => {
+        console.log(res);
+        setNumberMax(res.length);
+      })
+      .catch((err) => setError(err));
   }, []);
 
   useEffect(() => {
+     resetVideo();
     if (isVideoPlay === true) {
       const videoEl = document.querySelector('#video');
       videoEl.muted = false;
     } else {
+      UpCounterVideo()
       const videoEl = document.querySelector('#video');
       videoEl.muted = true;
     }
   }, [isVideoPlay]);
 
-  const changeVideo = () => {
-    console.log('cambiando el video', numberSong, numberMax);
-    getListVideos();
-    if (numberSong < numberMax) {
-      console.log(numberMax, numberSong);
-      numberSong += 1;
-      console.log(numberMax, numberSong);
-    } else if (numberSong === numberMax) {
-      numberSong = 1;
+  const UpCounterVideo = () => {
+    setNumberSong(numberSong + 1);
+  }
+
+  const resetVideo = () => {
+    if (numberSong === numberMax || numberSong > numberMax) {
+      setNumberSong(1);
     }
   };
 
-  useEffect(() => {
-    setInterval(() => {
-      changeVideo();
-    }, 1000 * 60 * 2);
-  }, [numberMax]);
 
   return (
     <section className={`${isVideoPlay ? '' : 'hidden'} `}>
@@ -70,7 +72,7 @@ export default function VideoPromocional() {
         autoPlay
         muted
         loop
-        src={`${path}-${songs[numberSong]}`}
+        src={ numberSong ? `${URL}${numberSong}` : ''}
         type="video/mp4"
       ></video>
     </section>
