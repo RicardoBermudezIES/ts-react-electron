@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.global.css';
-import fs from 'fs';
-import paths from 'path';
 import { Box, ThemeProvider } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import { theme } from './theme/Theme';
@@ -10,14 +8,15 @@ import { router } from './router';
 import DataProvider from './context/Context';
 import Juego from './iconos/JuegoResponsable.svg';
 import Alert from './component/Alert/Alert';
+import VideoPromocional from './component/VideoPromocional/VideoPromocional';
 
 const ipc = ipcRenderer;
 
 export default function App() {
   const [open, setOpen] = useState(!navigator.onLine);
 
-
   const isOnline = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     navigator.onLine ? setOpen(false) : setOpen(true);
   };
 
@@ -54,6 +53,7 @@ export default function App() {
   return (
     <DataProvider>
       <Router>
+        <VideoPromocional />
         <ThemeProvider theme={theme}>
           <Box position="absolute" bottom="5px" right="5px">
             <img style={{ width: 150 }} src={Juego} alt="juego Responsable" />
@@ -68,6 +68,7 @@ export default function App() {
           )}
           <Switch>
             {router.map((route, i) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Route key={i} path={route.path} component={route.component} />
             ))}
           </Switch>
