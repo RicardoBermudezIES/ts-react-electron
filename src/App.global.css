@@ -83,6 +83,14 @@ body {
   display: none;
 }
 
+video{
+  width: 100vw;
+  height: 100vh;
+  object-fit: fill;
+  position: absolute;
+  z-index: 2;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
