@@ -11,6 +11,7 @@ import {
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
+import { formatNumber } from '../helpers/format'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,6 +39,16 @@ const useStyles = makeStyles((theme) => ({
     border: '5px solid',
     borderColor: theme.palette.primary.main,
     borderRadius: 20,
+  },
+  blue: {
+    height: 200,
+    width: 200,
+    borderRadius: 999,
+    background: 'linear-gradient(180deg, #3af0b0 0%, #029af9 100%)',
+    position: 'absolute',
+    bottom: -50,
+    left: -100,
+    zIndex: -1,
   },
 }));
 
@@ -72,6 +83,7 @@ export default function Bar() {
   const categorias = ['Bebidas', 'Comida', 'Licores', 'juegos', 'tecnologia'];
   return (
     <Box p={2}>
+      <Box className={classes.blue} />
       <Grid container direction="column" spacing={3}>
         <Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container direction="row" spacing={2} alignItems="center">
@@ -93,7 +105,7 @@ export default function Bar() {
             <Grid item lg={4} md={4} sm={4} xs={4}>
               <Typography variant="h3" align="right" component="p">
                 {puntos?.cantidadPuntosDisponibles
-                  ? ( puntos?.cantidadPuntosDisponibles
+                  ? ( formatNumber(puntos?.cantidadPuntosDisponibles)
                 ) : (
                   <Typography variant="body2" align="right" component="span">
                     cargando..

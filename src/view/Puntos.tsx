@@ -1,7 +1,7 @@
 import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router';
-
+import {formatNumber} from '../helpers/format'
 const useStyles = makeStyles(() => ({
   root: {
     overflowX: 'hidden',
@@ -54,7 +54,7 @@ export default function Puntos() {
               </Button>
             </Grid>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography variant="h6" align="right" component="p">
+              <Typography color="secondary" variant="h3" align="right" component="p">
                 {user ? user.nombre : 'cargando..'}
               </Typography>
             </Grid>
@@ -64,9 +64,9 @@ export default function Puntos() {
         <Box p={8}>
           <Grid container direction="row" spacing={3}>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography variant="h3" align="center" component="p">
+              <Typography variant="h1" align="center" component="p">
                 {puntos.cantidadPuntosDisponibles
-                  ? puntos.cantidadPuntosDisponibles
+                  ? formatNumber(puntos.cantidadPuntosDisponibles)
                   : 'cargando..'}
               </Typography>
               <Typography variant="h5" align="center" component="p">
@@ -74,9 +74,9 @@ export default function Puntos() {
               </Typography>
             </Grid>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography variant="h3" align="center" component="p">
+              <Typography variant="h1" align="center" component="p">
                 {puntos.cantidadPuntosDisponibles
-                  ? puntos.cantidadPuntosDisponibles
+                  ? formatNumber(puntos.cantidadPuntosDisponibles)
                   : 'cargando..'}
               </Typography>
               <Typography variant="h5" align="center" component="p">

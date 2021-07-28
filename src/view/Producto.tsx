@@ -19,6 +19,8 @@ import {
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
+import { formatMoney, formatNumber } from '../helpers/format'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -148,14 +150,14 @@ export default function Producto() {
               </Button>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={4}>
-              <Typography variant="h4" component="p"  align="center">
+              <Typography variant="h3" component="p"  align="center">
                 {user ? user.nombre : 'Anonimo'}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={4}>
               <Typography variant="h3" align="right" component="p">
                 {puntos?.cantidadPuntosDisponibles ? (
-                  puntos?.cantidadPuntosDisponibles
+                  formatNumber(puntos?.cantidadPuntosDisponibles)
                 ) : (
                   <Typography variant="body2" align="right" component="span">
                     cargando..
@@ -209,7 +211,7 @@ export default function Producto() {
                               <Typography variant="h5" align="center">
                                 Puntos
                                 <Typography variant="h6" align="center">
-                                  {p?.puntos}
+                                  {formatNumber(p?.puntos)}
                                 </Typography>
                               </Typography>
                             </Grid>
@@ -237,7 +239,7 @@ export default function Producto() {
                               <Typography variant="h5" align="center">
                                 Precio
                                 <Typography variant="h6" align="center">
-                                  {p?.precio}
+                                  {formatMoney(p?.precio)}
                                 </Typography>
                               </Typography>
                             </Grid>
