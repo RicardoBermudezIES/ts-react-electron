@@ -17,7 +17,7 @@ import {
 import { useHistory } from 'react-router';
 import Keyboard from 'react-simple-keyboard';
 import { ipcRenderer } from 'electron';
-import { CallEndTwoTone, Fastfood } from '@material-ui/icons';
+import { CallEndTwoTone, Fastfood, Settings } from '@material-ui/icons';
 import { DataContext } from '../context/Context';
 import Alert from '../component/Alert/Alert';
 
@@ -26,17 +26,6 @@ const ipc = ipcRenderer;
 const useStyles = makeStyles(() => ({
   login: {
     marginBottom: 'min(10%,25%)',
-  },
-  red: {
-    height: 500,
-    width: 500,
-    borderRadius: 999,
-    background:
-      'linear-gradient(180deg, rgba(250, 93, 185, 1) 0%, rgba(239, 35, 35, 1) 100% )',
-    position: 'absolute',
-    bottom: -250,
-    left: -100,
-    zIndex: -1,
   },
 }));
 
@@ -186,7 +175,6 @@ function Login() {
 
   return (
     <Box p={3}>
-      <Box className={classes.red} />
       <Grid container justify="flex-end" spacing={2}>
         <Grid item lg={2} md={2} sm={3} xs={4}>
           <Button
@@ -195,7 +183,7 @@ function Login() {
             variant="contained"
             color="secondary"
           >
-            Configuracion
+              <Settings style={{ fontSize: 50 }} />
           </Button>
         </Grid>
       </Grid>
@@ -206,15 +194,15 @@ function Login() {
         justify="center"
         spacing={2}
       >
-        <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
-          <Typography variant="h4" align="center" component="h2">
-            Iniciar Sesión
+        <Grid item xl={6} lg={6} md={6} sm={6} xs={6}>
+          <Typography style={{fontWeight:900}} variant="h4" align="center" component="h2">
+            {"Iniciar sesión".toUpperCase()}
           </Typography>
         </Grid>
         <form onSubmit={onSubmit} noValidate autoComplete="off">
-          <Grid item xl={8} lg={8} md={10} sm={10} xs={12}>
-            <Grid container direction="row" justify="flex-end" spacing={2}>
-              <Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
+          <Grid item xl={12} lg={12} md={10} sm={10} xs={12}>
+            <Grid container direction="row" justify="center" align="center" spacing={2}>
+              <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
                 <TextField
                   name="username"
                   fullWidth
@@ -226,7 +214,7 @@ function Login() {
                   onFocus={() => setActiveInput('username')}
                 />
               </Grid>
-              <Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
+              <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
                 <TextField
                   type="password"
                   name="password"
@@ -239,15 +227,16 @@ function Login() {
                   onFocus={() => setActiveInput('password')}
                 />
               </Grid>
-              <Grid item>
+              <Grid item  xl={2} lg={2} md={2} sm={2} xs={2}>
                 <Button
+                  style={{height:"100%"}}
                   size="large"
                   type="submit"
-                  variant="contained"
+                  variant="outlined"
                   fullWidth
                   color="primary"
                 >
-                  Login
+                 {"Iniciar sesión"}
                 </Button>
               </Grid>
             </Grid>
@@ -255,7 +244,7 @@ function Login() {
         </form>
       </Grid>
 
-      <Grid container justify="center" spacing={1}>
+      <Grid container justify="flex-start" spacing={1}>
         <Grid item lg={1} md={1} sm={1} xs={1} >
           <Button
             onClick={() => history.push('/bar')}
@@ -301,14 +290,13 @@ function Login() {
         aria-labelledby="form-dialog-title"
       >
         <form onSubmit={onSubmitConfiguration}>
-          <DialogTitle id="form-dialog-title">Contraseña maestra</DialogTitle>
-          <DialogContent>
-            <DialogContentText>Ingresa la contraseña maestra</DialogContentText>
+          <DialogTitle style={{paddingBottom:0}} id="form-dialog-title">Contraseña maestra</DialogTitle>
+          <DialogContent style={{paddingTop:0}} >
             <TextField
               autoFocus
               margin="dense"
               id="passwordMaster"
-              label="contraseña Maestra"
+              label="Contraseña Maestra"
               type="password"
               fullWidth
               value={getInputValue('passwordMaster')}
@@ -318,10 +306,10 @@ function Login() {
             {errorMaster ? <span>Error</span> : null}
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseMasterPassword} color="primary">
+            <Button onClick={handleCloseMasterPassword} style={{fontSize:16}}  color="primary">
               cerrar
             </Button>
-            <Button type="submit" color="primary">
+            <Button type="submit"  style={{fontSize:16}} color="primary">
               entrar
             </Button>
           </DialogActions>
