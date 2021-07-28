@@ -17,12 +17,11 @@ export default function VideoPromocional() {
     const videoEl = document.querySelector('#video');
     setIsVideoPlay(!isVideoPlay);
     console.log(isVideoPlay + 'App');
-    videoEl.autoplay = false;
     videoEl.muted = true;
   };
 
-  const getListVideos = (URL_BASE) => {
-    return new Promise((resolve, reject): void => {
+  const getListVideos = (URL_BASE): Promise<Array<string>> => {
+    return new Promise((resolve, reject) => {
       fs.readdir(URL_BASE, { withFileTypes: true }, (err, files) => {
         if (err) reject(err);
         else {
@@ -34,7 +33,7 @@ export default function VideoPromocional() {
 
   useEffect(() => {
     getListVideos(URL_BASE)
-      .then((res: Array<any>) => {
+      .then((res: Array<string>) => {
         console.log(res);
         setNumberMax(res.length);
       })
@@ -42,14 +41,16 @@ export default function VideoPromocional() {
   }, []);
 
   useEffect(() => {
-     resetVideo();
     if (isVideoPlay === true) {
       const videoEl = document.querySelector('#video');
       videoEl.muted = false;
+      videoEl.play();
     } else {
       UpCounterVideo()
       const videoEl = document.querySelector('#video');
       videoEl.muted = true;
+      videoEl.pause();
+
     }
   }, [isVideoPlay]);
 
@@ -58,10 +59,15 @@ export default function VideoPromocional() {
   }
 
   const resetVideo = () => {
-    if (numberSong === numberMax || numberSong > numberMax) {
+    if (numberSong > numberMax) {
       setNumberSong(1);
     }
   };
+
+
+  useEffect(() => {
+    resetVideo();
+  }, [numberSong]);
 
 
   return (
