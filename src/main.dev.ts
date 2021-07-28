@@ -131,9 +131,9 @@ const createWindow = async () => {
 
 //recibe y envia el token a la configuración
 ipc.on('message-config', async (event, arg) => {
-  let token = await loginSmol(arg);
-  console.log(token, 'en el main.dev');
-  event.reply('message-config', token);
+  const res = await loginSmol(arg);
+  console.log(res, 'envia el token a la configuración');
+  event.reply('message-config', res);
 });
 
 //peticiones de tokens
