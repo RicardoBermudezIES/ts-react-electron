@@ -8,24 +8,24 @@ const useStyles = makeStyles(() => ({
     height: '100%',
   },
   red: {
-    height: 500,
-    width: 500,
+    height: 250,
+    width: 250,
     borderRadius: 999,
     background:
       'linear-gradient(180deg, rgba(250, 93, 185, 1) 0%, rgba(239, 35, 35, 1) 100% )',
     position: 'absolute',
-    bottom: -250,
+    bottom: -150,
     left: -100,
     zIndex: -1,
   },
   blue: {
-    height: 500,
-    width: 500,
+    height: 250,
+    width: 250,
     borderRadius: 999,
     background: 'linear-gradient(180deg, #3af0b0 0%, #029af9 100%)',
     position: 'absolute',
     top: -100,
-    right: -300,
+    right: -150,
     zIndex: -1,
   },
 }));
@@ -54,8 +54,8 @@ export default function Puntos() {
               </Button>
             </Grid>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography color="secondary" variant="h3" align="right" component="p">
-                {user ? user.nombre : 'cargando..'}
+              <Typography color="secondary" variant="h4" align="right" component="p">
+                {user ? user?.nombre : 'cargando..'}
               </Typography>
             </Grid>
           </Grid>
@@ -65,8 +65,8 @@ export default function Puntos() {
           <Grid container direction="row" spacing={3}>
             <Grid item lg={6} md={6} sm={6} xs={6}>
               <Typography variant="h1" align="center" component="p">
-                {puntos.cantidadPuntosDisponibles
-                  ? formatNumber(puntos.cantidadPuntosDisponibles)
+                {puntos?.cantidadPuntosDisponibles
+                  ? formatNumber(puntos?.cantidadPuntosDisponibles)
                   : 'cargando..'}
               </Typography>
               <Typography variant="h5" align="center" component="p">
@@ -75,8 +75,8 @@ export default function Puntos() {
             </Grid>
             <Grid item lg={6} md={6} sm={6} xs={6}>
               <Typography variant="h1" align="center" component="p">
-                {puntos.cantidadPuntosDisponibles
-                  ? formatNumber(puntos.cantidadPuntosDisponibles)
+                {puntos?.cantidadPuntosRedimidos
+                  ? formatNumber(puntos?.cantidadPuntosRedimidos)
                   : 'cargando..'}
               </Typography>
               <Typography variant="h5" align="center" component="p">
