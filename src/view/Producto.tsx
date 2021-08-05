@@ -15,6 +15,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  CardMedia,
 } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
@@ -39,20 +40,30 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 600,
     width: 'fit-content',
     margin: '0 1em',
-    display: 'flex',
-    flexDirection: 'column',
+
     alignItems: 'center',
     background: 'linear-gradient(180deg, #019aff 0%, #181d45 100%);',
     borderRadius: 20,
     color: '#fff',
   },
-
+  content: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   CardAction: {
     width: '90%',
     margin: '0 auto',
   },
-  img: {
-    width: '100%',
+  cover: {
+    minWidth: 152,
+    width: '40%',
+    minHeight:300,
     maxHeight: 100,
     objectFit: 'cover',
     marginBottom: 20,
@@ -94,7 +105,7 @@ export default function Producto() {
   const GotoRight = () => {
     const content = document.getElementById('content');
     let scroll2 = 0;
-    if (scroll > content.scrollWidth - (window.outerWidth-200)  ) {
+    if (scroll > content.scrollWidth - (window.outerWidth)  ) {
       setIsMax(true);
     }
     console.log(content.scrollWidth - window.outerWidth, scroll)
@@ -127,11 +138,11 @@ export default function Producto() {
   };
 
   const productos = [
-    { nombre: 'Alitas de BBQ', precio: 50000, puntos: 900000 },
-    { nombre: 'Hamburguesa Premium', precio: 50000, puntos: 900000 },
-    { nombre: 'Langostas Asadas', precio: 50000, puntos: 900000 },
-    { nombre: 'Churrasco', precio: 50000, puntos: 900000 },
-    { nombre: 'New York 500gr', precio: 50000, puntos: 900000 },
+    { nombre: 'Alitas de BBQ', img:"https://i.ytimg.com/vi/2u9Uo5kLAog/maxresdefault.jpg", precio: 50000, puntos: 900000 },
+    { nombre: 'Hamburguesa Premium', img:"https://scontent.fbog10-1.fna.fbcdn.net/v/t1.6435-9/75429611_2688963544488122_6773744964363878400_n.jpg?_nc_cat=107&ccb=1-3&_nc_sid=730e14&_nc_ohc=iK5jHXfOmeMAX86E3X3&_nc_ht=scontent.fbog10-1.fna&oh=9f6ad7c50c12cb1dee86f2521c80813b&oe=612B4862", precio: 50000, puntos: 900000 },
+    { nombre: 'Langostas Asadas', img:"https://i.pinimg.com/originals/2f/df/2d/2fdf2dfaefe6baa120886f9edd5a7fce.jpg", precio: 50000, puntos: 900000 },
+    { nombre: 'Churrasco' ,img:"https://i0.wp.com/www.sweetteaandthyme.com/wp-content/uploads/2016/05/Churrasco-hero-shot.jpg?fit=1000%2C1500&ssl=1",  precio: 50000, puntos: 900000 },
+    { nombre: 'BRIEF TOMA HAWK 500gr',img:"https://www.reviewjournal.com/wp-content/uploads/2020/10/14377165_web1_RESTBRIEFS2.jpg", precio: 50000, puntos: 900000 },
   ];
 
   return (
@@ -150,14 +161,14 @@ export default function Producto() {
               </Button>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={4}>
-              <Typography variant="h3" component="p"  align="center">
+              <Typography variant="h4" component="p"  align="center">
                 {user ? user.nombre : 'Anonimo'}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={4}>
               <Typography variant="h3" align="right" component="p">
                 {puntos?.cantidadPuntosDisponibles ? (
-                  formatNumber(puntos?.cantidadPuntosDisponibles)
+                  formatNumber(Number(puntos?.cantidadPuntosDisponibles))
                 ) : (
                   <Typography variant="body2" align="right" component="span">
                     cargando..
@@ -185,12 +196,13 @@ export default function Producto() {
             {productos
               ? productos.map((p, i) => (
                   <Card key={i} className={classes.item}>
-                    <CardContent>
-                      <img
-                        className={classes.img}
-                        src="https://picsum.photos/800/400"
-                        alt=""
+                    <CardContent className={classes.content}>
+                    <CardMedia
+                        className={classes.cover}
+                        image={p?.img}
+                        title="Live from space album cover"
                       />
+                      <Box className={classes.details}>
                       <Typography variant="h4" align="center">
                         {p?.nombre}
                       </Typography>
@@ -200,22 +212,22 @@ export default function Producto() {
                         justify="space-between"
                         align="center"
                       >
-                        <Grid item>
+                        <Grid item  lg={6} md={6} sm={6} xs={6}>
                           <Grid
                             container
                             direction="row"
                             alignItems="center"
                             spacing={2}
                           >
-                            <Grid item>
+                            <Grid item  lg={12} md={12} sm={12} xs={12}>
                               <Typography variant="h5" align="center">
                                 Puntos
-                                <Typography variant="h6" align="center">
+                                <Typography variant="h5" align="center">
                                   {formatNumber(p?.puntos)}
                                 </Typography>
                               </Typography>
                             </Grid>
-                            <Grid item>
+                            <Grid item  lg={12} md={12} sm={12} xs={12}>
                               <Button
                                 disabled={user === null}
                                 onClick={doRedimir}
@@ -228,22 +240,22 @@ export default function Producto() {
                             </Grid>
                           </Grid>
                         </Grid>
-                        <Grid item>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                           <Grid
                             container
                             direction="row"
                             spacing={2}
                             alignItems="center"
                           >
-                            <Grid item>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
                               <Typography variant="h5" align="center">
                                 Precio
-                                <Typography variant="h6" align="center">
+                                <Typography variant="h5" align="center">
                                   {formatMoney(p?.precio)}
                                 </Typography>
                               </Typography>
                             </Grid>
-                            <Grid item>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
                               <Button
                                 onClick={doBuy}
                                 variant="contained"
@@ -256,6 +268,7 @@ export default function Producto() {
                           </Grid>
                         </Grid>
                       </Grid>
+                      </Box>
                     </CardContent>
                   </Card>
                 ))
@@ -290,6 +303,7 @@ export default function Producto() {
           </Button>
         </DialogActions>
       </Dialog>
+
       <Dialog
         fullWidth="md"
         maxWidth="md"
