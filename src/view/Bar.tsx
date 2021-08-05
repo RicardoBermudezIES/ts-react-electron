@@ -35,10 +35,46 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     color: theme.palette.primary.main,
-    background: 'transparent',
     border: '5px solid',
     borderColor: theme.palette.primary.main,
     borderRadius: 20,
+    position: "relative",
+    zIndex: 0,
+    "&:after":{
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      content: "' '",
+      position: "absolute",
+      background: "rgba(0,0,0,0.3)",
+      zIndex: -1,
+    }
+  },
+  cardContent:{
+    position: "absolute",
+    top:0,
+    width:"100%"
+  },
+  title:{
+    background: theme.palette.primary.main,
+    paddingLeft:15,
+    paddingRight: 15,
+    color: "white",
+    borderRadius:5,
+    marginBottom:10,
+
+  },
+  buttons: {
+    position:"relative",
+    zIndex:2,
+    background:"#05194687"
+  },
+  cardAction:{
+    position:"absolute",
+    bottom:0,
+    width:"100%",
+    padding:0
   },
   blue: {
     height: 200,
@@ -65,7 +101,7 @@ export default function Bar() {
     const content = document.getElementById('content');
     const scroll = (content.scrollLeft -= 300);
     setScroll(scroll);
-    if (scroll <= content.scrollWidth -( window.outerWidth+500)) {
+    if (scroll <= content.scrollWidth -( window.outerWidth)) {
       setIsMax(false);
     }
   };
@@ -80,7 +116,10 @@ export default function Bar() {
     setScroll(scroll2);
   };
 
-  const categorias = ['Bebidas', 'Comida', 'Licores', 'juegos', 'tecnologia'];
+  const categorias = [
+    { name : 'Jugos', img:"https://laopinion.com/wp-content/uploads/sites/3/2021/04/jugos-naturales-shutterstock_121270552.jpg?quality=80&strip=all&w=1200"},
+   {name:'Comida', img:"https://elviajerofeliz.com/wp-content/uploads/2020/05/Comida-t%C3%ADpica-de-Jamaica-Platos-Imprescindibles.jpg"},
+   {name:'Licores', img:"https://www.eluniversal.com.mx/sites/default/files/2020/02/21/bebidas-emblematicas-mexico.jpg"}];
   return (
     <Box p={2}>
       <Box className={classes.blue} />
@@ -132,19 +171,23 @@ export default function Bar() {
           <Box id="content" className={classes.root}>
             {categorias
               ? categorias.map((c, i) => (
-                  <Card key={i} className={classes.item}>
-                    <CardContent>
-                      <Typography variant="h3" align="center">
-                        {c}
+                  <Card key={i} className={classes.item}
+                   style={{ background: `url(${c.img})`, objectFit:"cover", backgroundSize:"cover", backgroundRepeat:"no-repeat" }}>
+                    <CardContent className={classes.cardContent}>
+                      <Typography  className={classes.title} variant="h3" align="center">
+                        {c.name}
                       </Typography>
                     </CardContent>
-                    <CardActions>
-                      <Grid container justify="center">
-                        <Grid item>
+                    <CardActions   className={classes.cardAction}>
+                      <Grid container justify="center" >
+                        <Grid item lg={12} style={{width:"100%"}}>
                           <Button
-                            onClick={() => history.push(`/producto/${c}`)}
+                           className={classes.buttons}
+                            onClick={() => history.push(`/producto/${c.name}`)}
                             size="medium"
-                            color="primary"
+                            variant="contained"
+                            color="secondary"
+                            fullWidth
                           >
                             ver productos
                           </Button>
