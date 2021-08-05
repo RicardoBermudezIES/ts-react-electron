@@ -1,8 +1,4 @@
-export const formatNumber = (value: number): string =>
-  new Intl.NumberFormat({
-    minimumSignificantDigits: 1,
-    minimumIntegerDigits: 1,
-  }).format(value);
+export const formatNumber = (number: number) => new Intl.NumberFormat().format(number);
 
 export const FormatDay = (date: Date): string => {
   let newDate = new Date(date);
