@@ -4,6 +4,7 @@ import { Button, Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import NavButton from '../component/NavButton';
+import { formatNumber } from '../helpers/format';
 
 const ipc = ipcRenderer;
 
@@ -147,7 +148,7 @@ function Home() {
                 className={classes.NumberPoint}
               >
                 {puntos?.cantidadPuntosDisponibles ? (
-                  puntos?.cantidadPuntosDisponibles
+                  formatNumber(Number(puntos?.cantidadPuntosDisponibles))
                 ) : (
                   <Typography variant="body2" component="span" align="right">
                     cargando puntos
