@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export default function useInactivy() {
 
-    const [inactivy] = useState(60);
+    const [inactivy] = useState(180);
     const [activy, setActivy] = useState(0);
     const [isVideoPlay, setIsVideoPlay] = useState(false);
 
@@ -34,4 +34,4 @@ export default function useInactivy() {
     }
 
     return {isVideoPlay, setIsVideoPlay}
-}       
+}
