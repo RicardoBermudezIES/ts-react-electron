@@ -1,7 +1,7 @@
 import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router';
-import {formatNumber} from '../helpers/format'
+import { formatNumber } from '../helpers/format';
 const useStyles = makeStyles(() => ({
   root: {
     overflowX: 'hidden',
@@ -54,7 +54,12 @@ export default function Puntos() {
               </Button>
             </Grid>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography color="secondary" variant="h4" align="right" component="p">
+              <Typography
+                color="secondary"
+                variant="h4"
+                align="right"
+                component="p"
+              >
                 {user ? user?.nombre : 'cargando..'}
               </Typography>
             </Grid>
@@ -70,7 +75,7 @@ export default function Puntos() {
                   : 'cargando..'}
               </Typography>
               <Typography variant="h5" align="center" component="p">
-                Puntos
+                Puntos Totales
               </Typography>
             </Grid>
             <Grid item lg={6} md={6} sm={6} xs={6}>
@@ -80,7 +85,7 @@ export default function Puntos() {
                   : 'cargando..'}
               </Typography>
               <Typography variant="h5" align="center" component="p">
-                Puntos Totales
+                Puntos
               </Typography>
             </Grid>
           </Grid>
