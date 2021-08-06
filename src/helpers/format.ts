@@ -1,4 +1,4 @@
-export const formatNumber = (number: number) => new Intl.NumberFormat().format(number);
+export const formatNumber = (number: number) => new Intl.NumberFormat().format(Number(number));
 
 export const FormatDay = (date: Date): string => {
   let newDate = new Date(date);
