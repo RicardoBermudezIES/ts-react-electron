@@ -161,12 +161,12 @@ export default function Producto() {
               </Button>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={4}>
-              <Typography variant="h4" component="p"  align="center">
+              <Typography variant="h3" component="p"  align="center"  style={{fontWeight:"bold"}}>
                 {user ? user.nombre : 'Anonimo'}
               </Typography>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={4}>
-              <Typography variant="h3" align="right" component="p">
+              <Typography variant="h2" align="right" component="p"  style={{fontWeight:"bold"}}>
                 {puntos?.cantidadPuntosDisponibles ? (
                   formatNumber(Number(puntos?.cantidadPuntosDisponibles))
                 ) : (

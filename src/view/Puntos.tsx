@@ -53,14 +53,13 @@ export default function Puntos() {
                 Volver
               </Button>
             </Grid>
-            <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography
-                color="secondary"
-                variant="h4"
-                align="right"
-                component="p"
-              >
-                {user ? user?.nombre : 'cargando..'}
+            <Grid item lg={4} md={4} sm={4} xs={4}>
+            <Typography
+            variant="h3"
+            component="p"
+            align="center"
+            style={{fontWeight:"bold"}}>
+                {user ? user?.nombre : 'Anonimo'}
               </Typography>
             </Grid>
           </Grid>
@@ -69,23 +68,23 @@ export default function Puntos() {
         <Box p={8}>
           <Grid container direction="row" spacing={3}>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography variant="h1" align="center" component="p">
+              <Typography variant="h1" align="center" component="p" style={{fontWeight:"bold"}}>
                 {puntos?.cantidadPuntosDisponibles
                   ? formatNumber(puntos?.cantidadPuntosDisponibles)
                   : 'cargando..'}
               </Typography>
-              <Typography variant="h5" align="center" component="p">
+              <Typography variant="h4" align="center" component="p">
                 Puntos Totales
               </Typography>
             </Grid>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography variant="h1" align="center" component="p">
+              <Typography variant="h1" align="center" component="p"  style={{fontWeight:"bold"}}>
                 {puntos?.cantidadPuntosRedimidos
                   ? formatNumber(puntos?.cantidadPuntosRedimidos)
                   : 'cargando..'}
               </Typography>
-              <Typography variant="h5" align="center" component="p">
-                Puntos
+              <Typography variant="h4" align="center" component="p">
+                Puntos hoy
               </Typography>
             </Grid>
           </Grid>
