@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.global.css';
-import { Box, ThemeProvider } from '@material-ui/core';
+import { Box, Button, ThemeProvider } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import { theme } from './theme/Theme';
 import { router } from './router';
 import DataProvider from './context/Context';
-import Juego from './iconos/JuegoResponsable.svg';
+import Juego from './iconos/JuegoResponsable.png';
 import Alert from './component/Alert/Alert';
 import VideoPromocional from './component/VideoPromocional/VideoPromocional';
 
@@ -23,12 +23,12 @@ export default function App() {
   useEffect(() => {
     setInterval(() => {
       isOnline();
-    }, 1000 * 60 * 1);
+    }, 1000 * 60 * 5);
   }, []);
 
   useEffect(() => {
     const sendAuth = () => {
-      const auth = JSON.parse(localStorage.getItem('authConfig'));
+      const auth = JSON.parse(window.localStorage.getItem('authConfig'));
       ipc.send('allways-auth', auth);
     };
 
@@ -37,7 +37,13 @@ export default function App() {
         sendAuth();
       }, 1000 * 60 * 4);
     }
+
+    return () => {
+     ipc.removeListener(["allways-auth"])
+    }
   }, []);
+
+
 
   const getAuth = () => {
     ipc.on('allways-auth', (event, arg) => {
