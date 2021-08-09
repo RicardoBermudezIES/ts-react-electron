@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import NavButton from '../component/NavButton';
 import { formatNumber } from '../helpers/format';
-
+import Odometer from 'react-odometerjs';
 const ipc = ipcRenderer;
 
 const useStyles = makeStyles(() => ({
@@ -39,15 +39,12 @@ function Home() {
     user === null ? history.push('/login') : null;
   }, []);
 
-  useEffect(() => {
-    setInterval(() => {
+
+  const sendPuntos = () => {
       // eslint-disable-next-line @typescript-eslint/no-shadow
       const authConfig = JSON.parse(localStorage.getItem('authConfig'));
-
       const localMaquina = localStorage.getItem('maquina');
-
       const localCasino = localStorage.getItem('casino');
-
       // eslint-disable-next-line @typescript-eslint/no-shadow
       const localToken = localStorage.getItem('token');
       // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -62,6 +59,17 @@ function Home() {
       if (user !== null) {
         ipc.send('visualizarPuntos', args);
       }
+
+  }
+
+  useEffect(() => {
+    sendPuntos()
+  }, []);
+
+
+  useEffect(() => {
+    setInterval(() => {
+      sendPuntos()
     }, 1000 * 30);
   }, []);
 
@@ -148,7 +156,9 @@ function Home() {
                 className={classes.NumberPoint}
               >
                 {puntos?.cantidadPuntosDisponibles ? (
-                  formatNumber(Number(puntos?.cantidadPuntosDisponibles))
+                  <Odometer
+                  value={Number(puntos?.cantidadPuntosDisponibles)}
+                  format="(.ddd),dd" />
                 ) : (
                   <Typography variant="body2" component="span" align="right">
                     cargando puntos
