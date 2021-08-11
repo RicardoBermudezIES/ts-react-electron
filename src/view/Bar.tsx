@@ -20,39 +20,26 @@ const useStyles = makeStyles((theme) => ({
     overflowX: 'scroll',
     scrollBehavior: 'smooth',
     overflowWrap: 'anywhere',
-    height: 300,
     maxWidth: '70%',
     margin: '0 auto',
     padding: '1rem 0',
   },
   item: {
-    height: 280,
+    height: 250,
     minWidth: 400,
     width: 'fit-content',
     margin: '0 1em',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
     color: theme.palette.primary.main,
     border: '5px solid',
     borderColor: theme.palette.primary.main,
     borderRadius: 20,
-    position: "relative",
-    zIndex: 0,
-    "&:after":{
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-      content: "' '",
-      position: "absolute",
-      background: "rgba(0,0,0,0.3)",
-      zIndex: -1,
-    }
+    top:0,
   },
   cardContent:{
-    position: "absolute",
+    position: "relative",
     top:0,
     width:"100%"
   },
@@ -67,12 +54,12 @@ const useStyles = makeStyles((theme) => ({
   },
   buttons: {
     position:"relative",
-    zIndex:2,
+    zIndex:2, bottom:0,
     background:"#05194687"
   },
   cardAction:{
-    position:"absolute",
-    bottom:0,
+    position:"relative",
+    bottom:-135,
     width:"100%",
     padding:0
   },
@@ -99,20 +86,20 @@ export default function Bar() {
 
   const GotoLeft = () => {
     const content = document.getElementById('content');
-    const scroll = (content.scrollLeft -= 300);
-    setScroll(scroll);
-    if (scroll <= content.scrollWidth -( window.outerWidth)) {
+    const scroll1 = (content.scrollLeft -= 200);
+    if (scroll <= content.scrollWidth) {
       setIsMax(false);
     }
+    setScroll(scroll1);
   };
 
   const GotoRight = () => {
     const content = document.getElementById('content');
     let scroll2 = 0;
-    if (scroll >= content.scrollWidth - window.outerWidth) {
+    if (scroll > content.scrollWidth) {
       setIsMax(true);
     }
-    scroll2 = content.scrollLeft += 300;
+    scroll2 = content.scrollLeft += 200;
     setScroll(scroll2);
   };
 
@@ -126,7 +113,7 @@ export default function Bar() {
       <Grid container direction="column" spacing={3}>
         <Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container direction="row" spacing={2} alignItems="center">
-            <Grid item lg={4} md={4} sm={2} xs={2}>
+            <Grid item lg={2} md={2} sm={2} xs={2}>
               <Button
                 size="large"
                 variant="contained"
@@ -136,13 +123,13 @@ export default function Bar() {
                 Volver
               </Button>
             </Grid>
-            <Grid item lg={4} md={4} sm={4} xs={4}>
+            <Grid item lg={7} md={7} sm={7} xs={7}>
               <Typography variant="h3" component="p" align="center"  style={{fontWeight:"bold"}}>
                 {user ? user?.nombre : 'Anonimo'}
               </Typography>
             </Grid>
-            <Grid item lg={4} md={4} sm={4} xs={4}>
-              <Typography variant="h2" align="right" component="p"  style={{fontWeight:"bold"}}>
+            <Grid item lg={3} md={3} sm={3} xs={3}>
+              <Typography variant="h3" align="right" component="p"  style={{fontWeight:"bold"}}>
                 {puntos?.cantidadPuntosDisponibles
                   ? ( formatNumber(puntos?.cantidadPuntosDisponibles)
                 ) : (
