@@ -26,9 +26,7 @@ import { BarIcon } from '../iconos/Bar';
 const ipc = ipcRenderer;
 
 const useStyles = makeStyles(() => ({
-  login: {
-    marginBottom: 'min(10%,25%)',
-  },
+  login: {},
 }));
 
 function Login() {
@@ -111,6 +109,12 @@ function Login() {
     ipc.on('fidelizarMaquina', (event, arg) => {
       // eslint-disable-next-line no-console
       console.log(arg, 'fidelizarMaquina login.tsx');
+
+      if (arg == undefined ) {
+        // eslint-disable-next-line no-console
+        setmessageError("intente de nuevo, por favor.");
+        setOpenError(true);
+      }
       if (arg?.statusDTO.code !== '00') {
         // eslint-disable-next-line no-console
         setmessageError(arg?.statusDTO.message);
@@ -175,8 +179,8 @@ function Login() {
   };
 
   return (
-    <Box p={4}>
-      <Grid container justify="flex-end" spacing={2}>
+    <Box p={2}>
+      <Grid container justify="flex-end" spacing={1}>
         <Grid item lg={2} md={2} sm={3} xs={4}>
           <Button
             size="large"
@@ -207,26 +211,21 @@ function Login() {
         </Grid>
         <form onSubmit={onSubmit} noValidate autoComplete="off">
           <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-            <Grid
-              container
-              direction="row"
-              justify="flex-start"
-              align="center"
-              spacing={2}
-            >
+            <Grid container direction="row" justify="flex-start" spacing={2}>
               <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
                 <TextField
                   name="username"
                   fullWidth
-                  id="filled-basic"
-                  label="Usuario"
+                  label="Identificación cliente"
                   variant="filled"
                   value={getInputValue('username')}
                   onChange={onChangeInput}
                   onFocus={() => setActiveInput('username')}
                 />
               </Grid>
-              <Grid item xl={3} lg={3} md={3} sm={3} xs={3}>
+              </Grid>
+              <Grid container direction="row" justify="flex-start" spacing={2}>
+              <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
                 <Button
                   style={{ height: '100%' }}
                   size="large"
@@ -239,12 +238,13 @@ function Login() {
                 </Button>
               </Grid>
             </Grid>
+
           </Grid>
         </form>
       </Grid>
 
-      <Grid container justify="flex-start" spacing={1}>
-        <Grid item lg={1} md={1} sm={1} xs={1}>
+      <Grid container justify="flex-end" spacing={3}>
+        <Grid item lg={2} md={2} sm={2} xs={2}>
           <Button
             onClick={() => history.push('/bar')}
             style={{ display: 'grid' }}
@@ -256,7 +256,7 @@ function Login() {
             </Typography>
           </Button>
         </Grid>
-        <Grid item lg={1} md={1} sm={1} xs={1}>
+        <Grid item lg={2} md={2} sm={2} xs={2}>
           <Button style={{ display: 'grid' }}>
             <PhoneIcon />
             <Typography style={{ color: 'white' }}>
@@ -267,7 +267,7 @@ function Login() {
         </Grid>
       </Grid>
 
-      <Dialog open={open} onClose={handleClose} aria-labelledby="token">
+      <Dialog className="dialog-login" open={open} onClose={handleClose} aria-labelledby="token">
         <DialogTitle id="token">Ingresa tu token</DialogTitle>
         <DialogContent>
           <Input
@@ -342,9 +342,12 @@ function Login() {
       <Grid
         className={`keyboardContainer-login ${!keyboardOpen ? 'hidden' : ''}`}
       >
+        <div className="container-closeKeyBoard">
+
         <button className="closeKeyBoard" onClick={closeKeyboard}>
-          x
+          Cerrar
         </button>
+        </div>
         <Keyboard
           keyboardRef={(r) => (keyboard.current = r)}
           inputName={inputName}
@@ -359,7 +362,7 @@ function Login() {
               'a s d f g h j k l -',
               '{shift1} z x c v b n m {bksp}',
             ],
-            shift: ['1 2 3', '4 5 6', '7 8 9', '{shift} 0 - {bksp}'],
+            shift: ['1 2 3', '4 5 6', '7 8 9', '{shift} 0 {bksp}'],
           }}
           display={{
             '{bksp}': 'del',
