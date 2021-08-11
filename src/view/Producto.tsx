@@ -97,7 +97,7 @@ export default function Producto() {
     const content = document.getElementById('content');
     const scroll = (content.scrollLeft -= 300);
     setScroll(scroll);
-    if (scroll <= content.scrollWidth - window.outerWidth) {
+    if (scroll <= content.scrollWidth) {
       setIsMax(false);
     }
   };
@@ -105,10 +105,9 @@ export default function Producto() {
   const GotoRight = () => {
     const content = document.getElementById('content');
     let scroll2 = 0;
-    if (scroll > content.scrollWidth - (window.outerWidth)  ) {
+    if (scroll > content.scrollWidth ) {
       setIsMax(true);
     }
-    console.log(content.scrollWidth - window.outerWidth, scroll)
     scroll2 = content.scrollLeft += 300;
     setScroll(scroll2);
   };
@@ -146,11 +145,11 @@ export default function Producto() {
   ];
 
   return (
-    <Box p={2}>
+    <Box p={1}>
       <Grid container direction="column" spacing={3}>
         <Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container direction="row" spacing={2} alignItems="center">
-            <Grid item lg={4} md={4} sm={2} xs={2}>
+            <Grid item lg={2} md={2} sm={2} xs={2}>
               <Button
                 size="large"
                 variant="contained"
@@ -160,12 +159,12 @@ export default function Producto() {
                 Volver
               </Button>
             </Grid>
-            <Grid item lg={4} md={4} sm={4} xs={4}>
+            <Grid item lg={7} md={7} sm={7} xs={7}>
               <Typography variant="h3" component="p"  align="center"  style={{fontWeight:"bold"}}>
                 {user ? user.nombre : 'Anonimo'}
               </Typography>
             </Grid>
-            <Grid item lg={4} md={4} sm={4} xs={4}>
+            <Grid item lg={3} md={3} sm={3} xs={3}>
               <Typography variant="h2" align="right" component="p"  style={{fontWeight:"bold"}}>
                 {puntos?.cantidadPuntosDisponibles ? (
                   formatNumber(Number(puntos?.cantidadPuntosDisponibles))
