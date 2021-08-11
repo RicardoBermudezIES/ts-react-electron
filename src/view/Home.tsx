@@ -150,7 +150,7 @@ function Home() {
           >
             <Grid item>
               <Typography
-                variant="h1"
+                variant="h2"
                 component="h2"
                 align="right"
                 className={classes.NumberPoint}
