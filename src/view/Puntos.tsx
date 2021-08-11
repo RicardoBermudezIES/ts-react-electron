@@ -43,7 +43,7 @@ export default function Puntos() {
       <Grid container direction="column" spacing={3}>
         <Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container direction="row" spacing={2} alignItems="center">
-            <Grid item lg={4} md={4} sm={2} xs={2}>
+            <Grid item lg={2} md={2} sm={2} xs={2}>
               <Button
                 size="large"
                 variant="contained"
@@ -53,11 +53,11 @@ export default function Puntos() {
                 Volver
               </Button>
             </Grid>
-            <Grid item lg={4} md={4} sm={4} xs={4}>
+            <Grid item lg={8} md={8} sm={8} xs={8}>
             <Typography
             variant="h3"
             component="p"
-            align="center"
+            align="right"
             style={{fontWeight:"bold"}}>
                 {user ? user?.nombre : 'Anonimo'}
               </Typography>
@@ -65,7 +65,7 @@ export default function Puntos() {
           </Grid>
         </Grid>
         {/* fin del header */}
-        <Box p={8}>
+        <Box p={2}>
           <Grid container direction="row" spacing={3}>
             <Grid item lg={6} md={6} sm={6} xs={6}>
               <Typography variant="h1" align="center" component="p" style={{fontWeight:"bold"}}>
