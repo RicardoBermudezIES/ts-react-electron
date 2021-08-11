@@ -3,14 +3,199 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 
- .hg-theme-default{background-color:#ececec;border-radius:5px;box-sizing:border-box;font-family:HelveticaNeue-Light,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;overflow:hidden;padding:5px;touch-action:manipulation;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;width:100%}.hg-theme-default .hg-button span{pointer-events:none}.hg-theme-default button.hg-button{border-width:0;font-size:inherit;outline:0}.hg-theme-default .hg-button{display:inline-block;flex-grow:1}.hg-theme-default .hg-row{display:flex}.hg-theme-default .hg-row:not(:last-child){margin-bottom:5px}.hg-theme-default .hg-row .hg-button:not(:last-child){margin-right:5px}.hg-theme-default .hg-row .hg-button-container{margin-right:5px}.hg-theme-default .hg-row>div:last-child{margin-right:0}.hg-theme-default .hg-row .hg-button-container{display:flex}.hg-theme-default .hg-button{-webkit-tap-highlight-color:rgba(0,0,0,0);align-items:center;background:#fff;border-bottom:1px solid #b5b5b5;border-radius:5px;box-shadow:0 0 3px -1px rgba(0,0,0,.3);box-sizing:border-box;cursor:pointer;display:flex;height:40px;justify-content:center;padding:5px}.hg-theme-default .hg-button.hg-standardBtn{width:20px}.hg-theme-default .hg-button.hg-activeButton{background:#efefef}.hg-theme-default.hg-layout-numeric .hg-button{align-items:center;display:flex;height:60px;justify-content:center;width:33.3%}.hg-theme-default .hg-button.hg-button-numpadadd,.hg-theme-default .hg-button.hg-button-numpadenter{height:85px}.hg-theme-default .hg-button.hg-button-numpad0{width:105px}.hg-theme-default .hg-button.hg-button-com{max-width:85px}.hg-theme-default .hg-button.hg-standardBtn.hg-button-at{max-width:45px}.hg-theme-default .hg-button.hg-selectedButton{background:rgba(5,25,70,.53);color:#fff}.hg-theme-default .hg-button.hg-standardBtn[data-skbtn=".com"]{max-width:82px}.hg-theme-default .hg-button.hg-standardBtn[data-skbtn="@"]{max-width:60px}.hg-candidate-box{background:#ececec;border-bottom:2px solid #b5b5b5;border-radius:5px;display:inline-flex;margin-top:-10px;max-width:272px;position:absolute;transform:translateY(-100%);-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}ul.hg-candidate-box-list{display:flex;flex:1;list-style:none;margin:0;padding:0}li.hg-candidate-box-list-item{align-items:center;display:flex;height:40px;justify-content:center;width:40px}li.hg-candidate-box-list-item:hover{background:rgba(0,0,0,.03);cursor:pointer}li.hg-candidate-box-list-item:active{background:rgba(0,0,0,.1)}.hg-candidate-box-prev:before{content:"◄"}.hg-candidate-box-next:before{content:"►"}.hg-candidate-box-next,.hg-candidate-box-prev{align-items:center;background:#d0d0d0;color:#969696;cursor:pointer;display:flex;padding:0 10px}.hg-candidate-box-next{border-bottom-right-radius:5px;border-top-right-radius:5px}.hg-candidate-box-prev{border-bottom-left-radius:5px;border-top-left-radius:5px}.hg-candidate-box-btn-active{color:#444}
+.hg-theme-default {
+  background-color: #ececec;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-family: HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  overflow: hidden;
+  padding: 5px;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 100%
+}
+
+.hg-theme-default .hg-button span {
+  pointer-events: none
+}
+
+.hg-theme-default button.hg-button {
+  border-width: 0;
+  font-size: inherit;
+  outline: 0
+}
+
+.hg-theme-default .hg-button {
+  display: inline-block;
+  flex-grow: 1
+}
+
+.hg-theme-default .hg-row {
+  display: flex
+}
+
+.hg-theme-default .hg-row:not(:last-child) {
+  margin-bottom: 5px
+}
+
+.hg-theme-default .hg-row .hg-button:not(:last-child) {
+  margin-right: 5px
+}
+
+.hg-theme-default .hg-row .hg-button-container {
+  margin-right: 5px
+}
+
+.hg-theme-default .hg-row>div:last-child {
+  margin-right: 0
+}
+
+.hg-theme-default .hg-row .hg-button-container {
+  display: flex
+}
+
+.hg-theme-default .hg-button {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #b5b5b5;
+  border-radius: 5px;
+  box-shadow: 0 0 3px -1px rgba(0, 0, 0, .3);
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  padding: 5px
+}
+
+.hg-theme-default .hg-button.hg-standardBtn {
+  width: 20px
+}
+
+.hg-theme-default .hg-button.hg-activeButton {
+  background: #efefef
+}
+
+.hg-theme-default.hg-layout-numeric .hg-button {
+  align-items: center;
+  display: flex;
+  height: 60px;
+  justify-content: center;
+  width: 33.3%
+}
+
+.hg-theme-default .hg-button.hg-button-numpadadd,
+.hg-theme-default .hg-button.hg-button-numpadenter {
+  height: 85px
+}
+
+.hg-theme-default .hg-button.hg-button-numpad0 {
+  width: 105px
+}
+
+.hg-theme-default .hg-button.hg-button-com {
+  max-width: 85px
+}
+
+.hg-theme-default .hg-button.hg-standardBtn.hg-button-at {
+  max-width: 45px
+}
+
+.hg-theme-default .hg-button.hg-selectedButton {
+  background: rgba(5, 25, 70, .53);
+  color: #fff
+}
+
+.hg-theme-default .hg-button.hg-standardBtn[data-skbtn=".com"] {
+  max-width: 82px
+}
+
+.hg-theme-default .hg-button.hg-standardBtn[data-skbtn="@"] {
+  max-width: 60px
+}
+
+.hg-candidate-box {
+  background: #ececec;
+  border-bottom: 2px solid #b5b5b5;
+  border-radius: 5px;
+  display: inline-flex;
+  margin-top: -10px;
+  max-width: 272px;
+  position: absolute;
+  transform: translateY(-100%);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none
+}
+
+ul.hg-candidate-box-list {
+  display: flex;
+  flex: 1;
+  list-style: none;
+  margin: 0;
+  padding: 0
+}
+
+li.hg-candidate-box-list-item {
+  align-items: center;
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px
+}
+
+li.hg-candidate-box-list-item:hover {
+  background: rgba(0, 0, 0, .03);
+  cursor: pointer
+}
+
+li.hg-candidate-box-list-item:active {
+  background: rgba(0, 0, 0, .1)
+}
+
+.hg-candidate-box-prev:before {
+  content: "◄"
+}
+
+.hg-candidate-box-next:before {
+  content: "►"
+}
+
+.hg-candidate-box-next,
+.hg-candidate-box-prev {
+  align-items: center;
+  background: #d0d0d0;
+  color: #969696;
+  cursor: pointer;
+  display: flex;
+  padding: 0 10px
+}
+
+.hg-candidate-box-next {
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px
+}
+
+.hg-candidate-box-prev {
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px
+}
+
+.hg-candidate-box-btn-active {
+  color: #444
+}
 
 
 body {
   position: relative;
   color: white;
   height: 100vh;
-  background: radial-gradient( circle, rgba(24, 29, 69, 1) 0%, rgba(11, 16, 38, 1) 100% );
+  background: radial-gradient(circle, rgba(24, 29, 69, 1) 0%, rgba(11, 16, 38, 1) 100%);
   font-family: sans-serif;
   overflow: hidden;
   margin: 0;
@@ -45,8 +230,8 @@ body {
   font-weight: 900;
   color: black;
   left: 20px;
-    right: auto;
-    bottom: 0px;
+  right: auto;
+  bottom: 0px;
 }
 
 .keyboardContainer-login {
@@ -60,20 +245,20 @@ body {
   right: 0;
 }
 
-.keyboardContainer-login .hg-theme-default .hg-row .hg-button{
-  height:112px;
+.keyboardContainer-login .hg-theme-default .hg-row .hg-button {
+  height: 112px;
 }
 
- .hg-button{
+.hg-button {
   font-size: 1.5em;
 
 }
 
-.hg-theme-default .hg-row .hg-button{
-  height:60px;
+.hg-theme-default .hg-row .hg-button {
+  height: 60px;
 }
 
-.container-closeKeyBoard{
+.container-closeKeyBoard {
   display: flex;
   justify-content: flex-end;
   position: absolute;
@@ -81,7 +266,7 @@ body {
 }
 
 
-.closeKeyBoard{
+.closeKeyBoard {
   border: none;
   padding: 15px 30px;
   border-radius: 7px;
@@ -98,12 +283,12 @@ body {
   display: none;
 }
 
-.MuiPaper-root{
-  left:-250px;
-  top:50px;
+.MuiPaper-root {
+  left: -250px;
+  top: 50px;
 }
 
-video{
+video {
   width: 100vw;
   height: 100vh;
   object-fit: fill;
@@ -114,26 +299,28 @@ video{
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
- }
- ::-webkit-scrollbar-thumb {
+}
+
+::-webkit-scrollbar-thumb {
   background: #ffffff00;
   border-radius: 1px;
- }
- ::-webkit-scrollbar-thumb:hover{
+}
+
+::-webkit-scrollbar-thumb:hover {
   background: #ffffff00;
- }
- ::-webkit-scrollbar-track{
+}
+
+::-webkit-scrollbar-track {
   background: #ffffff00;
   border-radius: 5px;
- }
+}
 
 
 
 
 
-
- ---------------------
- .odometer.odometer-auto-theme, .odometer.odometer-theme-minimal {
+.odometer.odometer-auto-theme,
+.odometer.odometer-theme-minimal {
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
@@ -141,7 +328,9 @@ video{
   *display: inline;
   position: relative;
 }
-.odometer.odometer-auto-theme .odometer-digit, .odometer.odometer-theme-minimal .odometer-digit {
+
+.odometer.odometer-auto-theme .odometer-digit,
+.odometer.odometer-theme-minimal .odometer-digit {
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
@@ -149,7 +338,9 @@ video{
   *display: inline;
   position: relative;
 }
-.odometer.odometer-auto-theme .odometer-digit .odometer-digit-spacer, .odometer.odometer-theme-minimal .odometer-digit .odometer-digit-spacer {
+
+.odometer.odometer-auto-theme .odometer-digit .odometer-digit-spacer,
+.odometer.odometer-theme-minimal .odometer-digit .odometer-digit-spacer {
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
@@ -157,7 +348,9 @@ video{
   *display: inline;
   visibility: hidden;
 }
-.odometer.odometer-auto-theme .odometer-digit .odometer-digit-inner, .odometer.odometer-theme-minimal .odometer-digit .odometer-digit-inner {
+
+.odometer.odometer-auto-theme .odometer-digit .odometer-digit-inner,
+.odometer.odometer-theme-minimal .odometer-digit .odometer-digit-inner {
   text-align: left;
   display: block;
   position: absolute;
@@ -167,42 +360,58 @@ video{
   bottom: 0;
   overflow: hidden;
 }
-.odometer.odometer-auto-theme .odometer-digit .odometer-ribbon, .odometer.odometer-theme-minimal .odometer-digit .odometer-ribbon {
+
+.odometer.odometer-auto-theme .odometer-digit .odometer-ribbon,
+.odometer.odometer-theme-minimal .odometer-digit .odometer-ribbon {
   display: block;
 }
-.odometer.odometer-auto-theme .odometer-digit .odometer-ribbon-inner, .odometer.odometer-theme-minimal .odometer-digit .odometer-ribbon-inner {
+
+.odometer.odometer-auto-theme .odometer-digit .odometer-ribbon-inner,
+.odometer.odometer-theme-minimal .odometer-digit .odometer-ribbon-inner {
   display: block;
   -webkit-backface-visibility: hidden;
 }
-.odometer.odometer-auto-theme .odometer-digit .odometer-value, .odometer.odometer-theme-minimal .odometer-digit .odometer-value {
+
+.odometer.odometer-auto-theme .odometer-digit .odometer-value,
+.odometer.odometer-theme-minimal .odometer-digit .odometer-value {
   display: block;
   -webkit-transform: translateZ(0);
 }
-.odometer.odometer-auto-theme .odometer-digit .odometer-value.odometer-last-value, .odometer.odometer-theme-minimal .odometer-digit .odometer-value.odometer-last-value {
+
+.odometer.odometer-auto-theme .odometer-digit .odometer-value.odometer-last-value,
+.odometer.odometer-theme-minimal .odometer-digit .odometer-value.odometer-last-value {
   position: absolute;
 }
-.odometer.odometer-auto-theme.odometer-animating-up .odometer-ribbon-inner, .odometer.odometer-theme-minimal.odometer-animating-up .odometer-ribbon-inner {
+
+.odometer.odometer-auto-theme.odometer-animating-up .odometer-ribbon-inner,
+.odometer.odometer-theme-minimal.odometer-animating-up .odometer-ribbon-inner {
   -webkit-transition: -webkit-transform 2s;
   -moz-transition: -moz-transform 2s;
   -ms-transition: -ms-transform 2s;
   -o-transition: -o-transform 2s;
   transition: transform 2s;
 }
-.odometer.odometer-auto-theme.odometer-animating-up.odometer-animating .odometer-ribbon-inner, .odometer.odometer-theme-minimal.odometer-animating-up.odometer-animating .odometer-ribbon-inner {
+
+.odometer.odometer-auto-theme.odometer-animating-up.odometer-animating .odometer-ribbon-inner,
+.odometer.odometer-theme-minimal.odometer-animating-up.odometer-animating .odometer-ribbon-inner {
   -webkit-transform: translateY(-100%);
   -moz-transform: translateY(-100%);
   -ms-transform: translateY(-100%);
   -o-transform: translateY(-100%);
   transform: translateY(-100%);
 }
-.odometer.odometer-auto-theme.odometer-animating-down .odometer-ribbon-inner, .odometer.odometer-theme-minimal.odometer-animating-down .odometer-ribbon-inner {
+
+.odometer.odometer-auto-theme.odometer-animating-down .odometer-ribbon-inner,
+.odometer.odometer-theme-minimal.odometer-animating-down .odometer-ribbon-inner {
   -webkit-transform: translateY(-100%);
   -moz-transform: translateY(-100%);
   -ms-transform: translateY(-100%);
   -o-transform: translateY(-100%);
   transform: translateY(-100%);
 }
-.odometer.odometer-auto-theme.odometer-animating-down.odometer-animating .odometer-ribbon-inner, .odometer.odometer-theme-minimal.odometer-animating-down.odometer-animating .odometer-ribbon-inner {
+
+.odometer.odometer-auto-theme.odometer-animating-down.odometer-animating .odometer-ribbon-inner,
+.odometer.odometer-theme-minimal.odometer-animating-down.odometer-animating .odometer-ribbon-inner {
   -webkit-transition: -webkit-transform 2s;
   -moz-transition: -moz-transform 2s;
   -ms-transition: -ms-transform 2s;
