@@ -243,14 +243,14 @@ function Login() {
         </form>
       </Grid>
 
-      <Grid container justify="flex-end" spacing={3}>
+      <Grid container justify="flex-end" spacing={0}>
         <Grid item lg={2} md={2} sm={2} xs={2}>
           <Button
             onClick={() => history.push('/bar')}
             style={{ display: 'grid' }}
           >
             <BarIcon />
-            <Typography style={{ color: 'white' }}>
+            <Typography variant="h6" style={{ color: 'white' }}>
               {' '}
               Bar{' '}
             </Typography>
@@ -259,7 +259,7 @@ function Login() {
         <Grid item lg={2} md={2} sm={2} xs={2}>
           <Button style={{ display: 'grid' }}>
             <PhoneIcon />
-            <Typography style={{ color: 'white' }}>
+            <Typography variant="h6" style={{ color: 'white' }}>
               {' '}
               Ayuda{' '}
             </Typography>
