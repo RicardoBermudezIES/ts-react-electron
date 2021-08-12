@@ -12,3 +12,8 @@ export const formatMoney = (number: number): string => {
   }).format(number);
 };
 
+
+export function shortName(name: string): string {
+    const ArrName = name.split(" ");
+    return `${ArrName[0]} ${ArrName[1].slice(0,1)}`;
+};
