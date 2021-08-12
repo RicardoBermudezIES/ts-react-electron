@@ -4,7 +4,6 @@ import { Button, Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import NavButton from '../component/NavButton';
-import { formatNumber } from '../helpers/format';
 import Odometer from 'react-odometerjs';
 const ipc = ipcRenderer;
 
@@ -23,11 +22,11 @@ const useStyles = makeStyles(() => ({
 
 function Home() {
   const history = useHistory();
+  const [isShow, setIsShow] = useState(false);
 
   const user = JSON.parse(localStorage.getItem('user'))
     ? JSON.parse(localStorage.getItem('user'))
     : null;
-
 
   const [puntos, setPuntos] = useState({
     cantidadPuntosDisponibles: null,
@@ -39,37 +38,34 @@ function Home() {
     user === null ? history.push('/login') : null;
   }, []);
 
-
   const sendPuntos = () => {
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      const authConfig = JSON.parse(localStorage.getItem('authConfig'));
-      const localMaquina = localStorage.getItem('maquina');
-      const localCasino = localStorage.getItem('casino');
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      const localToken = localStorage.getItem('token');
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      const user = JSON.parse(localStorage.getItem('user'));
-      const args = {
-        host: authConfig?.host,
-        casino: localCasino,
-        maquina: localMaquina,
-        numeroDocumento: user?.numeroDocumento,
-        token: localToken,
-      };
-      if (user !== null) {
-        ipc.send('visualizarPuntos', args);
-      }
-
-  }
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const authConfig = JSON.parse(localStorage.getItem('authConfig'));
+    const localMaquina = localStorage.getItem('maquina');
+    const localCasino = localStorage.getItem('casino');
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const localToken = localStorage.getItem('token');
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const user = JSON.parse(localStorage.getItem('user'));
+    const args = {
+      host: authConfig?.host,
+      casino: localCasino,
+      maquina: localMaquina,
+      numeroDocumento: user?.numeroDocumento,
+      token: localToken,
+    };
+    if (user !== null) {
+      ipc.send('visualizarPuntos', args);
+    }
+  };
 
   useEffect(() => {
-    sendPuntos()
+    sendPuntos();
   }, []);
-
 
   useEffect(() => {
     setInterval(() => {
-      sendPuntos()
+      sendPuntos();
     }, 1000 * 30);
   }, []);
 
@@ -110,7 +106,7 @@ function Home() {
 
   const classes = useStyles();
   return (
-    <Box height="100vh" p={2}>
+    <Box height="100vh" p={1}>
       <Box
         position="absolute"
         top="-15%"
@@ -138,7 +134,7 @@ function Home() {
         direction="row"
         justify="space-between"
         alignItems="center"
-        spacing={4}
+        spacing={2}
         className={classes.grid}
       >
         <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
@@ -150,15 +146,16 @@ function Home() {
           >
             <Grid item>
               <Typography
-                variant="h2"
+                variant="h3"
                 component="h2"
                 align="right"
                 className={classes.NumberPoint}
               >
                 {puntos?.cantidadPuntosDisponibles ? (
                   <Odometer
-                  value={Number(puntos?.cantidadPuntosDisponibles)}
-                  format="(.ddd),dd" />
+                    value={Number(puntos?.cantidadPuntosDisponibles)}
+                    format="(.ddd),dd"
+                  />
                 ) : (
                   <Typography variant="body2" component="span" align="right">
                     cargando puntos
@@ -167,7 +164,7 @@ function Home() {
               </Typography>
             </Grid>
             <Grid item>
-              <Typography variant="h5" component="p">
+              <Typography variant="h4" component="p">
                 Puntos Totales{' '}
               </Typography>
             </Grid>
@@ -177,10 +174,11 @@ function Home() {
           <Grid
             container
             alignItems="flex-end"
-            justify="center"
+            justify="flex-end"
             direction="column"
           >
             <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
+              <Box display="flex" flexDirection="column" >
               <Typography
                 variant="h2"
                 component="h2"
@@ -188,8 +186,17 @@ function Home() {
                 align="right"
                 className={classes.NumberPoint}
               >
-                {user ? user?.nombre : ''}
+                {isShow && user ? user?.nombre : ''}
               </Typography>
+              <Button
+                size="small"
+                onClick={() => setIsShow(!isShow)}
+                variant="contained"
+                color="secondary"
+              >
+                {isShow ? 'Ocultar nombre' : 'Mostrar nombre'}
+              </Button>
+              </Box>
             </Grid>
           </Grid>
         </Grid>
