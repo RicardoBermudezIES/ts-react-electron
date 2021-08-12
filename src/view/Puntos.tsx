@@ -1,7 +1,7 @@
 import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router';
-import { formatNumber } from '../helpers/format';
+import { formatNumber, shortName } from '../helpers/format';
 const useStyles = makeStyles(() => ({
   root: {
     overflowX: 'hidden',
@@ -59,7 +59,7 @@ export default function Puntos() {
             component="p"
             align="right"
             style={{fontWeight:"bold"}}>
-                {user ? user?.nombre : 'Anonimo'}
+                {user ? shortName(user?.nombre) : 'Anonimo'}
               </Typography>
             </Grid>
           </Grid>
