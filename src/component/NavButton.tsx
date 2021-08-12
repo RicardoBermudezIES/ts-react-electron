@@ -34,7 +34,7 @@ export default function NavButton() {
             <Grid item>
               <Button style={{ display: 'grid' }} onClick={goPuntos}>
                 <PuntosIcon />
-                <Typography style={{ color: 'white' }}>
+                <Typography variant="h6" style={{ color: 'white' }}>
                   {' '}
                   Puntos{' '}
                 </Typography>
@@ -43,7 +43,7 @@ export default function NavButton() {
             <Grid item>
               <Button style={{ display: 'grid', opacity: 0.5 }}>
                 <BilleteraIcon />
-                <Typography style={{ color: 'white' }}>
+                <Typography variant="h6" style={{ color: 'white' }}>
                   {' '}
                   Billtera{' '}
                 </Typography>
@@ -56,7 +56,7 @@ export default function NavButton() {
             <Grid item>
               <Button style={{ display: 'grid' }} disabled>
                 <PhoneIcon />
-                <Typography style={{ color: 'white' }}>
+                <Typography variant="h6" style={{ color: 'white' }}>
                   {' '}
                   Ayuda{' '}
                 </Typography>
@@ -65,7 +65,7 @@ export default function NavButton() {
             <Grid item>
               <Button onClick={goBar} style={{ display: 'grid' }}>
                 <BarIcon />
-                <Typography style={{ color: 'white' }}>
+                <Typography variant="h6" style={{ color: 'white' }}>
                   {' '}
                   Bar{' '}
                 </Typography>
