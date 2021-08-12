@@ -20,7 +20,7 @@ import {
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
-import { formatMoney, formatNumber } from '../helpers/format'
+import { formatMoney, formatNumber, shortName } from '../helpers/format'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -161,11 +161,11 @@ export default function Producto() {
             </Grid>
             <Grid item lg={7} md={7} sm={7} xs={7}>
               <Typography variant="h3" component="p"  align="center"  style={{fontWeight:"bold"}}>
-                {user ? user.nombre : 'Anonimo'}
+                {user ? shortName(user.nombre) : 'Anonimo'}
               </Typography>
             </Grid>
             <Grid item lg={3} md={3} sm={3} xs={3}>
-              <Typography variant="h2" align="right" component="p"  style={{fontWeight:"bold"}}>
+              <Typography variant="h4" align="right" component="p"  style={{fontWeight:"bold"}}>
                 {puntos?.cantidadPuntosDisponibles ? (
                   formatNumber(Number(puntos?.cantidadPuntosDisponibles))
                 ) : (

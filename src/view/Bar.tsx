@@ -11,7 +11,7 @@ import {
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
-import { formatNumber } from '../helpers/format'
+import { formatNumber, shortName } from '../helpers/format'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -108,7 +108,7 @@ export default function Bar() {
    {name:'Comida', img:"https://elviajerofeliz.com/wp-content/uploads/2020/05/Comida-t%C3%ADpica-de-Jamaica-Platos-Imprescindibles.jpg"},
    {name:'Licores', img:"https://www.eluniversal.com.mx/sites/default/files/2020/02/21/bebidas-emblematicas-mexico.jpg"}];
   return (
-    <Box p={2}>
+    <Box p={1}>
       <Box className={classes.blue} />
       <Grid container direction="column" spacing={3}>
         <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -125,11 +125,11 @@ export default function Bar() {
             </Grid>
             <Grid item lg={7} md={7} sm={7} xs={7}>
               <Typography variant="h3" component="p" align="center"  style={{fontWeight:"bold"}}>
-                {user ? user?.nombre : 'Anonimo'}
+                {user ? shortName(user?.nombre) : 'Anonimo'}
               </Typography>
             </Grid>
             <Grid item lg={3} md={3} sm={3} xs={3}>
-              <Typography variant="h3" align="right" component="p"  style={{fontWeight:"bold"}}>
+              <Typography variant="h4" align="right" component="p"  style={{fontWeight:"bold"}}>
                 {puntos?.cantidadPuntosDisponibles
                   ? ( formatNumber(puntos?.cantidadPuntosDisponibles)
                 ) : (
