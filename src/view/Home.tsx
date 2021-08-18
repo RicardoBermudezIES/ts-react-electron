@@ -73,10 +73,11 @@ function Home() {
     ipc.on('visualizarPuntos', (event, arg) => {
       if (arg?.Error) {
         console.log(arg?.Error);
+        CloseSession()
       }
 
       if (arg?.statusDTO?.code !== '00') {
-        console.log(arg?.statusDTO?.message);
+        CloseSession()
       }
       if (arg?.statusDTO?.code == '00') {
         localStorage.setItem(
@@ -113,45 +114,42 @@ function Home() {
       numeroDocumento: user?.numeroDocumento,
       token: localToken,
     };
-    if (user !== null) {
+    if (user !== null && localMaquina) {
       ipc.send('cerrar-sesion', args);
     }
   };
   const leaveLobby = () => {
     console.log('click para salir')
     CloseSession()
-    localStorage.removeItem('user');
-    localStorage.removeItem('puntos');
   };
 
   const ipcCloseSession = () => {
     console.log('ipc Render')
     ipc.on('cerrar-sesion', (_, arg) => {
+
       if (arg?.Error) {
-        console.log(arg?.Error);
+        history.push('/login')
       }
 
       if (arg?.statusDTO?.code !== '00') {
         console.log(arg?.statusDTO?.message);
       }
       if (arg?.statusDTO?.code == '00') {
+        localStorage.removeItem('user');
+        localStorage.removeItem('puntos');
         history.push('/login')
       }
     });
   };
 
+  // useEffect(() => {
+
+  //   setInterval(() => {CloseSession()}, 1000*60*5)
+
+  // }, []);
+
   useEffect(() => {
-
-    setInterval(() => {CloseSession()}, 1000*60*5)
-
-  }, []);
-
-  useEffect(() => {
-    if (user == null) {
-
       ipcCloseSession();
-
-    }
   }, []);
 
   const classes = useStyles();
