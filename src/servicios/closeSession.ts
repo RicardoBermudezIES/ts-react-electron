@@ -2,17 +2,21 @@ import Https from 'https';
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 export const closeSession = (arg) => {
-  const { host, numeroDocumento, serial, token } = arg;
+  const { host, numeroDocumento, maquina, token } = arg;
   var data = {
     nombreServicio: 'cerrarFidelizacionMaquina',
     numeroDeParametros: '3',
     parametros: [
-      { nombreParametro: 'serial', valorParametro: `${serial}` },
       {
+        nombreParametro: 'serial',
+        valorParametro: `${maquina}`
+      },{
         nombreParametro: 'numeroDocumento',
         valorParametro: numeroDocumento+"",
+      },{
+        nombreParametro: 'tipoDispositivo',
+        valorParametro: 'MOVIL'
       },
-      { nombreParametro: 'tipoDispositivo', valorParametro: 'MOVIL' },
     ],
   };
   var config = {
@@ -30,9 +34,11 @@ export const closeSession = (arg) => {
 
   return axios(config)
     .then((res: AxiosResponse) => {
+      console.log(res.data, "servicio")
       return res.data;
+
     })
     .catch((error: AxiosError) => {
-      console.log(error);
+      return error
     });
 };
