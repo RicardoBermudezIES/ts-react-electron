@@ -98,11 +98,61 @@ function Home() {
     getPuntos();
   }, []);
 
+
+  const CloseSession = () => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const authConfig = JSON.parse(localStorage.getItem('authConfig'));
+    const localMaquina = localStorage.getItem('maquina');
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const localToken = localStorage.getItem('token');
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const user = JSON.parse(localStorage.getItem('user'));
+    const args = {
+      host: authConfig?.host,
+      maquina: localMaquina,
+      numeroDocumento: user?.numeroDocumento,
+      token: localToken,
+    };
+    if (user !== null) {
+      ipc.send('cerrar-sesion', args);
+    }
+  };
   const leaveLobby = () => {
+    console.log('click para salir')
+    CloseSession()
     localStorage.removeItem('user');
     localStorage.removeItem('puntos');
-    history.push('/login');
   };
+
+  const ipcCloseSession = () => {
+    console.log('ipc Render')
+    ipc.on('cerrar-sesion', (_, arg) => {
+      if (arg?.Error) {
+        console.log(arg?.Error);
+      }
+
+      if (arg?.statusDTO?.code !== '00') {
+        console.log(arg?.statusDTO?.message);
+      }
+      if (arg?.statusDTO?.code == '00') {
+        history.push('/login')
+      }
+    });
+  };
+
+  useEffect(() => {
+
+    setInterval(() => {CloseSession()}, 1000*60*5)
+
+  }, []);
+
+  useEffect(() => {
+    if (user == null) {
+
+      ipcCloseSession();
+
+    }
+  }, []);
 
   const classes = useStyles();
   return (
