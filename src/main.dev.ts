@@ -1,4 +1,3 @@
-
 /* eslint global-require: off, no-console: off */
 
 /**
@@ -22,6 +21,7 @@ import { VincularMaquina } from './servicios/VincularMaquina';
 import { fidelzarMaquina } from './servicios/Login';
 import { visualizarPuntos } from './servicios/visualizarPuntos';
 import { loginSmol } from './servicios/auth';
+import { closeSession } from './servicios/closeSession';
 
 const ipc = ipcMain;
 
@@ -33,7 +33,7 @@ export default class AppUpdater {
   }
 }
 
-let mainWindow: BrowserWindow | null = null;
+let mainWindow: BrowserWindow | undefined ;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -81,9 +81,8 @@ const createWindow = async () => {
     width: 1280,
     height: 480,
     frame: false,
-    resizable: false,
-    // fullscreenable:true,
-    fullscreen:true,
+    //kiosk:true,
+
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -107,8 +106,21 @@ const createWindow = async () => {
     }
   });
 
+  mainWindow.webContents.session.webRequest.onHeadersReceived(
+    { urls: ['*://*/*'] },
+    (d, c) => {
+      if (d?.responseHeaders['X-Frame-Options']) {
+        delete d.responseHeaders['X-Frame-Options'];
+      } else if (d?.responseHeaders['x-frame-options']) {
+        delete d.responseHeaders['x-frame-options'];
+      }
+
+      c({ cancel: false, responseHeaders: d.responseHeaders });
+    }
+  );
+
   mainWindow.on('closed', () => {
-    mainWindow = null;
+    mainWindow = undefined;
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);
@@ -137,13 +149,13 @@ ipc.on('message-config', async (event, arg) => {
 });
 
 //peticiones de tokens
-ipc.on('allways-auth', async (event, arg)=> {
-  let token
+ipc.on('allways-auth', async (event, arg) => {
+  let token;
   // eslint-disable-next-line prefer-const
   token = await loginSmol(arg);
   console.log(token, 'nuevo');
   event.reply('allways-auth', token);
-})
+});
 
 //peticion para listar casino
 ipc.on('get-casinos', async (event, arg) => {
@@ -180,20 +192,31 @@ ipc.on('fidelizarMaquina', async (event, arg) => {
 //VisualizarPuntos
 ipc.on('visualizarPuntos', async (event, arg) => {
   let res;
-  console.log(arg);
   // eslint-disable-next-line prefer-const
   res = await visualizarPuntos(arg);
-  if (res.response?.status === 400){
-    console.log('peticion incorrecta en visualizar el main.dev');
+  if (res.response?.status === 400) {
     event.reply('visualizarPuntos', { Error: 'bad request' });
   }
-
   if (res.statusDTO?.code === '00') {
-    console.log(res, 'en el main.dev');
     event.reply('visualizarPuntos', res);
   }
-
 });
+
+ipc.on('cerrar-sesion', async (event, arg) => {
+  let res;
+
+    res = await closeSession(arg);
+
+  if (res?.response?.status === 400) {
+    event.reply('cerrar-sesion', { Error: 'bad request' });
+  }
+
+  if (res?.statusDTO?.code === '00') {
+    console.log(res, 'cerrar sesion');
+    event.reply('cerrar-sesion', res);
+  }
+});
+
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
