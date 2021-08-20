@@ -33,6 +33,6 @@ export const fidelzarMaquina = (arg) => {
       return res.data;
     })
     .catch((error: AxiosError) => {
-      console.log(error);
+      return error;
     });
 };
