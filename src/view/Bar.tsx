@@ -80,6 +80,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Bar() {
+  const [productos, setProductos] = useState([]);
   const [scroll, setScroll] = useState(0);
   const [isMax, setIsMax] = useState(false);
   const classes = useStyles();
@@ -111,6 +112,8 @@ export default function Bar() {
 
  const getBar = () => {
   const auth = JSON.parse(localStorage.getItem('authConfig'));
+  ipc.send('allways-auth', auth);
+
   const localCasino = localStorage.getItem('casino');
   const localToken = localStorage.getItem('token');
 
@@ -119,17 +122,29 @@ export default function Bar() {
     casino: localCasino,
     token: localToken,
   };
-  ipc.send('bar', args);
+  if (localStorage.getItem('bar') == null) {
+    ipc.send('bar', args);
+  }else{
+    const  barList = JSON.parse(localStorage.getItem('bar'))
+    if (barList){
+      const newSet = new Set()
+      barList.forEach(( l => newSet.add(l?.categoriaPremio)));
+      setProductos(newSet)
+    }
+  }
  }
 
  useEffect(() => {
-  getBar()
- })
+
+    getBar()
+
+
+ }, [])
 
  useEffect(() => {
   ipc.on('bar', (event, arg) => {
     // eslint-disable-next-line no-console
-    console.log(arg, 'bar login.tsx');
+    console.log(arg?.listaVisualizarPremiosDTO, 'bar login.tsx');
 
     if (arg?.statusDTO?.code !== '00') {
       // eslint-disable-next-line no-console
@@ -137,23 +152,18 @@ export default function Bar() {
     }
 
     if (arg?.statusDTO?.code == '00') {
-      // localStorage.setItem(
-      //   'bar',
-      //   JSON.stringify({
-      //     numeroDocumento: inputs.username,
-      //     nombre: arg.nombreCompleto,
-      //     clave: arg.clave,
-      //     billetero: arg.enableBilletero,
-      //   })
-      // );
+      localStorage.setItem(
+        'bar',
+        JSON.stringify(arg?.listaVisualizarPremiosDTO)
+      );
+      const newSet = new Set()
+      arg?.listaVisualizarPremiosDTO.forEach(( l => newSet.add(l?.categoriaPremio)));
+      setProductos(newSet)
+
     }
   });
 });
 
-  const categorias = [
-    { name : 'Jugos', img:"https://laopinion.com/wp-content/uploads/sites/3/2021/04/jugos-naturales-shutterstock_121270552.jpg?quality=80&strip=all&w=1200"},
-   {name:'Comida', img:"https://elviajerofeliz.com/wp-content/uploads/2020/05/Comida-t%C3%ADpica-de-Jamaica-Platos-Imprescindibles.jpg"},
-   {name:'Licores', img:"https://www.eluniversal.com.mx/sites/default/files/2020/02/21/bebidas-emblematicas-mexico.jpg"}];
   return (
     <Box p={1}>
       <Box className={classes.blue} />
@@ -203,13 +213,15 @@ export default function Bar() {
           ) : null}
 
           <Box id="content" className={classes.root}>
-            {categorias
-              ? categorias.map((c, i) => (
+            {
+            productos
+              ? (
+              productos.map((c, i) => (
                   <Card key={i} className={classes.item}
-                   style={{ background: `url(${c.img})`, objectFit:"cover", backgroundSize:"cover", backgroundRepeat:"no-repeat" }}>
+                   style={{ background: `url(${__dirname}/images/categorias/${c}.png)`, objectFit:"cover", backgroundSize:"cover", backgroundRepeat:"no-repeat" }}>
                     <CardContent className={classes.cardContent}>
                       <Typography  className={classes.title} variant="h3" align="center">
-                        {c.name}
+                        {c}
                       </Typography>
                     </CardContent>
                     <CardActions   className={classes.cardAction}>
@@ -217,7 +229,7 @@ export default function Bar() {
                         <Grid item lg={12} style={{width:"100%"}}>
                           <Button
                            className={classes.buttons}
-                            onClick={() => history.push(`/producto/${c.name}`)}
+                            onClick={() => history.push(`/producto/${c}`)}
                             size="medium"
                             variant="contained"
                             color="secondary"
@@ -230,7 +242,7 @@ export default function Bar() {
                     </CardActions>
                   </Card>
                 ))
-              : null}
+              ): null}
           </Box>
 
           {isMax ? null : (
