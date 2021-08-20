@@ -17,8 +17,8 @@ import {
   DialogActions,
   CardMedia,
 } from '@material-ui/core';
-import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatMoney, formatNumber, shortName } from '../helpers/format'
 
@@ -82,11 +82,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Producto() {
+  const  barList = JSON.parse(localStorage.getItem('bar'))
+  const [productos,] = useState(barList);
   const [scroll, setScroll] = useState(0);
   const [isMax, setIsMax] = useState(false);
   const classes = useStyles();
   const history = useHistory();
 
+  const param = useParams()
   const puntos = JSON.parse(localStorage.getItem('puntos'));
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -136,14 +139,7 @@ export default function Producto() {
     setRedimirModal(false);
   };
 
-  const productos = [
-    { nombre: 'Alitas de BBQ', img:"https://i.ytimg.com/vi/2u9Uo5kLAog/maxresdefault.jpg", precio: 50000, puntos: 900000 },
-    { nombre: 'Hamburguesa Premium', img:"https://scontent.fbog10-1.fna.fbcdn.net/v/t1.6435-9/75429611_2688963544488122_6773744964363878400_n.jpg?_nc_cat=107&ccb=1-3&_nc_sid=730e14&_nc_ohc=iK5jHXfOmeMAX86E3X3&_nc_ht=scontent.fbog10-1.fna&oh=9f6ad7c50c12cb1dee86f2521c80813b&oe=612B4862", precio: 50000, puntos: 900000 },
-    { nombre: 'Langostas Asadas', img:"https://i.pinimg.com/originals/2f/df/2d/2fdf2dfaefe6baa120886f9edd5a7fce.jpg", precio: 50000, puntos: 900000 },
-    { nombre: 'Churrasco' ,img:"https://i0.wp.com/www.sweetteaandthyme.com/wp-content/uploads/2016/05/Churrasco-hero-shot.jpg?fit=1000%2C1500&ssl=1",  precio: 50000, puntos: 900000 },
-    { nombre: 'BRIEF TOMA HAWK 500gr',img:"https://www.reviewjournal.com/wp-content/uploads/2020/10/14377165_web1_RESTBRIEFS2.jpg", precio: 50000, puntos: 900000 },
-  ];
-
+  console.log(productos)
   return (
     <Box p={1}>
       <Grid container direction="column" spacing={3}>
@@ -193,17 +189,20 @@ export default function Producto() {
 
           <Box id="content" className={classes.root}>
             {productos
-              ? productos.map((p, i) => (
+              ? productos.filter(bar => bar.categoriaPremio === param.id).map((p, i) => (
                   <Card key={i} className={classes.item}>
                     <CardContent className={classes.content}>
                     <CardMedia
                         className={classes.cover}
-                        image={p?.img}
+                        image={`data:image/png;base64,${p?.imagen}`}
                         title="Live from space album cover"
                       />
                       <Box className={classes.details}>
                       <Typography variant="h4" align="center">
                         {p?.nombre}
+                      </Typography>
+                      <Typography variant="h4" align="center">
+                       Disponibles:  {p?.unidadesDisponibles}
                       </Typography>
                       <Grid
                         style={{ marginbottom: 30, padding: 20 }}
@@ -222,7 +221,7 @@ export default function Producto() {
                               <Typography variant="h5" align="center">
                                 Puntos
                                 <Typography variant="h5" align="center">
-                                  {formatNumber(p?.puntos)}
+                                  {formatNumber(p?.puntosParaCanjear)}
                                 </Typography>
                               </Typography>
                             </Grid>
@@ -250,7 +249,7 @@ export default function Producto() {
                               <Typography variant="h5" align="center">
                                 Precio
                                 <Typography variant="h5" align="center">
-                                  {formatMoney(p?.precio)}
+                                  {formatMoney(p?.valorParaCanjear)}
                                 </Typography>
                               </Typography>
                             </Grid>
