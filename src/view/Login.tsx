@@ -89,7 +89,6 @@ function Login() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(inputs);
 
     const auth = JSON.parse(localStorage.getItem('authConfig'));
     ipc.send('allways-auth', auth);
@@ -115,13 +114,13 @@ function Login() {
         setmessageError("intente de nuevo, por favor.");
         setOpenError(true);
       }
-      if (arg?.statusDTO.code !== '00') {
+      if (arg?.statusDTO?.code !== '00') {
         // eslint-disable-next-line no-console
-        setmessageError(arg?.statusDTO.message);
+        setmessageError(arg?.statusDTO?.message);
         setOpenError(true);
       }
 
-      if (arg?.statusDTO.code == '00') {
+      if (arg?.statusDTO?.code == '00') {
         setData({
           numeroDocumento: inputs.username,
           nombre: arg.nombreCompleto,
@@ -143,7 +142,7 @@ function Login() {
     });
   });
 
-  const onChangeInput = (event) => {
+    const onChangeInput = (event) => {
     const inputVal = event.target.value;
 
     setInputs({
