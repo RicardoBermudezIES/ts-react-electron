@@ -13,7 +13,7 @@ export const barServices = (arg) => {
   };
   var config = {
     method: 'post',
-    url: `https://${host}:8443/MobilAppV2/bar/visualizarPremiosBar'`,
+    url: `https://${host}:8443/MobilAppV2/bar/visualizarPremiosBar`,
     httpsAgent: new Https.Agent({ rejectUnauthorized: false }),
     agent: false,
     strictSSL: false,
