@@ -220,6 +220,11 @@ ipc.on('cerrar-sesion', async (event, arg) => {
     event.reply('cerrar-sesion', { Error: 'bad request' });
   }
 
+  if (res?.statusDTO?.code !== '00') {
+    console.log(res, 'cerrar sesion');
+    event.reply('cerrar-sesion', res);
+  }
+
   if (res?.statusDTO?.code === '00') {
     console.log(res, 'cerrar sesion');
     event.reply('cerrar-sesion', res);
@@ -235,7 +240,6 @@ ipc.on('bar', async (event, arg) => {
   if (res.response?.status === 400) {
     event.reply('bar', { Error: 'bad request' });
   }
-
 
   if (res.response?.status === 404) {
     event.reply('bar', { Error: 'Recurso no encontrado' });
