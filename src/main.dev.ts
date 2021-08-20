@@ -22,6 +22,7 @@ import { fidelzarMaquina } from './servicios/Login';
 import { visualizarPuntos } from './servicios/visualizarPuntos';
 import { loginSmol } from './servicios/auth';
 import { closeSession } from './servicios/closeSession';
+import { barServices } from './servicios/bar';
 
 const ipc = ipcMain;
 
@@ -194,13 +195,21 @@ ipc.on('visualizarPuntos', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
   res = await visualizarPuntos(arg);
+
   if (res.response?.status === 400) {
     event.reply('visualizarPuntos', { Error: 'bad request' });
   }
+  if (res.statusDTO?.code !== '00') {
+    console.log(res)
+    event.reply('visualizarPuntos', res);
+  }
   if (res.statusDTO?.code === '00') {
+    console.log(res)
     event.reply('visualizarPuntos', res);
   }
 });
+
+
 
 ipc.on('cerrar-sesion', async (event, arg) => {
   let res;
@@ -214,6 +223,31 @@ ipc.on('cerrar-sesion', async (event, arg) => {
   if (res?.statusDTO?.code === '00') {
     console.log(res, 'cerrar sesion');
     event.reply('cerrar-sesion', res);
+  }
+});
+
+//consultar bar
+ipc.on('bar', async (event, arg) => {
+  let res;
+  // eslint-disable-next-line prefer-const
+  res = await barServices(arg);
+
+  if (res.response?.status === 400) {
+    event.reply('bar', { Error: 'bad request' });
+  }
+
+
+  if (res.response?.status === 404) {
+    event.reply('bar', { Error: 'Recurso no encontrado' });
+  }
+
+  if (res.statusDTO?.code !== '00') {
+    console.log(res)
+    event.reply('bar', res);
+  }
+  if (res.statusDTO?.code === '00') {
+    console.log(res)
+    event.reply('bar', res);
   }
 });
 
