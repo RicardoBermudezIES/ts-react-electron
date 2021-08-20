@@ -8,10 +8,14 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatNumber, shortName } from '../helpers/format'
+import { ipcRenderer } from 'electron';
+
+
+const ipc = ipcRenderer;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,6 +106,49 @@ export default function Bar() {
     scroll2 = content.scrollLeft += 200;
     setScroll(scroll2);
   };
+
+  // solicitar el bar.
+
+ const getBar = () => {
+  const auth = JSON.parse(localStorage.getItem('authConfig'));
+  const localCasino = localStorage.getItem('casino');
+  const localToken = localStorage.getItem('token');
+
+  const args = {
+    host: auth.host,
+    casino: localCasino,
+    token: localToken,
+  };
+  ipc.send('bar', args);
+ }
+
+ useEffect(() => {
+  getBar()
+ })
+
+ useEffect(() => {
+  ipc.on('bar', (event, arg) => {
+    // eslint-disable-next-line no-console
+    console.log(arg, 'bar login.tsx');
+
+    if (arg?.statusDTO?.code !== '00') {
+      // eslint-disable-next-line no-console
+      console.log(arg?.statusDTO?.message);
+    }
+
+    if (arg?.statusDTO?.code == '00') {
+      // localStorage.setItem(
+      //   'bar',
+      //   JSON.stringify({
+      //     numeroDocumento: inputs.username,
+      //     nombre: arg.nombreCompleto,
+      //     clave: arg.clave,
+      //     billetero: arg.enableBilletero,
+      //   })
+      // );
+    }
+  });
+});
 
   const categorias = [
     { name : 'Jugos', img:"https://laopinion.com/wp-content/uploads/sites/3/2021/04/jugos-naturales-shutterstock_121270552.jpg?quality=80&strip=all&w=1200"},
