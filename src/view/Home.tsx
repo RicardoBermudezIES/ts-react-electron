@@ -60,10 +60,6 @@ function Home() {
   };
 
   useEffect(() => {
-    sendPuntos();
-  }, []);
-
-  useEffect(() => {
     setInterval(() => {
       sendPuntos();
     }, 1000 * 30);
