@@ -31,6 +31,6 @@ export const VincularMaquina = (arg) => {
       return res.data;
     })
     .catch((error: AxiosError) => {
-      console.log(error);
+      return error;
     });
 };
