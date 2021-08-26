@@ -202,13 +202,13 @@ export default function Producto() {
                         {p?.nombre}
                       </Typography>
                       <Typography variant="h4" align="center">
-                       Disponibles:  {p?.unidadesDisponibles}
+                         Disponibles:  {p?.unidadesDisponibles}
                       </Typography>
                       <Grid
-                        style={{ marginbottom: 30, padding: 20 }}
+                        style={{ marginBottom: 30, padding: 20 }}
                         container
                         justify="space-between"
-                        align="center"
+                        alignContent="center"
                       >
                         <Grid item  lg={6} md={6} sm={6} xs={6}>
                           <Grid
@@ -284,7 +284,7 @@ export default function Producto() {
       </Grid>
 
       <Dialog
-        fullWidth="md"
+        fullWidth
         maxWidth="md"
         open={buyModal}
         onClose={handleCloseBuyModal}
