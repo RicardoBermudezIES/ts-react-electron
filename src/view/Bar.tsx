@@ -13,6 +13,7 @@ import { useHistory } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatNumber, shortName } from '../helpers/format'
 import { ipcRenderer } from 'electron';
+import Alert from '../component/Alert/Alert';
 
 
 const ipc = ipcRenderer;
@@ -89,6 +90,9 @@ export default function Bar() {
   const puntos = JSON.parse(localStorage.getItem('puntos'));
   const user = JSON.parse(localStorage.getItem('user'));
 
+  const [openError, setOpenError] = useState(false);
+  const [messageError, setmessageError] = useState('');
+
   const GotoLeft = () => {
     const content = document.getElementById('content');
     const scroll1 = (content.scrollLeft -= 200);
@@ -148,7 +152,8 @@ export default function Bar() {
 
     if (arg?.statusDTO?.code !== '00') {
       // eslint-disable-next-line no-console
-      console.log(arg?.statusDTO?.message);
+      setmessageError(arg?.statusDTO?.message);
+      setOpenError(true);
     }
 
     if (arg?.statusDTO?.code == '00') {
@@ -254,6 +259,13 @@ export default function Bar() {
           )}
         </Box>
       </Grid>
+      {messageError ? (
+        <Alert
+          open={openError}
+          onClose={() => setOpenError(false)}
+          message={messageError}
+        />
+      ) : null}
     </Box>
   );
 }
