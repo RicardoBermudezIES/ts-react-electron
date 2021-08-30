@@ -12,7 +12,6 @@ import {
   DialogTitle,
   Input,
   makeStyles,
-  DialogContentText,
 } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import Keyboard from 'react-simple-keyboard';
