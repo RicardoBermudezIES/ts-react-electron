@@ -1,15 +1,11 @@
 import {
-  Backdrop,
   Box,
   Button,
   Card,
-  CardActions,
   CardContent,
   Grid,
   makeStyles,
   Typography,
-  Modal,
-  Fade,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -21,7 +17,10 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatMoney, formatNumber, shortName } from '../helpers/format'
+import { ipcRenderer } from 'electron';
+import Alert from '../component/Alert/Alert';
 
+const ipc = ipcRenderer;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,6 +81,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Producto() {
+
   const  barList = JSON.parse(localStorage.getItem('bar'))
   const [productos,] = useState(barList);
   const [scroll, setScroll] = useState(0);
@@ -95,6 +95,9 @@ export default function Producto() {
 
   const [buyModal, setBuyModal] = useState(false);
   const [redimirModal, setRedimirModal] = useState(false);
+
+  const [openError, setOpenError] = useState(false);
+  const [messageError, setmessageError] = useState('');
 
   const GotoLeft = () => {
     const content = document.getElementById('content');
@@ -116,11 +119,30 @@ export default function Producto() {
   };
 
   const doBuy = () => {
+
     handleOpenBuyModal();
   };
 
-  const doRedimir = () => {
-    handleOpenRedimirModal();
+  const doRedimir = (puk: string) => {
+
+    const auth = JSON.parse(localStorage.getItem('authConfig'));
+    ipc.send('allways-auth', auth);
+     const user = JSON.parse(localStorage.getItem('user'));
+     const maquina = localStorage.getItem('maquina');
+     const localToken = localStorage.getItem('token');
+
+  const args = {
+    host: auth.host,
+    numeroDocumento: user.numeroDocumento,
+    maquina: maquina,
+    token: localToken,
+    puk:puk
+  };
+
+
+   ipc.send('comprar-productos', args);
+
+
   };
 
   const handleOpenBuyModal = () => {
@@ -139,7 +161,22 @@ export default function Producto() {
     setRedimirModal(false);
   };
 
-  console.log(productos)
+  useEffect(() => {
+    ipc.on('comprar-productos', (event, arg) => {
+      // eslint-disable-next-line no-console
+
+      if (arg?.statusDTO?.code !== '00') {
+        // eslint-disable-next-line no-console
+        setmessageError(arg?.statusDTO?.message);
+        setOpenError(true);
+      }
+
+      if (arg?.statusDTO?.code == '00') {
+          handleOpenRedimirModal();
+      }
+    });
+  });
+
   return (
     <Box p={1}>
       <Grid container direction="column" spacing={3}>
@@ -228,11 +265,10 @@ export default function Producto() {
                             <Grid item  lg={12} md={12} sm={12} xs={12}>
                               <Button
                                 disabled={user === null}
-                                onClick={doRedimir}
+                                onClick={ ()=> doRedimir(p?.pk)}
                                 variant="contained"
                                 color="secondary"
-                                size="large"
-                              >
+                                size="large">
                                 redimir
                               </Button>
                             </Grid>
@@ -255,7 +291,7 @@ export default function Producto() {
                             </Grid>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                               <Button
-                                onClick={doBuy}
+                                onClick={()=> doBuy(p?.pk)}
                                 variant="contained"
                                 color="primary"
                                 size="large"
@@ -285,7 +321,7 @@ export default function Producto() {
 
       <Dialog
         fullWidth
-        maxWidth="md"
+        maxWidth="sm"
         open={buyModal}
         onClose={handleCloseBuyModal}
       >
@@ -303,8 +339,8 @@ export default function Producto() {
       </Dialog>
 
       <Dialog
-        fullWidth="md"
-        maxWidth="md"
+        fullWidth
+        maxWidth="sm"
         open={redimirModal}
         onClose={handleCloseRedimirModal}
       >
@@ -320,6 +356,14 @@ export default function Producto() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {messageError ? (
+        <Alert
+          open={openError}
+          onClose={() => setOpenError(false)}
+          message={messageError}
+        />
+      ) : null}
     </Box>
   );
 }
