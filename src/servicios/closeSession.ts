@@ -1,5 +1,5 @@
 import Https from 'https';
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import axios, {  AxiosResponse, AxiosError } from 'axios';
 
 export const closeSession = (arg) => {
   const { host, numeroDocumento, maquina, token } = arg;
