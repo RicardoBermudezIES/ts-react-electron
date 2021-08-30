@@ -22,7 +22,7 @@ export const realizarPeticion = (arg) => {
   };
   var config = {
     method: 'post',
-    url: `https://${host}:8443/MobilAppV2/fidelizacion/cerrarFidelizacionMaquina`,
+    url: `https://${host}:8443/MobilAppV2/bar/realizarPeticion`,
     httpsAgent: new Https.Agent({ rejectUnauthorized: false }),
     agent: false,
     strictSSL: false,
