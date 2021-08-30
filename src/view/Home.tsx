@@ -23,6 +23,8 @@ const useStyles = makeStyles(() => ({
 function Home() {
   const history = useHistory();
   const [isShow, setIsShow] = useState(false);
+  const [openError, setOpenError] = useState(false);
+  const [messageError, setmessageError] = useState('');
 
   const user = JSON.parse(localStorage.getItem('user'))
     ? JSON.parse(localStorage.getItem('user'))
@@ -129,6 +131,8 @@ function Home() {
 
       if (arg?.statusDTO?.code !== '00') {
         console.log(arg?.statusDTO?.message);
+        setmessageError(arg?.statusDTO?.message);
+        setOpenError(true);
       }
       if (arg?.statusDTO?.code == '00') {
         localStorage.removeItem('user');
@@ -248,6 +252,13 @@ function Home() {
           <NavButton />
         </Grid>
       </Grid>
+      {messageError ? (
+        <Alert
+          open={openError}
+          onClose={() => setOpenError(false)}
+          message={messageError}
+        />
+      ) : null}
     </Box>
   );
 }
