@@ -23,6 +23,7 @@ import { visualizarPuntos } from './servicios/visualizarPuntos';
 import { loginSmol } from './servicios/auth';
 import { closeSession } from './servicios/closeSession';
 import { barServices } from './servicios/bar';
+import { comprarPremio } from './servicios/comprarPremio';
 
 const ipc = ipcMain;
 
@@ -255,6 +256,54 @@ ipc.on('bar', async (event, arg) => {
   }
 });
 
+//consulta comprar productos
+ipc.on('comprar-productos', async (event, arg) => {
+  let res;
+  // eslint-disable-next-line prefer-const
+  res = await comprarPremio(arg);
+
+  if (res.response?.status === 400) {
+    event.reply('comprar-productos', { Error: 'bad request' });
+  }
+
+  if (res.response?.status === 404) {
+    event.reply('bcomprar-productosar', { Error: 'Recurso no encontrado' });
+  }
+
+  if (res.statusDTO?.code !== '00') {
+    console.log(res)
+    event.reply('comprar-productos', res);
+  }
+  if (res.statusDTO?.code === '00') {
+    console.log(res)
+    event.reply('comprar-productos', res);
+  }
+});
+
+
+//consulta realizar peticion
+ipc.on('realizar-peticion', async (event, arg) => {
+  let res;
+  // eslint-disable-next-line prefer-const
+  res = await comprarPremio(arg);
+
+  if (res.response?.status === 400) {
+    event.reply('realizar-peticion', { Error: 'bad request' });
+  }
+
+  if (res.response?.status === 404) {
+    event.reply('realizar-peticion', { Error: 'Recurso no encontrado' });
+  }
+
+  if (res.statusDTO?.code !== '00') {
+    console.log(res)
+    event.reply('realizar-peticion', res);
+  }
+  if (res.statusDTO?.code === '00') {
+    console.log(res)
+    event.reply('realizar-peticion', res);
+  }
+});
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
