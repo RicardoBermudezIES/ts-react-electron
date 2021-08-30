@@ -122,16 +122,16 @@ export default function Bar() {
     casino: localCasino,
     token: localToken,
   };
-  if (localStorage.getItem('bar') == null) {
+
     ipc.send('bar', args);
-  }else{
-    const  barList = JSON.parse(localStorage.getItem('bar'))
+
+  /*   const  barList = JSON.parse(localStorage.getItem('bar'))
     if (barList){
       const newSet = new Set()
       barList.forEach(( l => newSet.add(l?.categoriaPremio)));
       setProductos(newSet)
-    }
-  }
+    }} */
+
  }
 
  useEffect(() => {
