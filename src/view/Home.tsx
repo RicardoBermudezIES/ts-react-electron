@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import NavButton from '../component/NavButton';
 import Odometer from 'react-odometerjs';
+import Alert from '../component/Alert/Alert';
 const ipc = ipcRenderer;
 
 const useStyles = makeStyles(() => ({
