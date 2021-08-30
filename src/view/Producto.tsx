@@ -118,7 +118,25 @@ export default function Producto() {
     setScroll(scroll2);
   };
 
-  const doBuy = () => {
+  const doBuy = (puk: string) => {
+
+    const auth = JSON.parse(localStorage.getItem('authConfig'));
+    ipc.send('allways-auth', auth);
+     const user = JSON.parse(localStorage.getItem('user'));
+     const maquina = localStorage.getItem('maquina');
+     const localToken = localStorage.getItem('token');
+
+  const args = {
+    host: auth.host,
+    numeroDocumento: user.numeroDocumento,
+    maquina: maquina,
+    token: localToken,
+    puk:puk
+  };
+
+
+   ipc.send('comprar-productos', args);
+
 
     handleOpenBuyModal();
   };
@@ -140,7 +158,7 @@ export default function Producto() {
   };
 
 
-   ipc.send('comprar-productos', args);
+   ipc.send('realizar-peticion', args);
 
 
   };
@@ -163,6 +181,24 @@ export default function Producto() {
 
   useEffect(() => {
     ipc.on('comprar-productos', (event, arg) => {
+      // eslint-disable-next-line no-console
+
+      if (arg?.statusDTO?.code !== '00') {
+        // eslint-disable-next-line no-console
+        setmessageError(arg?.statusDTO?.message);
+        setOpenError(true);
+        history.go(-2)
+      }
+
+      if (arg?.statusDTO?.code == '00') {
+        handleOpenBuyModal();
+        history.go(-2)
+      }
+    });
+  });
+
+  useEffect(() => {
+    ipc.on('realizar-peticion', (event, arg) => {
       // eslint-disable-next-line no-console
 
       if (arg?.statusDTO?.code !== '00') {
