@@ -7,6 +7,7 @@ import {
   Grid,
   makeStyles,
   Typography,
+  CircularProgress
 } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
@@ -247,7 +248,7 @@ export default function Bar() {
                     </CardActions>
                   </Card>
                 ))
-              ): null}
+              ): <CircularProgress />  }
           </Box>
 
           {isMax ? null : (

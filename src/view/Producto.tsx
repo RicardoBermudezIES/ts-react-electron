@@ -187,12 +187,12 @@ export default function Producto() {
         // eslint-disable-next-line no-console
         setmessageError(arg?.statusDTO?.message);
         setOpenError(true);
-        history.go(-2)
+
       }
 
       if (arg?.statusDTO?.code == '00') {
         handleOpenBuyModal();
-        history.go(-2)
+
       }
     });
   });

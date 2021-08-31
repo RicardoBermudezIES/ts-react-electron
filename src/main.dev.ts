@@ -24,6 +24,7 @@ import { loginSmol } from './servicios/auth';
 import { closeSession } from './servicios/closeSession';
 import { barServices } from './servicios/bar';
 import { comprarPremio } from './servicios/comprarPremio';
+import { realizarPeticion } from './servicios/realizarPeticion';
 
 const ipc = ipcMain;
 
@@ -285,7 +286,7 @@ ipc.on('comprar-productos', async (event, arg) => {
 ipc.on('realizar-peticion', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
-  res = await comprarPremio(arg);
+  res = await realizarPeticion(arg);
 
   if (res.response?.status === 400) {
     event.reply('realizar-peticion', { Error: 'bad request' });
