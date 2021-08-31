@@ -2,25 +2,25 @@ import Https from 'https';
 import axios, { AxiosResponse, AxiosError } from 'axios';
 
 export const getMaquinas = (arg) => {
+  const { host, numeroDocumento, maquina, token } = arg;
   let data = {
-    nombreServicio: 'listarDispositivos',
-    numeroDeParametros: '3',
+    nombreServicio: 'listarPeticionesXCliente',
+    numeroDeParametros: '2',
     parametros: [
-      { nombreParametro: 'codigoCasino', valorParametro: arg.idCasino.toString() },
-      { nombreParametro: 'first', valorParametro: '0' },
-      { nombreParametro: 'pageSize', valorParametro: '1000' },
+      { nombreParametro: 'numeroDocumento', valorParametro: numeroDocumento+"" },
+      { nombreParametro: 'serial', valorParametro: `${maquina}` },
     ],
   };
 
   var config = {
     method: 'post',
-    url: `https://${arg.host}:8443/MobilAppV2/configuracion/listarDispositivos`,
+    url: `https://${host}:8443/MobilAppV2/bar/listarPeticionesXCliente`,
     httpsAgent: new Https.Agent({ rejectUnauthorized: false }),
     agent: false,
     strictSSL: false,
     headers: {
       'Content-Type': 'application/json',
-      token: `${arg.token}`,
+      token: `${token}`,
     },
     data: data,
   };
