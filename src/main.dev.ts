@@ -25,6 +25,7 @@ import { closeSession } from './servicios/closeSession';
 import { barServices } from './servicios/bar';
 import { comprarPremio } from './servicios/comprarPremio';
 import { realizarPeticion } from './servicios/realizarPeticion';
+import { listarPeticionesXCliente } from './servicios/listarPeticionxCliente';
 
 const ipc = ipcMain;
 
@@ -305,6 +306,31 @@ ipc.on('realizar-peticion', async (event, arg) => {
     event.reply('realizar-peticion', res);
   }
 });
+
+//consulta listar peticion por peticiones
+ipc.on('listar-peticiones', async (event, arg) => {
+  let res;
+  // eslint-disable-next-line prefer-const
+  res = await listarPeticionesXCliente(arg);
+
+  if (res.response?.status === 400) {
+    event.reply('listar-peticiones', { Error: 'bad request' });
+  }
+
+  if (res.response?.status === 404) {
+    event.reply('listar-peticiones', { Error: 'Recurso no encontrado' });
+  }
+
+  if (res.statusDTO?.code !== '00') {
+    console.log(res)
+    event.reply('listar-peticiones', res);
+  }
+  if (res.statusDTO?.code === '00') {
+    console.log(res)
+    event.reply('listar-peticiones', res);
+  }
+});
+
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
