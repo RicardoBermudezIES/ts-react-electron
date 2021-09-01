@@ -1,3 +1,4 @@
+import { confirmarPeticion } from './servicios/confirmarPeticion';
 /* eslint global-require: off, no-console: off */
 
 /**
@@ -354,6 +355,30 @@ ipc.on('anular-peticiones', async (event, arg) => {
   if (res.statusDTO?.code === '00') {
     console.log(res)
     event.reply('anular-peticiones', res);
+  }
+});
+
+//consulta confirmar peticiones
+ipc.on('confirmar-peticiones', async (event, arg) => {
+  let res;
+  // eslint-disable-next-line prefer-const
+  res = await confirmarPeticion(arg);
+
+  if (res.response?.status === 400) {
+    event.reply('confirmar-peticiones', { Error: 'bad request' });
+  }
+
+  if (res.response?.status === 404) {
+    event.reply('confirmar-peticiones', { Error: 'Recurso no encontrado' });
+  }
+
+  if (res.statusDTO?.code !== '00') {
+    console.log(res)
+    event.reply('confirmar-peticiones', res);
+  }
+  if (res.statusDTO?.code === '00') {
+    console.log(res)
+    event.reply('confirmar-peticiones', res);
   }
 });
 
