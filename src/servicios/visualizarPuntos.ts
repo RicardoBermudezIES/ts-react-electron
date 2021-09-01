@@ -1,8 +1,8 @@
 import Https from 'https';
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axios from 'axios';
 
 // eslint-disable-next-line import/prefer-default-export
-export const visualizarPuntos = (arg) => {
+export const visualizarPuntos = async (arg) => {
   const { host, numeroDocumento, casino, token, maquina } = arg;
   const data = {
     nombreServicio: 'visualizarPuntos',
@@ -39,11 +39,10 @@ export const visualizarPuntos = (arg) => {
     data,
   };
 
-  return axios(config)
-    .then((res: AxiosResponse) => {
-      return res.data;
-    })
-    .catch((error: AxiosError) => {
-      return error;
-    });
+  try {
+    const res = await axios(config);
+    return res.data;
+  } catch (error) {
+    return error;
+  }
 };
