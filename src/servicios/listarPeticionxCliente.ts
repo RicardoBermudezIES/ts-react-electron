@@ -1,7 +1,7 @@
 import Https from 'https';
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axios from 'axios';
 
-export const getMaquinas = (arg) => {
+export const listarPeticionesXCliente = async (arg) => {
   const { host, numeroDocumento, maquina, token } = arg;
   let data = {
     nombreServicio: 'listarPeticionesXCliente',
@@ -25,11 +25,10 @@ export const getMaquinas = (arg) => {
     data: data,
   };
 
-  return axios(config)
-    .then((res: AxiosResponse) => {
-      return res.data;
-    })
-    .catch((error: AxiosError) => {
-      return error;
-    });
+  try {
+    const res = await axios(config);
+    return res.data;
+  } catch (error) {
+    return error;
+  }
 };
