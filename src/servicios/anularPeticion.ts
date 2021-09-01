@@ -9,7 +9,7 @@ export const anularPeticion = async (arg) => {
     parametros: [
       {
         nombreParametro: 'nota',
-        valorParametro: " ",
+        valorParametro: "",
 
       },{
         nombreParametro: 'haySesion',
