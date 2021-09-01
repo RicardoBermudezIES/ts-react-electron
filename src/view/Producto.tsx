@@ -244,12 +244,71 @@ export default function Producto() {
   });
 
   const cancelarPeticion = (idPremio) => {
-    console.log('cancelar', idPremio);
+
+    const auth = JSON.parse(localStorage.getItem('authConfig'));
+    ipc.send('allways-auth', auth);
+    const maquina = localStorage.getItem('maquina');
+    const localToken = localStorage.getItem('token');
+
+    const args = {
+      host: auth.host,
+      maquina: maquina,
+      token: localToken,
+      puk: idPremio,
+    };
+
+    ipc.send('anular-peticiones', args);
   };
 
   const confirmarPeticion = (idPremio) => {
-    console.log('confirmar', idPremio);
+    const auth = JSON.parse(localStorage.getItem('authConfig'));
+    ipc.send('allways-auth', auth);
+    const maquina = localStorage.getItem('maquina');
+    const localToken = localStorage.getItem('token');
+
+    const args = {
+      host: auth.host,
+      maquina: maquina,
+      token: localToken,
+      puk: idPremio,
+    };
+
+    ipc.send('confirmar-peticiones', args);
+
   };
+
+  useEffect(() => {
+    ipc.on('anular-peticiones', (event, arg) => {
+      // eslint-disable-next-line no-console
+
+      if (arg?.statusDTO?.code !== '00') {
+        // eslint-disable-next-line no-console
+        setmessageError(arg?.statusDTO?.message);
+        setOpenError(true);
+      }
+
+      if (arg?.statusDTO?.code == '00') {
+        getListProducts();
+      }
+    });
+  });
+
+
+  useEffect(() => {
+    ipc.on('confirmar-peticiones', (event, arg) => {
+      // eslint-disable-next-line no-console
+
+      if (arg?.statusDTO?.code !== '00') {
+        // eslint-disable-next-line no-console
+        setmessageError(arg?.statusDTO?.message);
+        setOpenError(true);
+      }
+
+      if (arg?.statusDTO?.code == '00') {
+        getListProducts();
+      }
+    });
+  });
 
   const hasQueque = (idPremio) => {
     const product = listarProductos?.find((l) => l?.idPremio === idPremio)
