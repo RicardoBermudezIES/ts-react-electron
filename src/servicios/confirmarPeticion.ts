@@ -7,7 +7,7 @@ export const confirmarPeticion = async (arg) => {
     nombreServicio: 'confirmarPeticion',
     numeroDeParametros: '3',
     parametros: [
-     ,{
+     {
         nombreParametro: 'haySesion',
         valorParametro: `JWT`
       },{
