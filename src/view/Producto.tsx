@@ -16,7 +16,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
-import { formatMoney, formatNumber, shortName } from '../helpers/format'
+import { formatMoney, formatNumber, shortName } from '../helpers/format';
 import { ipcRenderer } from 'electron';
 import Alert from '../component/Alert/Alert';
 
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   CardAction: {
     width: '90%',
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   cover: {
     minWidth: 152,
     width: '40%',
-    minHeight:300,
+    minHeight: 300,
     maxHeight: 100,
     objectFit: 'cover',
     marginBottom: 20,
@@ -81,15 +81,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Producto() {
-
-  const  barList = JSON.parse(localStorage.getItem('bar'))
-  const [productos,] = useState(barList);
+  const barList = JSON.parse(localStorage.getItem('bar'));
+  const [productos] = useState(barList);
   const [scroll, setScroll] = useState(0);
   const [isMax, setIsMax] = useState(false);
+  const [listarProductos, setListarProductos] = useState([]);
   const classes = useStyles();
   const history = useHistory();
 
-  const param = useParams()
+  const param = useParams();
   const puntos = JSON.parse(localStorage.getItem('puntos'));
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -98,6 +98,43 @@ export default function Producto() {
 
   const [openError, setOpenError] = useState(false);
   const [messageError, setmessageError] = useState('');
+
+  const getListProducts = () => {
+    const auth = JSON.parse(localStorage.getItem('authConfig'));
+    ipc.send('allways-auth', auth);
+    const user = JSON.parse(localStorage.getItem('user'));
+    const maquina = localStorage.getItem('maquina');
+    const localToken = localStorage.getItem('token');
+
+    const args = {
+      host: auth.host,
+      numeroDocumento: user.numeroDocumento,
+      maquina: maquina,
+      token: localToken,
+    };
+
+    ipc.send('listar-peticiones', args);
+  };
+
+  useEffect(() => {
+    getListProducts();
+  }, []);
+
+  useEffect(() => {
+    ipc.on('listar-peticiones', (event, arg) => {
+      // eslint-disable-next-line no-console
+
+      if (arg?.statusDTO?.code !== '00') {
+        // eslint-disable-next-line no-console
+        setmessageError(arg?.statusDTO?.message);
+        setOpenError(true);
+      }
+
+      if (arg?.statusDTO?.code == '00') {
+        setListarProductos(arg?.peticiones);
+      }
+    });
+  }, []);
 
   const GotoLeft = () => {
     const content = document.getElementById('content');
@@ -111,7 +148,7 @@ export default function Producto() {
   const GotoRight = () => {
     const content = document.getElementById('content');
     let scroll2 = 0;
-    if (scroll > content.scrollWidth ) {
+    if (scroll > content.scrollWidth) {
       setIsMax(true);
     }
     scroll2 = content.scrollLeft += 300;
@@ -119,48 +156,41 @@ export default function Producto() {
   };
 
   const doBuy = (puk: string) => {
-
     const auth = JSON.parse(localStorage.getItem('authConfig'));
     ipc.send('allways-auth', auth);
-     const user = JSON.parse(localStorage.getItem('user'));
-     const maquina = localStorage.getItem('maquina');
-     const localToken = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    const maquina = localStorage.getItem('maquina');
+    const localToken = localStorage.getItem('token');
 
-  const args = {
-    host: auth.host,
-    numeroDocumento: user.numeroDocumento,
-    maquina: maquina,
-    token: localToken,
-    puk:puk
-  };
+    const args = {
+      host: auth.host,
+      numeroDocumento: user.numeroDocumento,
+      maquina: maquina,
+      token: localToken,
+      puk: puk,
+    };
 
-
-   ipc.send('comprar-productos', args);
-
+    ipc.send('comprar-productos', args);
 
     handleOpenBuyModal();
   };
 
   const doRedimir = (puk: string) => {
-
     const auth = JSON.parse(localStorage.getItem('authConfig'));
     ipc.send('allways-auth', auth);
-     const user = JSON.parse(localStorage.getItem('user'));
-     const maquina = localStorage.getItem('maquina');
-     const localToken = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    const maquina = localStorage.getItem('maquina');
+    const localToken = localStorage.getItem('token');
 
-  const args = {
-    host: auth.host,
-    numeroDocumento: user.numeroDocumento,
-    maquina: maquina,
-    token: localToken,
-    puk:puk
-  };
+    const args = {
+      host: auth.host,
+      numeroDocumento: user.numeroDocumento,
+      maquina: maquina,
+      token: localToken,
+      puk: puk,
+    };
 
-
-   ipc.send('realizar-peticion', args);
-
-
+    ipc.send('realizar-peticion', args);
   };
 
   const handleOpenBuyModal = () => {
@@ -187,12 +217,11 @@ export default function Producto() {
         // eslint-disable-next-line no-console
         setmessageError(arg?.statusDTO?.message);
         setOpenError(true);
-
       }
 
       if (arg?.statusDTO?.code == '00') {
+        getListProducts();
         handleOpenBuyModal();
-
       }
     });
   });
@@ -208,10 +237,30 @@ export default function Producto() {
       }
 
       if (arg?.statusDTO?.code == '00') {
-          handleOpenRedimirModal();
+        getListProducts();
+        handleOpenRedimirModal();
       }
     });
   });
+
+  const cancelarPeticion = (idPremio) => {
+    console.log('cancelar', idPremio);
+  };
+
+  const confirmarPeticion = (idPremio) => {
+    console.log('confirmar', idPremio);
+  };
+
+  const hasQueque = (idPremio) => {
+    const product = listarProductos?.find((l) => l?.idPremio === idPremio)
+
+    if (product) {
+      return true
+    }
+    return false
+
+  }
+
 
   return (
     <Box p={1}>
@@ -229,12 +278,22 @@ export default function Producto() {
               </Button>
             </Grid>
             <Grid item lg={7} md={7} sm={7} xs={7}>
-              <Typography variant="h3" component="p"  align="center"  style={{fontWeight:"bold"}}>
+              <Typography
+                variant="h3"
+                component="p"
+                align="center"
+                style={{ fontWeight: 'bold' }}
+              >
                 {user ? shortName(user.nombre) : 'Anonimo'}
               </Typography>
             </Grid>
             <Grid item lg={3} md={3} sm={3} xs={3}>
-              <Typography variant="h4" align="right" component="p"  style={{fontWeight:"bold"}}>
+              <Typography
+                variant="h4"
+                align="right"
+                component="p"
+                style={{ fontWeight: 'bold' }}
+              >
                 {puntos?.cantidadPuntosDisponibles ? (
                   formatNumber(Number(puntos?.cantidadPuntosDisponibles))
                 ) : (
@@ -262,86 +321,167 @@ export default function Producto() {
 
           <Box id="content" className={classes.root}>
             {productos
-              ? productos.filter(bar => bar.categoriaPremio === param.id).map((p, i) => (
-                  <Card key={i} className={classes.item}>
-                    <CardContent className={classes.content}>
-                    <CardMedia
-                        className={classes.cover}
-                        image={`data:image/png;base64,${p?.imagen}`}
-                        title="Live from space album cover"
-                      />
-                      <Box className={classes.details}>
-                      <Typography variant="h4" align="center">
-                        {p?.nombre}
-                      </Typography>
-                      <Typography variant="h4" align="center">
-                         Disponibles:  {p?.unidadesDisponibles}
-                      </Typography>
-                      <Grid
-                        style={{ marginBottom: 30, padding: 20 }}
-                        container
-                        justify="space-between"
-                        alignContent="center"
-                      >
-                        <Grid item  lg={6} md={6} sm={6} xs={6}>
+              ? productos
+                  .filter((bar) => bar?.categoriaPremio === param?.id)
+                  .map((p, i) => (
+                    <Card key={i} className={classes.item}>
+                      <CardContent className={classes.content}>
+                        <CardMedia
+                          className={classes.cover}
+                          image={`data:image/png;base64,${p?.imagen}`}
+                          title="Live from space album cover"
+                        />
+                        <Box className={classes.details}>
+                          <Typography variant="h4" align="center">
+                            {p?.nombre}
+                          </Typography>
+                          <Typography variant="h4" align="center">
+                            Disponibles: {p?.unidadesDisponibles}
+                          </Typography>
                           <Grid
+                            style={{ marginBottom: 30, padding: 20 }}
                             container
-                            direction="row"
-                            alignItems="center"
-                            spacing={2}
+                            justify="space-between"
+                            alignContent="center"
                           >
-                            <Grid item  lg={12} md={12} sm={12} xs={12}>
-                              <Typography variant="h5" align="center">
-                                Puntos
-                                <Typography variant="h5" align="center">
-                                  {formatNumber(p?.puntosParaCanjear)}
-                                </Typography>
-                              </Typography>
-                            </Grid>
-                            <Grid item  lg={12} md={12} sm={12} xs={12}>
-                              <Button
-                                disabled={user === null}
-                                onClick={ ()=> doRedimir(p?.pk)}
-                                variant="contained"
-                                color="secondary"
-                                size="large">
-                                redimir
-                              </Button>
-                            </Grid>
+                            {
+                            hasQueque(p?.pk) ?
+                                      <>
+                                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                                          <Button
+                                            onClick={() =>
+                                              cancelarPeticion(
+                                                p?.pk
+                                              )
+                                            }
+                                            variant="contained"
+                                            color="secondary"
+                                            size="large"
+                                          >
+                                            Cancelar
+                                          </Button>
+                                        </Grid>
+
+                                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                                          <Button
+                                            onClick={() =>
+                                              confirmarPeticion(
+                                                p?.pk
+                                              )
+                                            }
+                                            variant="contained"
+                                            color="primary"
+                                            size="large"
+                                          >
+                                            Confirmar
+                                          </Button>
+                                        </Grid>
+                                      </>
+                                     :  <>
+                                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                                      <Grid
+                                        container
+                                        direction="row"
+                                        alignItems="center"
+                                        spacing={2}
+                                      >
+                                        <Grid
+                                          item
+                                          lg={12}
+                                          md={12}
+                                          sm={12}
+                                          xs={12}
+                                        >
+                                          <Typography
+                                            variant="h5"
+                                            align="center"
+                                          >
+                                            Puntos
+                                            <Typography
+                                              variant="h5"
+                                              align="center"
+                                            >
+                                              {formatNumber(
+                                                p?.puntosParaCanjear
+                                              )}
+                                            </Typography>
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          lg={12}
+                                          md={12}
+                                          sm={12}
+                                          xs={12}
+                                        >
+                                          <Button
+                                            disabled={user === null}
+                                            onClick={() => doRedimir(p?.pk)}
+                                            variant="contained"
+                                            color="secondary"
+                                            size="large"
+                                          >
+                                            redimir
+                                          </Button>
+                                        </Grid>
+                                      </Grid>
+                                    </Grid>
+
+                                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                                      <Grid
+                                        container
+                                        direction="row"
+                                        spacing={2}
+                                        alignItems="center"
+                                      >
+                                        <Grid
+                                          item
+                                          lg={12}
+                                          md={12}
+                                          sm={12}
+                                          xs={12}
+                                        >
+                                          <Typography
+                                            variant="h5"
+                                            align="center"
+                                          >
+                                            Precio
+                                            <Typography
+                                              variant="h5"
+                                              align="center"
+                                            >
+                                              {formatMoney(
+                                                p?.valorParaCanjear
+                                              )}
+                                            </Typography>
+                                          </Typography>
+                                        </Grid>
+                                        <Grid
+                                          item
+                                          lg={12}
+                                          md={12}
+                                          sm={12}
+                                          xs={12}
+                                        >
+                                          <Button
+                                            onClick={() => doBuy(p?.pk)}
+                                            variant="contained"
+                                            color="primary"
+                                            size="large"
+                                          >
+                                            Comprar
+                                          </Button>
+                                        </Grid>
+                                      </Grid>
+                                    </Grid>
+                                  </>
+                              }
+
                           </Grid>
-                        </Grid>
-                        <Grid item lg={6} md={6} sm={6} xs={6}>
-                          <Grid
-                            container
-                            direction="row"
-                            spacing={2}
-                            alignItems="center"
-                          >
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
-                              <Typography variant="h5" align="center">
-                                Precio
-                                <Typography variant="h5" align="center">
-                                  {formatMoney(p?.valorParaCanjear)}
-                                </Typography>
-                              </Typography>
-                            </Grid>
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
-                              <Button
-                                onClick={()=> doBuy(p?.pk)}
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                              >
-                                Comprar
-                              </Button>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                ))
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  ))
               : 'cargando...'}
           </Box>
 
