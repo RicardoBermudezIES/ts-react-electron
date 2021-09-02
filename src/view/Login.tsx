@@ -21,7 +21,7 @@ import { DataContext } from '../context/Context';
 import Alert from '../component/Alert/Alert';
 import { PhoneIcon } from '../iconos/PhoneIcon';
 import { BarIcon } from '../iconos/Bar';
-
+import { setTimeout } from 'timers';
 const ipc = ipcRenderer;
 
 const useStyles = makeStyles(() => ({
@@ -92,7 +92,9 @@ function Login() {
     const auth = JSON.parse(localStorage.getItem('authConfig'));
     ipc.send('allways-auth', auth);
 
-    const localToken = localStorage.getItem('token');
+
+    setTimeout(() => {
+      const localToken = localStorage.getItem('token');
 
     const args = {
       host: authConfig.host,
@@ -101,6 +103,9 @@ function Login() {
       token: localToken,
     };
     ipc.send('fidelizarMaquina', args);
+
+    }, 200);
+
   };
 
   useEffect(() => {
