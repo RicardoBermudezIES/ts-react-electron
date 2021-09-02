@@ -88,8 +88,8 @@ export default function Bar() {
   const [isMax, setIsMax] = useState(false);
   const classes = useStyles();
   const history = useHistory();
+  const [puntosBar, setPuntosBar] = useState();
 
-  const puntos = JSON.parse(localStorage.getItem('puntos'));
   const user = JSON.parse(localStorage.getItem('user'));
 
   const [openError, setOpenError] = useState(false);
@@ -114,6 +114,24 @@ export default function Bar() {
     setScroll(scroll2);
   };
 
+  // solicitar el puntosbar.
+  const puntosXBar = () => {
+    setTimeout(() => {
+      const auth = JSON.parse(localStorage.getItem('authConfig'));
+      const localCasino = localStorage.getItem('casino');
+      const localToken = localStorage.getItem('token');
+      const localMaquina = localStorage.getItem('maquina');
+      const args = {
+        host: auth.host,
+        numeroDocumento: user?.numeroDocumento,
+        maquina: localMaquina,
+        casino: localCasino,
+        token: localToken,
+      };
+        ipc.send('visualizarPuntosxDia', args);
+    }, 200);
+  }
+
   // solicitar el bar.
 
  const getBar = () => {
@@ -137,14 +155,15 @@ export default function Bar() {
  useEffect(() => {
 
     getBar()
+    if (user) {
+      puntosXBar()
+    }
 
 
  }, [])
 
  useEffect(() => {
   ipc.on('bar', (event, arg) => {
-    // eslint-disable-next-line no-console
-    console.log(arg?.listaVisualizarPremiosDTO, 'bar login.tsx');
 
     if (arg?.statusDTO?.code !== '00') {
       // eslint-disable-next-line no-console
@@ -163,7 +182,31 @@ export default function Bar() {
 
     }
   });
-});
+},[]);
+
+
+useEffect(() => {
+  ipc.on('visualizarPuntosxDia', (event, arg) => {
+    // eslint-disable-next-line no-console
+    console.log(arg?.cantidadPuntosDisponibles, 'bar.tsx');
+
+    if (arg?.statusDTO?.code !== '00') {
+      // eslint-disable-next-line no-console
+      setmessageError(arg?.statusDTO?.message);
+      setOpenError(true);
+    }
+
+    if (arg?.statusDTO?.code == '00') {
+      localStorage.setItem(
+        'puntosDiaxBar',
+        JSON.stringify(arg?.cantidadPuntosDisponibles)
+      );
+
+      setPuntosBar(arg?.cantidadPuntosDisponibles)
+
+    }
+  });
+},[]);
 
   return (
     <Box p={1}>
@@ -188,11 +231,11 @@ export default function Bar() {
             </Grid>
             <Grid item lg={3} md={3} sm={3} xs={3}>
               <Typography variant="h4" align="right" component="p"  style={{fontWeight:"bold"}}>
-                {puntos?.cantidadPuntosDisponibles
-                  ? ( formatNumber(puntos?.cantidadPuntosDisponibles)
+                {puntosBar
+                  ? ( formatNumber(puntosBar)
                 ) : (
                   <Typography variant="body2" align="right" component="span">
-                    cargando..
+                   0.0.0
                   </Typography>
                 )}
               </Typography>

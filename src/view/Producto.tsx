@@ -91,7 +91,7 @@ export default function Producto() {
   const history = useHistory();
 
   const param = useParams();
-  const puntos = JSON.parse(localStorage.getItem('puntos'));
+  const puntos = JSON.parse(localStorage.getItem('puntosDiaxBar'));
   const user = JSON.parse(localStorage.getItem('user'));
 
   const [buyModal, setBuyModal] = useState(false);
@@ -360,8 +360,8 @@ export default function Producto() {
                 component="p"
                 style={{ fontWeight: 'bold' }}
               >
-                {puntos?.cantidadPuntosDisponibles ? (
-                  formatNumber(Number(puntos?.cantidadPuntosDisponibles))
+                {puntos? (
+                  formatNumber(Number(puntos))
                 ) : (
                   <Typography variant="body2" align="right" component="span">
                     cargando..
