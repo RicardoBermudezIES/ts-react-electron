@@ -7,7 +7,8 @@ export const listarPeticionesXCliente = async (arg) => {
     nombreServicio: 'listarPeticionesXCliente',
     numeroDeParametros: '2',
     parametros: [
-      { nombreParametro: 'numeroDocumento', valorParametro: numeroDocumento+"" },
+      { nombreParametro: 'numeroDocumento',
+      valorParametro: numeroDocumento ? numeroDocumento+"" : null  },
       { nombreParametro: 'serial', valorParametro: `${maquina}` },
     ],
   };
