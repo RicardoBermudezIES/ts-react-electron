@@ -9,7 +9,7 @@ export const comprarPremio = (arg) => {
     parametros: [
       {
         nombreParametro: 'numeroDocumento',
-        valorParametro: numeroDocumento+"",
+        valorParametro: numeroDocumento ? numeroDocumento+"" : null,
 
       },{
         nombreParametro: 'serial',
