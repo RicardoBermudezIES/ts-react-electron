@@ -19,6 +19,7 @@ import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatMoney, formatNumber, shortName } from '../helpers/format';
 import { ipcRenderer } from 'electron';
 import Alert from '../component/Alert/Alert';
+import { setTimeout } from 'timers';
 
 const ipc = ipcRenderer;
 
@@ -106,14 +107,18 @@ export default function Producto() {
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
 
+    setTimeout(() => {
+
     const args = {
       host: auth.host,
-      numeroDocumento: user.numeroDocumento,
+      numeroDocumento: user?.numeroDocumento ?? null,
       maquina: maquina,
       token: localToken,
     };
 
     ipc.send('listar-peticiones', args);
+    }, 200);
+
   };
 
   useEffect(() => {
@@ -164,7 +169,7 @@ export default function Producto() {
 
     const args = {
       host: auth.host,
-      numeroDocumento: user.numeroDocumento,
+      numeroDocumento: user?.numeroDocumento ?? null,
       maquina: maquina,
       token: localToken,
       puk: puk,
@@ -184,7 +189,7 @@ export default function Producto() {
 
     const args = {
       host: auth.host,
-      numeroDocumento: user.numeroDocumento,
+      numeroDocumento: user?.numeroDocumento ?? null,
       maquina: maquina,
       token: localToken,
       puk: puk,
@@ -224,7 +229,7 @@ export default function Producto() {
         handleOpenBuyModal();
       }
     });
-  });
+  },[]);
 
   useEffect(() => {
     ipc.on('realizar-peticion', (event, arg) => {
@@ -241,7 +246,7 @@ export default function Producto() {
         handleOpenRedimirModal();
       }
     });
-  });
+  },[]);
 
   const cancelarPeticion = (idPremio) => {
 
@@ -252,6 +257,7 @@ export default function Producto() {
 
     const args = {
       host: auth.host,
+      numeroDocumento: auth?.numeroDocumento,
       maquina: maquina,
       token: localToken,
       puk: idPremio,
@@ -268,6 +274,7 @@ export default function Producto() {
 
     const args = {
       host: auth.host,
+      numeroDocumento: auth?.numeroDocumento,
       maquina: maquina,
       token: localToken,
       puk: idPremio,
@@ -291,7 +298,7 @@ export default function Producto() {
         getListProducts();
       }
     });
-  });
+  },[]);
 
 
   useEffect(() => {
@@ -308,7 +315,7 @@ export default function Producto() {
         getListProducts();
       }
     });
-  });
+  },[]);
 
   const hasQueque = (idPremio) => {
     const product = listarProductos?.find((l) => l?.idPremio === idPremio)
