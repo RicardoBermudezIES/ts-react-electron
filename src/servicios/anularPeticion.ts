@@ -2,7 +2,7 @@ import Https from 'https';
 import axios from 'axios';
 
 export const anularPeticion = async (arg) => {
-  const { host, maquina, token, puk } = arg;
+  const { host, numeroDocumento, maquina, token, puk } = arg;
   var data = {
     nombreServicio: 'anularPeticion',
     numeroDeParametros: '4',
@@ -13,7 +13,7 @@ export const anularPeticion = async (arg) => {
 
       },{
         nombreParametro: 'haySesion',
-        valorParametro: `JWT`
+        valorParametro: numeroDocumento ? "JWT" : "no"
       },{
         nombreParametro: 'serial',
         valorParametro: `${maquina}`

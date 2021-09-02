@@ -2,14 +2,14 @@ import Https from 'https';
 import axios from 'axios';
 
 export const confirmarPeticion = async (arg) => {
-  const { host, maquina, token, puk } = arg;
+  const { host, numeroDocumento ,maquina, token, puk } = arg;
   var data = {
     nombreServicio: 'confirmarPeticion',
     numeroDeParametros: '3',
     parametros: [
      {
         nombreParametro: 'haySesion',
-        valorParametro: `JWT`
+        valorParametro: numeroDocumento ? "JWT" : "no"
       },{
         nombreParametro: 'serial',
         valorParametro: `${maquina}`
