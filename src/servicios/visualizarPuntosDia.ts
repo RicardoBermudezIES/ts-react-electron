@@ -1,7 +1,6 @@
 import Https from 'https';
 import axios from 'axios';
 
-// eslint-disable-next-line import/prefer-default-export
 export const visualizarPuntosDia = async (arg) => {
   const { host, numeroDocumento, casino, token, maquina } = arg;
   const data = {
@@ -28,7 +27,7 @@ export const visualizarPuntosDia = async (arg) => {
   };
   const config = {
     method: 'post',
-    url: `https://${host}:8443/MobilAppV2/bar/visualizarPuntosBarXDia,
+    url: `https://${host}:8443/MobilAppV2/bar/visualizarPuntosBarXDia`,
     httpsAgent: new Https.Agent({ rejectUnauthorized: false }),
     agent: false,
     strictSSL: false,
