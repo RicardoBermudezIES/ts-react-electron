@@ -1,4 +1,4 @@
-import { confirmarPeticion } from './servicios/confirmarPeticion';
+
 /* eslint global-require: off, no-console: off */
 
 /**
@@ -29,7 +29,7 @@ import { realizarPeticion } from './servicios/realizarPeticion';
 import { listarPeticionesXCliente } from './servicios/listarPeticionxCliente';
 import { anularPeticion } from './servicios/anularPeticion';
 import { visualizarPuntosDia } from './servicios/visualizarPuntosDia';
-
+import { confirmarPeticion } from './servicios/confirmarPeticion';
 const ipc = ipcMain;
 
 export default class AppUpdater {
@@ -151,7 +151,6 @@ const createWindow = async () => {
 //recibe y envia el token a la configuración
 ipc.on('message-config', async (event, arg) => {
   const res = await loginSmol(arg);
-  console.log(res, 'envia el token a la configuración');
   event.reply('message-config', res);
 });
 
@@ -160,44 +159,40 @@ ipc.on('allways-auth', async (event, arg) => {
   let token;
   // eslint-disable-next-line prefer-const
   token = await loginSmol(arg);
-  console.log(token, 'nuevo');
   event.reply('allways-auth', token);
 });
 
 //peticion para listar casino
 ipc.on('get-casinos', async (event, arg) => {
-  console.log(arg);
+
   let casinos = await getCasino(arg);
-  console.log(casinos, 'en el main.dev');
   event.reply('get-casinos', casinos);
 });
 
 //peticion de listar maquinas
 ipc.on('get-maquinas', async (event, arg) => {
-  console.log(arg);
+
   let maquinas = await getMaquinas(arg);
-  console.log(maquinas, 'en el main.dev');
   event.reply('get-maquinas', maquinas);
 });
 
 //vincularMaquina
 ipc.on('VincularMaquina', async (event, arg) => {
-  console.log(arg);
+
   let res = await VincularMaquina(arg);
-  console.log(res, 'en el main.dev');
   event.reply('VincularMaquina', res);
 });
 
 //fidelizarMaquina
 ipc.on('fidelizarMaquina', async (event, arg) => {
-  console.log(arg);
+
   let res = await fidelzarMaquina(arg);
-  console.log(res, 'en el main.dev');
   event.reply('fidelizarMaquina', res);
 });
 
 //VisualizarPuntos
 ipc.on('visualizarPuntos', async (event, arg) => {
+  console.log(arg)
   let res;
   // eslint-disable-next-line prefer-const
   res = await visualizarPuntos(arg);
@@ -206,11 +201,11 @@ ipc.on('visualizarPuntos', async (event, arg) => {
     event.reply('visualizarPuntos', { Error: 'bad request' });
   }
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+
     event.reply('visualizarPuntos', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+
     event.reply('visualizarPuntos', res);
   }
 });
@@ -227,7 +222,6 @@ ipc.on('cerrar-sesion', async (event, arg) => {
   }
 
   if (res?.statusDTO?.code !== '00') {
-    console.log(res, 'cerrar sesion');
     event.reply('cerrar-sesion', res);
   }
 
@@ -252,11 +246,11 @@ ipc.on('bar', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+
     event.reply('bar', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+
     event.reply('bar', res);
   }
 });
@@ -276,11 +270,11 @@ ipc.on('comprar-productos', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+
     event.reply('comprar-productos', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+
     event.reply('comprar-productos', res);
   }
 });
@@ -301,11 +295,11 @@ ipc.on('realizar-peticion', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+
     event.reply('realizar-peticion', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+
     event.reply('realizar-peticion', res);
   }
 });
@@ -325,11 +319,11 @@ ipc.on('listar-peticiones', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+
     event.reply('listar-peticiones', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+
     event.reply('listar-peticiones', res);
   }
 });
@@ -350,11 +344,11 @@ ipc.on('anular-peticiones', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+
     event.reply('anular-peticiones', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+
     event.reply('anular-peticiones', res);
   }
 });
@@ -374,11 +368,11 @@ ipc.on('confirmar-peticiones', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+
     event.reply('confirmar-peticiones', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+
     event.reply('confirmar-peticiones', res);
   }
 });

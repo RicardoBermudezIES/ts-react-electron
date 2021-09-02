@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.global.css';
-import { Box, Button, ThemeProvider } from '@material-ui/core';
+import { Box, ThemeProvider } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import { theme } from './theme/Theme';
 import { router } from './router';
@@ -47,6 +47,7 @@ export default function App() {
   useEffect(() => {
     getAuth();
   }, []);
+
 
   return (
     <DataProvider>
