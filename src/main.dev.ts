@@ -28,6 +28,7 @@ import { comprarPremio } from './servicios/comprarPremio';
 import { realizarPeticion } from './servicios/realizarPeticion';
 import { listarPeticionesXCliente } from './servicios/listarPeticionxCliente';
 import { anularPeticion } from './servicios/anularPeticion';
+import { visualizarPuntosDia } from './servicios/visualizarPuntosDia';
 
 const ipc = ipcMain;
 
@@ -381,6 +382,26 @@ ipc.on('confirmar-peticiones', async (event, arg) => {
     event.reply('confirmar-peticiones', res);
   }
 });
+
+//VisualizarPuntos
+ipc.on('visualizarPuntosxDia', async (event, arg) => {
+  let res;
+  // eslint-disable-next-line prefer-const
+  res = await visualizarPuntosDia(arg);
+
+  if (res.response?.status === 400) {
+    event.reply('visualizarPuntosxDia', { Error: 'bad request' });
+  }
+  if (res.statusDTO?.code !== '00') {
+
+    event.reply('visualizarPuntosxDia', res);
+  }
+  if (res.statusDTO?.code === '00') {
+
+    event.reply('visualizarPuntosxDia', res);
+  }
+});
+
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
