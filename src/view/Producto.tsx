@@ -362,11 +362,7 @@ export default function Producto() {
               >
                 {puntos? (
                   formatNumber(Number(puntos))
-                ) : (
-                  <Typography variant="body2" align="right" component="span">
-                    cargando..
-                  </Typography>
-                )}
+                ) : null}
               </Typography>
               <Typography variant="h6" align="right" component="p">
                 Puntos

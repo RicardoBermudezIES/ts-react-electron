@@ -129,7 +129,7 @@ export default function Bar() {
         token: localToken,
       };
         ipc.send('visualizarPuntosxDia', args);
-    }, 200);
+    }, 300);
   }
 
   // solicitar el bar.
@@ -233,11 +233,7 @@ useEffect(() => {
               <Typography variant="h4" align="right" component="p"  style={{fontWeight:"bold"}}>
                 {puntosBar
                   ? ( formatNumber(puntosBar)
-                ) : (
-                  <Typography variant="body2" align="right" component="span">
-                   0.0.0
-                  </Typography>
-                )}
+                ) : null}
               </Typography>
               <Typography variant="h6" align="right" component="p">
                 Puntos
