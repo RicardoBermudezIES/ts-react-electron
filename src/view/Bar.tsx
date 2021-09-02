@@ -15,6 +15,7 @@ import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatNumber, shortName } from '../helpers/format'
 import { ipcRenderer } from 'electron';
 import Alert from '../component/Alert/Alert';
+import { setTimeout } from 'timers';
 
 
 const ipc = ipcRenderer;
@@ -119,23 +120,17 @@ export default function Bar() {
   const auth = JSON.parse(localStorage.getItem('authConfig'));
   ipc.send('allways-auth', auth);
 
-  const localCasino = localStorage.getItem('casino');
-  const localToken = localStorage.getItem('token');
+  setTimeout(() => {
+    const localCasino = localStorage.getItem('casino');
+    const localToken = localStorage.getItem('token');
 
-  const args = {
-    host: auth.host,
-    casino: localCasino,
-    token: localToken,
-  };
-
-    ipc.send('bar', args);
-
-  /*   const  barList = JSON.parse(localStorage.getItem('bar'))
-    if (barList){
-      const newSet = new Set()
-      barList.forEach(( l => newSet.add(l?.categoriaPremio)));
-      setProductos(newSet)
-    }} */
+    const args = {
+      host: auth.host,
+      casino: localCasino,
+      token: localToken,
+    };
+      ipc.send('bar', args);
+  }, 200);
 
  }
 
