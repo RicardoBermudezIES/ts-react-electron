@@ -13,7 +13,7 @@ export const anularPeticion = async (arg) => {
 
       },{
         nombreParametro: 'haySesion',
-        valorParametro: numeroDocumento ? "JWT" : "no"
+        valorParametro: numeroDocumento ? "si" : "no"
       },{
         nombreParametro: 'serial',
         valorParametro: `${maquina}`

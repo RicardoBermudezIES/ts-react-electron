@@ -9,7 +9,7 @@ export const confirmarPeticion = async (arg) => {
     parametros: [
      {
         nombreParametro: 'haySesion',
-        valorParametro: numeroDocumento ? "JWT" : "no"
+        valorParametro: numeroDocumento ? "si" : "no"
       },{
         nombreParametro: 'serial',
         valorParametro: `${maquina}`

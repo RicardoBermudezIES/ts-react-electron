@@ -9,7 +9,7 @@ export const realizarPeticion = (arg) => {
     parametros: [
       {
         nombreParametro: 'numeroDocumento',
-        valorParametro: numeroDocumento+"",
+        valorParametro: numeroDocumento ? numeroDocumento+"" : null,
 
       },{
         nombreParametro: 'serial',
