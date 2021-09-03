@@ -31,8 +31,16 @@ export default function App() {
       const auth = JSON.parse(window.localStorage.getItem('authConfig'));
       ipc.send('allways-auth', auth);
     };
-        sendAuth();
 
+    if (localStorage.getItem('authConfig')) {
+      setInterval(() => {
+        sendAuth();
+      }, 1000 * 60 * 4);
+    }
+
+    return () => {
+     ipc.removeListener( "allways-auth", ["allways-auth"])
+    }
   }, []);
 
 
