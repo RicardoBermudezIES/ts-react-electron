@@ -82,7 +82,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Bar() {
-  const [productos, setProductos] = useState([]);
+
+  const [productos, setProductos] = useState();
   const [scroll, setScroll] = useState(0);
   const [isMax, setIsMax] = useState(false);
   const classes = useStyles();
@@ -146,7 +147,7 @@ export default function Bar() {
       token: localToken,
     };
       ipc.send('bar', args);
-  }, 200);
+  }, 500);
 
  }
 
@@ -179,7 +180,9 @@ export default function Bar() {
       setProductos(newSet)
 
     }
+
   });
+
 },[]);
 
 
