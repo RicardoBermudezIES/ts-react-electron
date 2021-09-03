@@ -159,6 +159,7 @@ ipc.on('allways-auth', async (event, arg) => {
   let token;
   // eslint-disable-next-line prefer-const
   token = await loginSmol(arg);
+  console.log(token)
   event.reply('allways-auth', token);
 });
 
@@ -187,6 +188,7 @@ ipc.on('VincularMaquina', async (event, arg) => {
 ipc.on('fidelizarMaquina', async (event, arg) => {
 
   let res = await fidelzarMaquina(arg);
+  console.log(res)
   event.reply('fidelizarMaquina', res);
 });
 
@@ -201,11 +203,11 @@ ipc.on('visualizarPuntos', async (event, arg) => {
     event.reply('visualizarPuntos', { Error: 'bad request' });
   }
   if (res.statusDTO?.code !== '00') {
-
+    console.log(res)
     event.reply('visualizarPuntos', res);
   }
   if (res.statusDTO?.code === '00') {
-
+    console.log(res)
     event.reply('visualizarPuntos', res);
   }
 });
@@ -216,7 +218,7 @@ ipc.on('cerrar-sesion', async (event, arg) => {
   let res;
 
     res = await closeSession(arg);
-
+    console.log(res)
   if (res?.response?.status === 400) {
     event.reply('cerrar-sesion', { Error: 'bad request' });
   }
@@ -246,11 +248,11 @@ ipc.on('bar', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-
+    console.log(res)
     event.reply('bar', res);
   }
   if (res.statusDTO?.code === '00') {
-
+    console.log(res)
     event.reply('bar', res);
   }
 });
@@ -270,11 +272,11 @@ ipc.on('comprar-productos', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-
+    console.log(res)
     event.reply('comprar-productos', res);
   }
   if (res.statusDTO?.code === '00') {
-
+    console.log(res)
     event.reply('comprar-productos', res);
   }
 });
@@ -387,11 +389,11 @@ ipc.on('visualizarPuntosxDia', async (event, arg) => {
     event.reply('visualizarPuntosxDia', { Error: 'bad request' });
   }
   if (res.statusDTO?.code !== '00') {
-
+    console.log(res)
     event.reply('visualizarPuntosxDia', res);
   }
   if (res.statusDTO?.code === '00') {
-
+    console.log(res)
     event.reply('visualizarPuntosxDia', res);
   }
 });
