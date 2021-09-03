@@ -19,7 +19,6 @@ import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatMoney, formatNumber, shortName } from '../helpers/format';
 import { ipcRenderer } from 'electron';
 import Alert from '../component/Alert/Alert';
-import { setTimeout } from 'timers';
 
 const ipc = ipcRenderer;
 
@@ -102,7 +101,6 @@ export default function Producto() {
 
   const getListProducts = () => {
     const auth = JSON.parse(localStorage.getItem('authConfig'));
-    ipc.send('allways-auth', auth);
     const user = JSON.parse(localStorage.getItem('user'));
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
@@ -130,9 +128,7 @@ export default function Producto() {
       // eslint-disable-next-line no-console
 
       if (arg?.statusDTO?.code !== '00') {
-        // eslint-disable-next-line no-console
-        setmessageError(arg?.statusDTO?.message);
-        setOpenError(true);
+
       }
 
       if (arg?.statusDTO?.code == '00') {
@@ -162,7 +158,6 @@ export default function Producto() {
 
   const doBuy = (puk: string) => {
     const auth = JSON.parse(localStorage.getItem('authConfig'));
-    ipc.send('allways-auth', auth);
     const user = JSON.parse(localStorage.getItem('user'));
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
@@ -182,7 +177,6 @@ export default function Producto() {
 
   const doRedimir = (puk: string) => {
     const auth = JSON.parse(localStorage.getItem('authConfig'));
-    ipc.send('allways-auth', auth);
     const user = JSON.parse(localStorage.getItem('user'));
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
@@ -249,9 +243,9 @@ export default function Producto() {
   },[]);
 
   const cancelarPeticion = (idPremio) => {
-
+    const product = listarProductos?.find((l) => l?.idPremio === idPremio)
     const auth = JSON.parse(localStorage.getItem('authConfig'));
-    ipc.send('allways-auth', auth);
+
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
 
@@ -260,15 +254,16 @@ export default function Producto() {
       numeroDocumento: auth?.numeroDocumento,
       maquina: maquina,
       token: localToken,
-      puk: idPremio,
+      puk: product?.idPeticion,
     };
 
     ipc.send('anular-peticiones', args);
   };
 
   const confirmarPeticion = (idPremio) => {
+    const product = listarProductos?.find((l) => l?.idPremio === idPremio)
     const auth = JSON.parse(localStorage.getItem('authConfig'));
-    ipc.send('allways-auth', auth);
+
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
 
@@ -277,7 +272,7 @@ export default function Producto() {
       numeroDocumento: auth?.numeroDocumento,
       maquina: maquina,
       token: localToken,
-      puk: idPremio,
+      puk: product?.idPeticion,
     };
 
     ipc.send('confirmar-peticiones', args);
@@ -317,10 +312,10 @@ export default function Producto() {
     });
   },[]);
 
-  const hasQueque = (idPremio) => {
+  const hasQueque = (idPremio, estado) => {
     const product = listarProductos?.find((l) => l?.idPremio === idPremio)
 
-    if (product) {
+    if (product?.estadoPeticion === estado) {
       return true
     }
     return false
@@ -407,9 +402,10 @@ export default function Producto() {
                             alignContent="center"
                           >
                             {
-                            hasQueque(p?.pk) ?
+                            hasQueque(p?.pk, "EN_COLA") ?
                                       <>
-                                        <Grid item lg={6} md={6} sm={6} xs={6}>
+
+                                        <Grid item lg={4} md={4} sm={4} xs={4}>
                                           <Button
                                             onClick={() =>
                                               cancelarPeticion(
@@ -431,6 +427,7 @@ export default function Producto() {
                                                 p?.pk
                                               )
                                             }
+                                            disabled
                                             variant="contained"
                                             color="primary"
                                             size="large"
@@ -439,7 +436,40 @@ export default function Producto() {
                                           </Button>
                                         </Grid>
                                       </>
-                                     :  <>
+                                     :  hasQueque(p?.pk, "EN_CAMINO") ?
+                                     <>
+                                       <Grid item lg={4} md={4} sm={4} xs={4}>
+                                         <Button
+                                           onClick={() =>
+                                             cancelarPeticion(
+                                               p?.pk
+                                             )
+                                           }
+                                           disabled
+                                           variant="contained"
+                                           color="secondary"
+                                           size="large"
+                                         >
+                                           Cancelar
+                                         </Button>
+                                       </Grid>
+
+                                       <Grid item lg={6} md={6} sm={6} xs={6}>
+                                         <Button
+                                           onClick={() =>
+                                             confirmarPeticion(
+                                               p?.pk
+                                             )
+                                           }
+                                           variant="contained"
+                                           color="primary"
+                                           size="large"
+                                         >
+                                           Confirmar
+                                         </Button>
+                                       </Grid>
+                                     </>
+                                    : <>
                                     <Grid item lg={6} md={6} sm={6} xs={6}>
                                       <Grid
                                         container
