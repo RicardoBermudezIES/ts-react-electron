@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     scrollBehavior: 'smooth',
     overflowWrap: 'anywhere',
     height: 300,
-    maxWidth: '70%',
+    maxWidth: '80%',
     margin: '0 auto',
     padding: '1rem 0',
   },
@@ -54,9 +54,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    width: "80%",
   },
   CardAction: {
-    width: '90%',
+    width: '95%',
     margin: '0 auto',
   },
   cover: {
@@ -106,17 +107,15 @@ export default function Producto() {
     const localToken = localStorage.getItem('token');
 
     setTimeout(() => {
+      const args = {
+        host: auth.host,
+        numeroDocumento: user?.numeroDocumento ?? null,
+        maquina: maquina,
+        token: localToken,
+      };
 
-    const args = {
-      host: auth.host,
-      numeroDocumento: user?.numeroDocumento ?? null,
-      maquina: maquina,
-      token: localToken,
-    };
-
-    ipc.send('listar-peticiones', args);
+      ipc.send('listar-peticiones', args);
     }, 200);
-
   };
 
   useEffect(() => {
@@ -128,7 +127,6 @@ export default function Producto() {
       // eslint-disable-next-line no-console
 
       if (arg?.statusDTO?.code !== '00') {
-
       }
 
       if (arg?.statusDTO?.code == '00') {
@@ -223,7 +221,7 @@ export default function Producto() {
         handleOpenBuyModal();
       }
     });
-  },[]);
+  }, []);
 
   useEffect(() => {
     ipc.on('realizar-peticion', (event, arg) => {
@@ -240,10 +238,10 @@ export default function Producto() {
         handleOpenRedimirModal();
       }
     });
-  },[]);
+  }, []);
 
   const cancelarPeticion = (idPremio) => {
-    const product = listarProductos?.find((l) => l?.idPremio === idPremio)
+    const product = listarProductos?.find((l) => l?.idPremio === idPremio);
     const auth = JSON.parse(localStorage.getItem('authConfig'));
 
     const maquina = localStorage.getItem('maquina');
@@ -261,7 +259,7 @@ export default function Producto() {
   };
 
   const confirmarPeticion = (idPremio) => {
-    const product = listarProductos?.find((l) => l?.idPremio === idPremio)
+    const product = listarProductos?.find((l) => l?.idPremio === idPremio);
     const auth = JSON.parse(localStorage.getItem('authConfig'));
 
     const maquina = localStorage.getItem('maquina');
@@ -276,7 +274,6 @@ export default function Producto() {
     };
 
     ipc.send('confirmar-peticiones', args);
-
   };
 
   useEffect(() => {
@@ -293,8 +290,7 @@ export default function Producto() {
         getListProducts();
       }
     });
-  },[]);
-
+  }, []);
 
   useEffect(() => {
     ipc.on('confirmar-peticiones', (event, arg) => {
@@ -310,18 +306,16 @@ export default function Producto() {
         getListProducts();
       }
     });
-  },[]);
+  }, []);
 
   const hasQueque = (idPremio, estado) => {
-    const product = listarProductos?.find((l) => l?.idPremio === idPremio)
+    const product = listarProductos?.find((l) => l?.idPremio === idPremio);
 
     if (product?.estadoPeticion === estado) {
-      return true
+      return true;
     }
-    return false
-
-  }
-
+    return false;
+  };
 
   return (
     <Box p={1}>
@@ -355,9 +349,7 @@ export default function Producto() {
                 component="p"
                 style={{ fontWeight: 'bold' }}
               >
-                {puntos? (
-                  formatNumber(Number(puntos))
-                ) : null}
+                {puntos ? formatNumber(Number(puntos)) : null}
               </Typography>
               <Typography variant="h6" align="right" component="p">
                 Puntos
@@ -396,179 +388,134 @@ export default function Producto() {
                             Disponibles: {p?.unidadesDisponibles}
                           </Typography>
                           <Grid
-                            style={{ marginBottom: 30, padding: 20 }}
+                            style={{ marginBottom: 30, padding: 15 }}
                             container
                             justify="space-between"
                             alignContent="center"
                           >
-                            {
-                            hasQueque(p?.pk, "EN_COLA") ?
-                                      <>
+                            {hasQueque(p?.pk, 'EN_COLA') ? (
+                              <>
+                               <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <Grid
+                                  container
+                                  direction="row"
+                                  alignItems="center"
+                                  spacing={1}
+                                >
+                                  <Grid item lg={6} md={6} sm={6} xs={6}>
+                                    <Button
+                                      onClick={() => cancelarPeticion(p?.pk)}
+                                      variant="contained"
+                                      color="secondary"
+                                    >
+                                      Anular
+                                    </Button>
+                                  </Grid>
 
-                                        <Grid item lg={4} md={4} sm={4} xs={4}>
-                                          <Button
-                                            onClick={() =>
-                                              cancelarPeticion(
-                                                p?.pk
-                                              )
-                                            }
-                                            variant="contained"
-                                            color="secondary"
-                                            size="large"
-                                          >
-                                            Cancelar
-                                          </Button>
-                                        </Grid>
+                                  <Grid item lg={6} md={6} sm={6} xs={6}>
+                                    <Button
+                                      onClick={() => confirmarPeticion(p?.pk)}
+                                      disabled
+                                      variant="contained"
+                                      color="primary"
+                                    >
+                                      Aceptar
+                                    </Button>
+                                  </Grid>
+                                </Grid>
+                                </Grid>
+                              </>
+                            ) : hasQueque(p?.pk, 'EN_CAMINO') ? (
+                              <>
+                                <Grid
+                                  container
+                                  direction="row"
+                                  alignItems="center"
+                                  spacing={2}
+                                >
+                                  <Grid item lg={6} md={6} sm={6} xs={6}>
+                                    <Button
+                                      onClick={() => cancelarPeticion(p?.pk)}
+                                      disabled
+                                      variant="contained"
+                                      color="secondary"
+                                      size="medium"
+                                    >
+                                      Anular
+                                    </Button>
+                                  </Grid>
 
-                                        <Grid item lg={6} md={6} sm={6} xs={6}>
-                                          <Button
-                                            onClick={() =>
-                                              confirmarPeticion(
-                                                p?.pk
-                                              )
-                                            }
-                                            disabled
-                                            variant="contained"
-                                            color="primary"
-                                            size="large"
-                                          >
-                                            Confirmar
-                                          </Button>
-                                        </Grid>
-                                      </>
-                                     :  hasQueque(p?.pk, "EN_CAMINO") ?
-                                     <>
-                                       <Grid item lg={4} md={4} sm={4} xs={4}>
-                                         <Button
-                                           onClick={() =>
-                                             cancelarPeticion(
-                                               p?.pk
-                                             )
-                                           }
-                                           disabled
-                                           variant="contained"
-                                           color="secondary"
-                                           size="large"
-                                         >
-                                           Cancelar
-                                         </Button>
-                                       </Grid>
-
-                                       <Grid item lg={6} md={6} sm={6} xs={6}>
-                                         <Button
-                                           onClick={() =>
-                                             confirmarPeticion(
-                                               p?.pk
-                                             )
-                                           }
-                                           variant="contained"
-                                           color="primary"
-                                           size="large"
-                                         >
-                                           Confirmar
-                                         </Button>
-                                       </Grid>
-                                     </>
-                                    : <>
-                                    <Grid item lg={6} md={6} sm={6} xs={6}>
-                                      <Grid
-                                        container
-                                        direction="row"
-                                        alignItems="center"
-                                        spacing={2}
-                                      >
-                                        <Grid
-                                          item
-                                          lg={12}
-                                          md={12}
-                                          sm={12}
-                                          xs={12}
-                                        >
-                                          <Typography
-                                            variant="h5"
-                                            align="center"
-                                          >
-                                            Puntos
-                                            <Typography
-                                              variant="h5"
-                                              align="center"
-                                            >
-                                              {formatNumber(
-                                                p?.puntosParaCanjear
-                                              )}
-                                            </Typography>
-                                          </Typography>
-                                        </Grid>
-                                        <Grid
-                                          item
-                                          lg={12}
-                                          md={12}
-                                          sm={12}
-                                          xs={12}
-                                        >
-                                          <Button
-                                            disabled={user === null}
-                                            onClick={() => doRedimir(p?.pk)}
-                                            variant="contained"
-                                            color="secondary"
-                                            size="large"
-                                          >
-                                            redimir
-                                          </Button>
-                                        </Grid>
-                                      </Grid>
+                                  <Grid item lg={6} md={6} sm={6} xs={6}>
+                                    <Button
+                                      onClick={() => confirmarPeticion(p?.pk)}
+                                      variant="contained"
+                                      color="primary"
+                                    >
+                                      Aceptar
+                                    </Button>
+                                  </Grid>
+                                </Grid>
+                              </>
+                            ) : (
+                              <>
+                                <Grid item lg={6} md={6} sm={6} xs={6}>
+                                  <Grid
+                                    container
+                                    direction="row"
+                                    alignItems="center"
+                                    spacing={2}
+                                  >
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                      <Typography variant="h5" align="center">
+                                        Puntos
+                                        <Typography variant="h5" align="center">
+                                          {formatNumber(p?.puntosParaCanjear)}
+                                        </Typography>
+                                      </Typography>
                                     </Grid>
-
-                                    <Grid item lg={6} md={6} sm={6} xs={6}>
-                                      <Grid
-                                        container
-                                        direction="row"
-                                        spacing={2}
-                                        alignItems="center"
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                      <Button
+                                        disabled={user === null}
+                                        onClick={() => doRedimir(p?.pk)}
+                                        variant="contained"
+                                        color="secondary"
+                                        size="large"
                                       >
-                                        <Grid
-                                          item
-                                          lg={12}
-                                          md={12}
-                                          sm={12}
-                                          xs={12}
-                                        >
-                                          <Typography
-                                            variant="h5"
-                                            align="center"
-                                          >
-                                            Precio
-                                            <Typography
-                                              variant="h5"
-                                              align="center"
-                                            >
-                                              {formatMoney(
-                                                p?.valorParaCanjear
-                                              )}
-                                            </Typography>
-                                          </Typography>
-                                        </Grid>
-                                        <Grid
-                                          item
-                                          lg={12}
-                                          md={12}
-                                          sm={12}
-                                          xs={12}
-                                        >
-                                          <Button
-                                            onClick={() => doBuy(p?.pk)}
-                                            variant="contained"
-                                            color="primary"
-                                            size="large"
-                                          >
-                                            Comprar
-                                          </Button>
-                                        </Grid>
-                                      </Grid>
+                                        redimir
+                                      </Button>
                                     </Grid>
-                                  </>
-                              }
+                                  </Grid>
+                                </Grid>
 
+                                <Grid item lg={6} md={6} sm={6} xs={6}>
+                                  <Grid
+                                    container
+                                    direction="row"
+                                    spacing={2}
+                                    alignItems="center"
+                                  >
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                      <Typography variant="h5" align="center">
+                                        Precio
+                                        <Typography variant="h5" align="center">
+                                          {formatMoney(p?.valorParaCanjear)}
+                                        </Typography>
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                      <Button
+                                        onClick={() => doBuy(p?.pk)}
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                      >
+                                        Comprar
+                                      </Button>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                              </>
+                            )}
                           </Grid>
                         </Box>
                       </CardContent>
