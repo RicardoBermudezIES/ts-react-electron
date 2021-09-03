@@ -15,7 +15,6 @@ import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatNumber, shortName } from '../helpers/format'
 import { ipcRenderer } from 'electron';
 import Alert from '../component/Alert/Alert';
-import { setTimeout } from 'timers';
 
 
 const ipc = ipcRenderer;
@@ -116,7 +115,6 @@ export default function Bar() {
 
   // solicitar el puntosbar.
   const puntosXBar = () => {
-    setTimeout(() => {
       const auth = JSON.parse(localStorage.getItem('authConfig'));
       const localCasino = localStorage.getItem('casino');
       const localToken = localStorage.getItem('token');
@@ -129,7 +127,7 @@ export default function Bar() {
         token: localToken,
       };
         ipc.send('visualizarPuntosxDia', args);
-    }, 300);
+
   }
 
   // solicitar el bar.
