@@ -30,6 +30,8 @@ import { listarPeticionesXCliente } from './servicios/listarPeticionxCliente';
 import { anularPeticion } from './servicios/anularPeticion';
 import { visualizarPuntosDia } from './servicios/visualizarPuntosDia';
 import { confirmarPeticion } from './servicios/confirmarPeticion';
+import { crearSolicitud } from './servicios/crearSolicitud';
+import { todasSolicitudes } from './servicios/todasSolicitudes';
 const ipc = ipcMain;
 
 export default class AppUpdater {
@@ -218,7 +220,7 @@ ipc.on('cerrar-sesion', async (event, arg) => {
   let res;
 
     res = await closeSession(arg);
-    console.log(res)
+
   if (res?.response?.status === 400) {
     event.reply('cerrar-sesion', { Error: 'bad request' });
   }
@@ -398,6 +400,45 @@ ipc.on('visualizarPuntosxDia', async (event, arg) => {
   }
 });
 
+
+//soporte ***** crear solicitud
+ipc.on('crearSolicitud', async (event, arg) => {
+  let res;
+  // eslint-disable-next-line prefer-const
+  res = await crearSolicitud(arg);
+
+  if (res.response?.status === 400) {
+    event.reply('crearSolicitud', { Error: 'bad request' });
+  }
+  if (res.statusDTO?.code !== '00') {
+    console.log(res)
+    event.reply('crearSolicitud', res);
+  }
+  if (res.statusDTO?.code === '00') {
+    console.log(res)
+    event.reply('crearSolicitud', res);
+  }
+});
+
+
+/// todas-solicitudes
+ipc.on('todas-solicitudes', async (event, arg) => {
+  let res;
+  // eslint-disable-next-line prefer-const
+  res = await todasSolicitudes(arg);
+
+  if (res.response?.status === 400) {
+    event.reply('todas-solicitudes', { Error: 'bad request' });
+  }
+  if (res.statusDTO?.code !== '00') {
+    console.log(res)
+    event.reply('todas-solicitudes', res);
+  }
+  if (res.statusDTO?.code === '00') {
+    console.log(res)
+    event.reply('todas-solicitudes', res);
+  }
+});
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
