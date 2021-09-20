@@ -192,9 +192,6 @@ useEffect(() => {
     console.log(arg?.cantidadPuntosDisponibles, 'bar.tsx');
 
     if (arg?.statusDTO?.code !== '00') {
-      // eslint-disable-next-line no-console
-      setmessageError(arg?.statusDTO?.message);
-      setOpenError(true);
     }
 
     if (arg?.statusDTO?.code == '00') {

@@ -71,7 +71,6 @@ function Home() {
   const getPuntos = () => {
     ipc.on('visualizarPuntos', (event, arg) => {
       if (arg?.Error) {
-        console.log(arg?.Error);
         CloseSession()
       }
 
@@ -118,12 +117,10 @@ function Home() {
     }
   };
   const leaveLobby = () => {
-    console.log('click para salir')
     CloseSession()
   };
 
   const ipcCloseSession = () => {
-    console.log('ipc Render')
     ipc.on('cerrar-sesion', (_, arg) => {
 
       if (arg?.Error) {
@@ -131,7 +128,6 @@ function Home() {
       }
 
       if (arg?.statusDTO?.code !== '00') {
-        console.log(arg?.statusDTO?.message);
         setmessageError(arg?.statusDTO?.message);
         setOpenError(true);
       }
