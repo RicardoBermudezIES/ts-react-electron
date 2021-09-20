@@ -22,6 +22,7 @@ import Alert from '../component/Alert/Alert';
 import { PhoneIcon } from '../iconos/PhoneIcon';
 import { BarIcon } from '../iconos/Bar';
 import { setTimeout } from 'timers';
+import ButtonHelper from '../component/ButtonHelper/ButtonHelper';
 const ipc = ipcRenderer;
 
 const useStyles = makeStyles(() => ({
@@ -260,13 +261,7 @@ function Login() {
           </Button>
         </Grid>
         <Grid item lg={2} md={2} sm={2} xs={2}>
-          <Button style={{ display: 'grid' }}>
-            <PhoneIcon />
-            <Typography variant="h6" style={{ color: 'white' }}>
-              {' '}
-              Ayuda{' '}
-            </Typography>
-          </Button>
+        <ButtonHelper />
         </Grid>
       </Grid>
 
