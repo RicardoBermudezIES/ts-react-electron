@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: "80%",
+    width: '80%',
   },
   CardAction: {
     width: '95%',
@@ -395,34 +395,37 @@ export default function Producto() {
                           >
                             {hasQueque(p?.pk, 'EN_COLA') ? (
                               <>
-                               <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <Grid
-                                  container
-                                  direction="row"
-                                  alignItems="center"
-                                  spacing={1}
-                                >
-                                  <Grid item lg={6} md={6} sm={6} xs={6}>
-                                    <Button
-                                      onClick={() => cancelarPeticion(p?.pk)}
-                                      variant="contained"
-                                      color="secondary"
-                                    >
-                                      Anular
-                                    </Button>
-                                  </Grid>
+                                <Grid item lg={12} md={12} sm={12} xs={12}>
+                                  <Grid
+                                    container
+                                    direction="row"
+                                    alignItems="center"
+                                    spacing={1}
+                                  >
+                                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                                      <Button
+                                        onClick={() => cancelarPeticion(p?.pk)}
+                                        variant="contained"
+                                        color="secondary"
+                                      >
+                                        Anular
+                                      </Button>
+                                    </Grid>
 
-                                  <Grid item lg={6} md={6} sm={6} xs={6}>
-                                    <Button
-                                      onClick={() => confirmarPeticion(p?.pk)}
-                                      disabled
-                                      variant="contained"
-                                      color="primary"
-                                    >
-                                      Aceptar
-                                    </Button>
+                                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                                      <Button
+                                        onClick={() => confirmarPeticion(p?.pk)}
+                                        disabled
+                                        variant="contained"
+                                        color="primary"
+                                      >
+                                        Aceptar
+                                      </Button>
+                                    </Grid>
                                   </Grid>
-                                </Grid>
+                                  <Typography style={{ color:"#efb810" }} variant="h4" align="center">
+                                    En cola
+                                  </Typography>
                                 </Grid>
                               </>
                             ) : hasQueque(p?.pk, 'EN_CAMINO') ? (
@@ -454,6 +457,9 @@ export default function Producto() {
                                       Aceptar
                                     </Button>
                                   </Grid>
+                                  <Typography style={{ color:"#efb810" }}  variant="h4" align="center">
+                                    En camino
+                                  </Typography>
                                 </Grid>
                               </>
                             ) : (
