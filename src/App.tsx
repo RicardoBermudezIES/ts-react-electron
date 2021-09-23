@@ -8,7 +8,7 @@ import { router } from './router';
 import DataProvider from './context/Context';
 import Juego from './iconos/JuegoResponsable.png';
 import Alert from './component/Alert/Alert';
-import VideoPromocional from './component/VideoPromocional/VideoPromocional';
+// import VideoPromocional from './component/VideoPromocional/VideoPromocional';
 
 const ipc = ipcRenderer;
 
@@ -21,9 +21,11 @@ export default function App() {
   };
 
   useEffect(() => {
-    setInterval(() => {
-      isOnline();
-    }, 1000 * 60 * 5);
+    const myInterval2 = setInterval( () => isOnline(), 1000 * 60 * 5);
+    myInterval2
+    return () => {
+      clearInterval(myInterval2);
+    }
   }, []);
 
   useEffect(() => {
@@ -31,15 +33,13 @@ export default function App() {
       const auth = JSON.parse(window.localStorage.getItem('authConfig'));
       ipc.send('allways-auth', auth);
     };
-
+    var myInterval3;
     if (localStorage.getItem('authConfig')) {
-      setInterval(() => {
-        sendAuth();
-      }, 1000 * 60 * 4);
+      myInterval3 =  setInterval(() =>   sendAuth(), 1000 * 60 * 4);
+      myInterval3
     }
-
     return () => {
-     ipc.removeListener( "allways-auth", ["allways-auth"])
+      clearInterval(myInterval3);
     }
   }, []);
 
@@ -60,7 +60,7 @@ export default function App() {
   return (
     <DataProvider>
       <Router>
-        <VideoPromocional />
+        {/* <VideoPromocional /> */}
         <ThemeProvider theme={theme}>
           <Box position="absolute" bottom="5px" right="5px">
             <img style={{ width: 150 }} src={Juego} alt="juego Responsable" />
