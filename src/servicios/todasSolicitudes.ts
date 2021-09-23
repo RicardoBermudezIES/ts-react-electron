@@ -6,7 +6,7 @@ export const todasSolicitudes = async (arg) => {
   const { userAdmin, host, token, casino } = arg;
   var data = {
     nombreServicio: 'listarSolicitudes',
-    numeroDeParametros: '6',
+    numeroDeParametros: '2',
     parametros: [
       {
         nombreParametro:"nombreUsuario",
