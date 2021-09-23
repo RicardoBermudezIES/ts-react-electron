@@ -36,9 +36,15 @@ function Home() {
     cantidadPuntosRedimidos: null,
   });
 
+  const goToLogin = () => {
+    localStorage.removeItem('user')
+    localStorage.removeItem('puntos')
+     history.push('/login')
+  }
+
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    user === null ? history.push('/login') : null;
+    user === null ?  goToLogin()
+       : null;
   }, []);
 
   const sendPuntos = () => {
@@ -63,17 +69,15 @@ function Home() {
   };
 
   useEffect(() => {
-    setInterval(() => {
-      sendPuntos();
-    }, 1000 * 30);
+    const myInterval = setInterval( () => sendPuntos(), 1000 * 30);
+    myInterval
+    return () => {
+      clearInterval(myInterval);
+    }
   }, []);
 
   const getPuntos = () => {
     ipc.on('visualizarPuntos', (event, arg) => {
-      if (arg?.Error) {
-        CloseSession()
-      }
-
       if (arg?.statusDTO?.code !== '00') {
         CloseSession()
       }
@@ -124,6 +128,8 @@ function Home() {
     ipc.on('cerrar-sesion', (_, arg) => {
 
       if (arg?.Error) {
+        localStorage.removeItem('user');
+        localStorage.removeItem('puntos');
         history.push('/login')
       }
 
