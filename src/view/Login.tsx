@@ -38,7 +38,7 @@ function Login() {
     : null;
 
   const localMaquina = localStorage.getItem('maquina');
-
+  const [isLoading, setIsLoading] = useState(false);
   const classes = useStyles();
 
   const history = useHistory();
@@ -95,6 +95,7 @@ function Login() {
 
 
     setTimeout(() => {
+      setIsLoading(true)
       const localToken = localStorage.getItem('token');
 
     const args = {
@@ -142,6 +143,7 @@ function Login() {
             billetero: arg.enableBilletero,
           })
         );
+        setIsLoading(false)
         if (localStorage.getItem('user')) history.push('/');
       }
     });
@@ -237,6 +239,7 @@ function Login() {
                   variant="outlined"
                   fullWidth
                   color="primary"
+                  disabled={isLoading}
                 >
                   {'Iniciar sesión'}
                 </Button>
