@@ -310,6 +310,10 @@ video {
   border-radius: 5px;
 }
 
+.inactive{
+  opacity: 0.5;
+}
+
 
 
 /* Contador del Home */

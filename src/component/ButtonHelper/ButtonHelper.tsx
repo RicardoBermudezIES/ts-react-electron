@@ -1,16 +1,24 @@
 import { Button, Typography } from '@material-ui/core';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { PhoneIcon } from '../../iconos/PhoneIcon';
 import { ipcRenderer } from 'electron';
 import { setTimeout } from 'timers';
+import useHelp from '../../Hook/useHelp';
 
 const ipc = ipcRenderer;
 export default function ButtonHelper(): ReactElement {
-  const [solicitudes, setSolicitudes] = useState([]);
-  const [isLoading, setIsLoading] = useState(false)
+  const {
+    isLoading,
+    hasPending,
+    setHasPending,
+    setIsLoading,
+    solicitudes,
+  } = useHelp();
+
   ///********* */
 
   const solicitarAyuda = () => {
+    setHasPending(true);
     const auth = JSON.parse(localStorage.getItem('authConfig'));
     ipc.send('allways-auth', auth);
 
@@ -29,87 +37,51 @@ export default function ButtonHelper(): ReactElement {
       token: localToken,
     };
 
-    setTimeout(() => {  ipc.send('crearSolicitud', args)}, 500)
-
+    setTimeout(() => {
+      ipc.send('crearSolicitud', args);
+    }, 500);
   };
 
   const solicitar = () => {
-    setIsLoading(true)
+    setIsLoading(true);
     solicitarAyuda();
-    PedirSolicitudes();
   };
 
-  const PedirSolicitudes = () => {
-
-    const authConfig = JSON.parse(localStorage.getItem('authConfig'));
-    const localCasino = localStorage.getItem('casino');
-    const localToken = localStorage.getItem('token');
-    const arg = {
-      userAdmin: authConfig?.user,
-      host: authConfig?.host,
-      casino: localCasino,
-      token: localToken,
-    };
-    setTimeout(() => {  ipc.send('todas-solicitudes', arg)}, 2000)
-  };
-
-  useEffect(() => {
-   const myInterval = setInterval( () => PedirSolicitudes(), 1000 * 60 * 1);
-    myInterval
-    return () => {
-      clearInterval(myInterval);
-    }
-  }, []);
-
-  const ObtenerSolicitudes = () => {
-    ipc.on('todas-solicitudes', (event, arg) => {
-      if (arg?.statusDTO?.code == '126') {
-        setIsLoading(false)
-        setSolicitudes(null);
-      }
-      if (arg?.statusDTO?.code == '00') {
-        setIsLoading(false)
-        setSolicitudes(arg?.solicitudes);
-      }
-    });
-  };
-
-  useEffect(() => {
-    ObtenerSolicitudes();
-  }, [solicitudes]);
 
   const hasSolicitudes = () => {
     const localMaquina = localStorage.getItem('maquina');
-    if (solicitudes === null) {
+    if (solicitudes.length === 0) {
       return false;
     }
-    return solicitudes?.filter( s => s?.serial === localMaquina) ? true : false;
-  }
+    return solicitudes?.filter((s) => s?.serial === localMaquina)
+      ? true
+      : false;
+  };
+
+  console.log(solicitudes, hasPending)
 
   return (
     <>
-      {
-        hasSolicitudes() ? (
-          <Button style={{ display: 'grid' }} disabled>
+      {hasSolicitudes() ? (
+        <Button style={{ display: 'grid' }} disabled>
           <PhoneIcon color="#efb810" />
           <Typography variant="h6" style={{ color: 'white' }}>
             En camino
           </Typography>
         </Button>
-
-        ) : (
-          <Button
+      ) : (
+        <Button
           disabled={isLoading}
-          style={{ display: 'grid' }}
-          onClick={solicitar}>
-         <PhoneIcon color="" />
-         <Typography variant="h6" style={{ color: 'white' }}>
-           Ayuda
-         </Typography>
-       </Button>
-
-        )
-      }
+          style={{ display: 'grid'}}
+          className={`${hasPending  == true ? "inactive" : ""}` }
+          onClick={solicitar}
+        >
+          <PhoneIcon color="" />
+          <Typography variant="h6" style={{ color: 'white' }}>
+            Ayuda
+          </Typography>
+        </Button>
+      )}
     </>
   );
 }

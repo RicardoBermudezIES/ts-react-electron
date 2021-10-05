@@ -19,7 +19,6 @@ import { ipcRenderer } from 'electron';
 import { Settings } from '@material-ui/icons';
 import { DataContext } from '../context/Context';
 import Alert from '../component/Alert/Alert';
-import { PhoneIcon } from '../iconos/PhoneIcon';
 import { BarIcon } from '../iconos/Bar';
 import { setTimeout } from 'timers';
 import ButtonHelper from '../component/ButtonHelper/ButtonHelper';
@@ -38,7 +37,6 @@ function Login() {
     : null;
 
   const localMaquina = localStorage.getItem('maquina');
-  const [isLoading, setIsLoading] = useState(false);
   const classes = useStyles();
 
   const history = useHistory();
@@ -74,7 +72,6 @@ function Login() {
 
   const onSubmitConfiguration = (e) => {
     e.preventDefault();
-    console.log(inputs);
     const auth = JSON.parse(localStorage.getItem('authConfig'));
 
     if (
@@ -95,7 +92,6 @@ function Login() {
 
 
     setTimeout(() => {
-      setIsLoading(true)
       const localToken = localStorage.getItem('token');
 
     const args = {
@@ -112,8 +108,6 @@ function Login() {
 
   useEffect(() => {
     ipc.on('fidelizarMaquina', (event, arg) => {
-      // eslint-disable-next-line no-console
-      console.log(arg, 'fidelizarMaquina login.tsx');
 
       if (arg == undefined ) {
         // eslint-disable-next-line no-console
@@ -143,7 +137,7 @@ function Login() {
             billetero: arg.enableBilletero,
           })
         );
-        setIsLoading(false)
+
         if (localStorage.getItem('user')) history.push('/');
       }
     });
@@ -239,7 +233,6 @@ function Login() {
                   variant="outlined"
                   fullWidth
                   color="primary"
-                  disabled={isLoading}
                 >
                   {'Iniciar sesión'}
                 </Button>

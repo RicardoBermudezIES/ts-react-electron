@@ -15,6 +15,8 @@ import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatNumber, shortName } from '../helpers/format'
 import { ipcRenderer } from 'electron';
 import Alert from '../component/Alert/Alert';
+import useProduct from '../Hook/useProduct';
+import usePuntosDia from '../Hook/usePuntosDia';
 
 
 const ipc = ipcRenderer;
@@ -27,74 +29,56 @@ const useStyles = makeStyles((theme) => ({
     scrollBehavior: 'smooth',
     overflowWrap: 'anywhere',
     maxWidth: '70%',
-    margin: '0 auto',
+    margin: '50px auto',
     padding: '1rem 0',
   },
   item: {
-    height: 250,
-    minWidth: 400,
-    width: 'fit-content',
     margin: '0 1em',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    background: "transparent",
     color: theme.palette.primary.main,
     border: '5px solid',
     borderColor: theme.palette.primary.main,
     borderRadius: 20,
-    top:0,
+
   },
   cardContent:{
-    position: "relative",
-    top:0,
     width:"100%"
   },
   title:{
-    background: theme.palette.primary.main,
     paddingLeft:15,
     paddingRight: 15,
-    color: "white",
     borderRadius:5,
     marginBottom:10,
 
   },
   buttons: {
-    position:"relative",
-    zIndex:2, bottom:0,
-    background:"#05194687"
+    color: "#fff"
   },
   cardAction:{
-    position:"relative",
-    bottom:-135,
     width:"100%",
     padding:0
   },
   blue: {
-    height: 200,
-    width: 200,
-    borderRadius: 999,
-    background: 'linear-gradient(180deg, #3af0b0 0%, #029af9 100%)',
-    position: 'absolute',
-    bottom: -50,
-    left: -100,
-    zIndex: -1,
   },
 }));
 
 export default function Bar() {
 
-  const [productos, setProductos] = useState();
+  const { productos,
+    openError,
+    messageError} = useProduct();
+
+    const { puntosBar } = usePuntosDia();
+
   const [scroll, setScroll] = useState(0);
   const [isMax, setIsMax] = useState(false);
   const classes = useStyles();
   const history = useHistory();
-  const [puntosBar, setPuntosBar] = useState();
 
   const user = JSON.parse(localStorage.getItem('user'));
-
-  const [openError, setOpenError] = useState(false);
-  const [messageError, setmessageError] = useState('');
-
   const GotoLeft = () => {
     const content = document.getElementById('content');
     const scroll1 = (content.scrollLeft -= 200);
@@ -114,97 +98,7 @@ export default function Bar() {
     setScroll(scroll2);
   };
 
-  // solicitar el puntosbar.
-  const puntosXBar = () => {
-      const auth = JSON.parse(localStorage.getItem('authConfig'));
-      const localCasino = localStorage.getItem('casino');
-      const localToken = localStorage.getItem('token');
-      const localMaquina = localStorage.getItem('maquina');
-      const args = {
-        host: auth.host,
-        numeroDocumento: user?.numeroDocumento,
-        maquina: localMaquina,
-        casino: localCasino,
-        token: localToken,
-      };
-        ipc.send('visualizarPuntosxDia', args);
 
-  }
-
-  // solicitar el bar.
-
- const getBar = () => {
-  const auth = JSON.parse(localStorage.getItem('authConfig'));
-  ipc.send('allways-auth', auth);
-
-  setTimeout(() => {
-    const localCasino = localStorage.getItem('casino');
-    const localToken = localStorage.getItem('token');
-
-    const args = {
-      host: auth.host,
-      casino: localCasino,
-      token: localToken,
-    };
-      ipc.send('bar', args);
-  }, 500);
-
- }
-
- useEffect(() => {
-
-    getBar()
-    if (user) {
-      puntosXBar()
-    }
-
-
- }, [])
-
- useEffect(() => {
-  ipc.on('bar', (event, arg) => {
-
-    if (arg?.statusDTO?.code !== '00') {
-      // eslint-disable-next-line no-console
-      setmessageError(arg?.statusDTO?.message);
-      setOpenError(true);
-    }
-
-    if (arg?.statusDTO?.code == '00') {
-      localStorage.setItem(
-        'bar',
-        JSON.stringify(arg?.listaVisualizarPremiosDTO)
-      );
-      const newSet = new Set()
-      arg?.listaVisualizarPremiosDTO.forEach(( l => newSet.add(l?.categoriaPremio)));
-      setProductos(newSet)
-
-    }
-
-  });
-
-},[]);
-
-
-useEffect(() => {
-  ipc.on('visualizarPuntosxDia', (event, arg) => {
-    // eslint-disable-next-line no-console
-    console.log(arg?.cantidadPuntosDisponibles, 'bar.tsx');
-
-    if (arg?.statusDTO?.code !== '00') {
-    }
-
-    if (arg?.statusDTO?.code == '00') {
-      localStorage.setItem(
-        'puntosDiaxBar',
-        JSON.stringify(arg?.cantidadPuntosDisponibles)
-      );
-
-      setPuntosBar(arg?.cantidadPuntosDisponibles)
-
-    }
-  });
-},[]);
 
   return (
     <Box p={1}>
@@ -256,7 +150,7 @@ useEffect(() => {
               ? (
               productos.map((c, i) => (
                   <Card key={i} className={classes.item}
-                   style={{ background: `url(${__dirname}/images/categorias/${c}.png)`, objectFit:"cover", backgroundSize:"cover", backgroundRepeat:"no-repeat" }}>
+              >
                     <CardContent className={classes.cardContent}>
                       <Typography  className={classes.title} variant="h3" align="center">
                         {c}
@@ -270,7 +164,7 @@ useEffect(() => {
                             onClick={() => history.push(`/producto/${c}`)}
                             size="medium"
                             variant="contained"
-                            color="secondary"
+                            color="primary"
                             fullWidth
                           >
                             ver productos
