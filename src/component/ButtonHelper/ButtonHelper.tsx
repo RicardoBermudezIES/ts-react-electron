@@ -1,5 +1,5 @@
 import { Button, Typography } from '@material-ui/core';
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import { PhoneIcon } from '../../iconos/PhoneIcon';
 import { ipcRenderer } from 'electron';
 import { setTimeout } from 'timers';
@@ -47,7 +47,6 @@ export default function ButtonHelper(): ReactElement {
     solicitarAyuda();
   };
 
-
   const hasSolicitudes = () => {
     const localMaquina = localStorage.getItem('maquina');
     if (solicitudes.length === 0) {
@@ -58,7 +57,7 @@ export default function ButtonHelper(): ReactElement {
       : false;
   };
 
-  console.log(solicitudes, hasPending)
+  console.log(solicitudes, hasPending);
 
   return (
     <>
@@ -72,8 +71,8 @@ export default function ButtonHelper(): ReactElement {
       ) : (
         <Button
           disabled={isLoading}
-          style={{ display: 'grid'}}
-          className={`${hasPending  == true ? "inactive" : ""}` }
+          style={{ display: 'grid' }}
+          className={`${hasPending == true ? 'inactive' : ''}`}
           onClick={solicitar}
         >
           <PhoneIcon color="" />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.global.css';
 import { Box, ThemeProvider } from '@material-ui/core';
@@ -9,20 +9,16 @@ import Juego from './iconos/JuegoResponsable.png';
 import Alert from './component/Alert/Alert';
 import useToken from './Hook/useToken';
 import useOnline from './Hook/useOnline';
-// import VideoPromocional from './component/VideoPromocional/VideoPromocional';
-
+import VideoPromocional from './component/VideoPromocional/VideoPromocional';
 
 export default function App() {
-
-  const { token } = useToken()
-  const { open , setOpen} = useOnline()
-  console.log(token)
-
+  useToken();
+  const { open, setOpen } = useOnline();
 
   return (
     <DataProvider>
       <Router>
-        {/* <VideoPromocional /> */}
+           <VideoPromocional />
         <ThemeProvider theme={theme}>
           <Box position="absolute" bottom="5px" right="5px">
             <img style={{ width: 150 }} src={Juego} alt="juego Responsable" />

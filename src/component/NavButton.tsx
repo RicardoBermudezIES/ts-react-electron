@@ -1,4 +1,4 @@
-import { Button, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router';
 import { BarIcon } from '../iconos/Bar';
@@ -6,10 +6,7 @@ import { PuntosIcon } from '../iconos/PuntosIcon';
 import { BilleteraIcon } from '../iconos/BilleteraIcon';
 import ButtonHelper from './ButtonHelper/ButtonHelper';
 
-const useStyles = makeStyles(() => ({}));
-
 export default function NavButton() {
-  const classes = useStyles();
   const history = useHistory();
 
   const goBar = () => {
