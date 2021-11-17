@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 
 /* eslint global-require: off, no-console: off */
 
@@ -32,6 +33,7 @@ import { visualizarPuntosDia } from './servicios/visualizarPuntosDia';
 import { confirmarPeticion } from './servicios/confirmarPeticion';
 import { crearSolicitud } from './servicios/crearSolicitud';
 import { todasSolicitudes } from './servicios/todasSolicitudes';
+
 const ipc = ipcMain;
 
 export default class AppUpdater {
@@ -42,7 +44,7 @@ export default class AppUpdater {
   }
 }
 
-let mainWindow: BrowserWindow | undefined ;
+let mainWindow: BrowserWindow | undefined;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -90,8 +92,7 @@ const createWindow = async () => {
     width: 1280,
     height: 480,
     frame: false,
-    //kiosk:true,
-
+    kiosk: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -118,9 +119,9 @@ const createWindow = async () => {
   mainWindow.webContents.session.webRequest.onHeadersReceived(
     { urls: ['*://*/*'] },
     (d, c) => {
-      if (d?.responseHeaders['X-Frame-Options']) {
+      if (d?.responseHeaders!['X-Frame-Options']) {
         delete d.responseHeaders['X-Frame-Options'];
-      } else if (d?.responseHeaders['x-frame-options']) {
+      } else if (d?.responseHeaders!['x-frame-options']) {
         delete d.responseHeaders['x-frame-options'];
       }
 
@@ -150,53 +151,48 @@ const createWindow = async () => {
  * Add event listeners...
  */
 
-//recibe y envia el token a la configuración
+// recibe y envia el token a la configuración
 ipc.on('message-config', async (event, arg) => {
   const res = await loginSmol(arg);
   event.reply('message-config', res);
 });
 
-//peticiones de tokens
+// peticiones de tokens
 ipc.on('allways-auth', async (event, arg) => {
   let token;
   // eslint-disable-next-line prefer-const
   token = await loginSmol(arg);
-  console.log(token)
   event.reply('allways-auth', token);
 });
 
-//peticion para listar casino
+// peticion para listar casino
 ipc.on('get-casinos', async (event, arg) => {
-
-  let casinos = await getCasino(arg);
+  const casinos = await getCasino(arg);
   event.reply('get-casinos', casinos);
 });
 
-//peticion de listar maquinas
+// peticion de listar maquinas
 ipc.on('get-maquinas', async (event, arg) => {
-
-  let maquinas = await getMaquinas(arg);
+  const maquinas = await getMaquinas(arg);
   event.reply('get-maquinas', maquinas);
 });
 
-//vincularMaquina
+// vincularMaquina
 ipc.on('VincularMaquina', async (event, arg) => {
-
-  let res = await VincularMaquina(arg);
+  const res = await VincularMaquina(arg);
   event.reply('VincularMaquina', res);
 });
 
-//fidelizarMaquina
+// fidelizarMaquina
 ipc.on('fidelizarMaquina', async (event, arg) => {
-
-  let res = await fidelzarMaquina(arg);
-  console.log(res)
+  const res = await fidelzarMaquina(arg);
+  console.log(res);
   event.reply('fidelizarMaquina', res);
 });
 
-//VisualizarPuntos
+// VisualizarPuntos
 ipc.on('visualizarPuntos', async (event, arg) => {
-  console.log(arg)
+  console.log(arg);
   let res;
   // eslint-disable-next-line prefer-const
   res = await visualizarPuntos(arg);
@@ -205,21 +201,19 @@ ipc.on('visualizarPuntos', async (event, arg) => {
     event.reply('visualizarPuntos', { Error: 'bad request' });
   }
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+    console.log(res);
     event.reply('visualizarPuntos', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+    console.log(res);
     event.reply('visualizarPuntos', res);
   }
 });
 
-
-
 ipc.on('cerrar-sesion', async (event, arg) => {
   let res;
 
-    res = await closeSession(arg);
+  res = await closeSession(arg);
 
   if (res?.response?.status === 400) {
     event.reply('cerrar-sesion', { Error: 'bad request' });
@@ -235,7 +229,7 @@ ipc.on('cerrar-sesion', async (event, arg) => {
   }
 });
 
-//consultar bar
+// consultar bar
 ipc.on('bar', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
@@ -250,16 +244,16 @@ ipc.on('bar', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+    console.log(res);
     event.reply('bar', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+    console.log(res);
     event.reply('bar', res);
   }
 });
 
-//consulta comprar productos
+// consulta comprar productos
 ipc.on('comprar-productos', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
@@ -274,17 +268,16 @@ ipc.on('comprar-productos', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+    console.log(res);
     event.reply('comprar-productos', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+    console.log(res);
     event.reply('comprar-productos', res);
   }
 });
 
-
-//consulta realizar peticion
+// consulta realizar peticion
 ipc.on('realizar-peticion', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
@@ -299,7 +292,6 @@ ipc.on('realizar-peticion', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-
     event.reply('realizar-peticion', res);
   }
   if (res.statusDTO?.code === '00') {
@@ -308,7 +300,7 @@ ipc.on('realizar-peticion', async (event, arg) => {
   }
 });
 
-//consulta listar peticion por peticiones
+// consulta listar peticion por peticiones
 ipc.on('listar-peticiones', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
@@ -323,17 +315,14 @@ ipc.on('listar-peticiones', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-
     event.reply('listar-peticiones', res);
   }
   if (res.statusDTO?.code === '00') {
-
     event.reply('listar-peticiones', res);
   }
 });
 
-
-//consulta anular peticiones
+// consulta anular peticiones
 ipc.on('anular-peticiones', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
@@ -348,16 +337,14 @@ ipc.on('anular-peticiones', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-
     event.reply('anular-peticiones', res);
   }
   if (res.statusDTO?.code === '00') {
-
     event.reply('anular-peticiones', res);
   }
 });
 
-//consulta confirmar peticiones
+// consulta confirmar peticiones
 ipc.on('confirmar-peticiones', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
@@ -372,16 +359,15 @@ ipc.on('confirmar-peticiones', async (event, arg) => {
   }
 
   if (res.statusDTO?.code !== '00') {
-
     event.reply('confirmar-peticiones', res);
   }
-  if (res.statusDTO?.code === '00') {
 
+  if (res.statusDTO?.code === '00') {
     event.reply('confirmar-peticiones', res);
   }
 });
 
-//VisualizarPuntos
+// VisualizarPuntos
 ipc.on('visualizarPuntosxDia', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
@@ -391,17 +377,17 @@ ipc.on('visualizarPuntosxDia', async (event, arg) => {
     event.reply('visualizarPuntosxDia', { Error: 'bad request' });
   }
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+    console.log(res);
     event.reply('visualizarPuntosxDia', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+    console.log(res);
     event.reply('visualizarPuntosxDia', res);
   }
 });
 
 
-//soporte ***** crear solicitud
+// soporte ***** crear solicitud
 ipc.on('crearSolicitud', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
@@ -411,15 +397,14 @@ ipc.on('crearSolicitud', async (event, arg) => {
     event.reply('crearSolicitud', { Error: 'bad request' });
   }
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+    console.log(res);
     event.reply('crearSolicitud', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+    console.log(res);
     event.reply('crearSolicitud', res);
   }
 });
-
 
 /// todas-solicitudes
 ipc.on('todas-solicitudes', async (event, arg) => {
@@ -431,11 +416,11 @@ ipc.on('todas-solicitudes', async (event, arg) => {
     event.reply('todas-solicitudes', { Error: 'bad request' });
   }
   if (res.statusDTO?.code !== '00') {
-    console.log(res)
+    console.log(res);
     event.reply('todas-solicitudes', res);
   }
   if (res.statusDTO?.code === '00') {
-    console.log(res)
+    console.log(res);
     event.reply('todas-solicitudes', res);
   }
 });

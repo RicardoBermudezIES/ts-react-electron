@@ -15,8 +15,6 @@ export const loginSmol = (arg) => {
     },
     data: data,
   };
-
-
   return axios(config)
     .then((res: AxiosResponse) => {
      return res.data;

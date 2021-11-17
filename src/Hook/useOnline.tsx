@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-
+import { useEffect, useState } from 'react';
 
 export default function useOnline() {
   const [open, setOpen] = useState(!navigator.onLine);
@@ -17,6 +16,5 @@ export default function useOnline() {
     }
   }, []);
 
-
-  return { open, setOpen }
+  return { open, setOpen };
 }

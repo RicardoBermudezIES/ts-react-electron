@@ -1,23 +1,21 @@
-import { ipcRenderer } from "electron";
-import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { ipcRenderer } from 'electron';
+import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 const ipc = ipcRenderer;
 
-
 export default function useCloseSession() {
-
   const history = useHistory();
   const [openError, setOpenError] = useState(false);
   const [messageError, setmessageError] = useState('');
 
   const CloseSession = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    const authConfig = JSON.parse(localStorage.getItem('authConfig'));
+    const authConfig = JSON.parse(localStorage.getItem('authConfig')!);
     const localMaquina = localStorage.getItem('maquina');
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const localToken = localStorage.getItem('token');
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('user')!);
     const args = {
       host: authConfig?.host,
       maquina: localMaquina,

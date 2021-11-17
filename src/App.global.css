@@ -1,3 +1,8 @@
+*{
+  box-shadow: none;
+  transition: none !important;
+}
+
 .hg-theme-default {
   background-color: #ececec;
   border-radius: 5px;

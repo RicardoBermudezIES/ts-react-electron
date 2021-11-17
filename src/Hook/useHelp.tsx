@@ -1,5 +1,5 @@
-import { ipcRenderer } from "electron";
-import { useEffect, useState } from "react";
+import { ipcRenderer } from 'electron';
+import { useEffect, useState } from 'react';
 const ipc = ipcRenderer;
 export default function useHelp() {
 
@@ -9,7 +9,7 @@ export default function useHelp() {
 
 
   useEffect(() => {
-    ObtenerSolicitudes()
+    ObtenerSolicitudes();
     },[solicitudes]);
 
   const ObtenerSolicitudes = () => {

@@ -26,7 +26,7 @@ export const theme = createMuiTheme({
           border:"0.3em solid #e91e63",
           padding: "7px 21px"
         }
-      }
+      },
     },
     MuiTextField: {
       root: {
