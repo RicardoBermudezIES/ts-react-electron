@@ -66,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 300,
     maxHeight: 100,
     objectFit: 'cover',
+    backgroundSize: 'auto !important',
     marginBottom: 20,
   },
   modal: {
@@ -163,9 +164,9 @@ export default function Producto() {
     const args = {
       host: auth.host,
       numeroDocumento: user?.numeroDocumento ?? null,
-      maquina: maquina,
+      maquina,
       token: localToken,
-      puk: puk,
+      puk,
     };
 
     ipc.send('comprar-productos', args);
@@ -250,7 +251,7 @@ export default function Producto() {
     const args = {
       host: auth.host,
       numeroDocumento: auth?.numeroDocumento,
-      maquina: maquina,
+      maquina,
       token: localToken,
       puk: product?.idPeticion,
     };
@@ -377,7 +378,7 @@ export default function Producto() {
                       <CardContent className={classes.content}>
                         <CardMedia
                           className={classes.cover}
-                          image={`data:image/png;base64,${p?.imagen}`}
+                          image={`${p?.imagen}`}
                           title="Live from space album cover"
                         />
                         <Box className={classes.details}>
