@@ -119,8 +119,10 @@ const createWindow = async () => {
   mainWindow.webContents.session.webRequest.onHeadersReceived(
     { urls: ['*://*/*'] },
     (d, c) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       if (d?.responseHeaders!['X-Frame-Options']) {
         delete d.responseHeaders['X-Frame-Options'];
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       } else if (d?.responseHeaders!['x-frame-options']) {
         delete d.responseHeaders['x-frame-options'];
       }
@@ -295,7 +297,6 @@ ipc.on('realizar-peticion', async (event, arg) => {
     event.reply('realizar-peticion', res);
   }
   if (res.statusDTO?.code === '00') {
-
     event.reply('realizar-peticion', res);
   }
 });
@@ -385,7 +386,6 @@ ipc.on('visualizarPuntosxDia', async (event, arg) => {
     event.reply('visualizarPuntosxDia', res);
   }
 });
-
 
 // soporte ***** crear solicitud
 ipc.on('crearSolicitud', async (event, arg) => {

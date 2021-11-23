@@ -138,6 +138,7 @@ function getStepContent(
 }
 
 export default function Configuracion() {
+  // eslint-disable-next-line spaced-comment
   //estado Globales
   const {
     setVinculacion,
@@ -176,9 +177,8 @@ export default function Configuracion() {
   const [open, setOpen] = React.useState(false);
 
   const handleFidelizar = () => {
-    const localToken = localStorage.getItem('token')
-    console.log(localToken)
-    let args = {
+    const localToken = localStorage.getItem('token');
+    const args = {
       host: inputs.host,
       token: localToken,
       serial: maquina,
@@ -187,13 +187,14 @@ export default function Configuracion() {
   };
 
   useEffect(() => {
-    ipc.on('VincularMaquina', (event, arg) => {
+    ipc.on('VincularMaquina', (_event, arg) => {
+      // eslint-disable-next-line no-console
       console.log(arg, 'VincularMaquina configuracion.tsx');
       if (arg.statusDTO.code !== '00') {
         setErrorVinculacion(arg.statusDTO.message);
         setOpen(true);
       }
-      if (arg.statusDTO.code == '00') setVinculacion(true);
+      if (arg.statusDTO.code === '00') setVinculacion(true);
       handleNext();
     });
 
@@ -209,7 +210,7 @@ export default function Configuracion() {
     setMaquina(event.target.value);
   };
 
-  const handleApp = (event) => {
+  const handleApp = (_event) => {
     history.push('/login');
   };
   return (

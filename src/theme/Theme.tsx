@@ -2,7 +2,6 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import { pink, lightBlue } from '@material-ui/core/colors/';
 
-
 export const theme = createMuiTheme({
   palette: {
     primary: {
@@ -15,17 +14,17 @@ export const theme = createMuiTheme({
     },
   },
   overrides: {
-    MuiButton:{
-      root:{
-        fontSize:"1.4em"
+    MuiButton: {
+      root: {
+        fontSize: '1.4em',
       },
-      outlinedPrimary:{
-        borderWidth: "0.3em",
-        padding: "7px 21px",
-        "&:hover":{
-          border:"0.3em solid #e91e63",
-          padding: "7px 21px"
-        }
+      outlinedPrimary: {
+        borderWidth: '0.3em',
+        padding: '7px 21px',
+        '&:hover': {
+          border: '0.3em solid #e91e63',
+          padding: '7px 21px',
+        },
       },
     },
     MuiTextField: {
