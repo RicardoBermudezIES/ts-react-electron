@@ -1,6 +1,7 @@
 *{
   box-shadow: none;
   transition: none !important;
+  animation:  none !important;
 }
 
 .hg-theme-default {
@@ -284,7 +285,6 @@ body {
 }
 
 .MuiPaper-root {
-  left: -250px;
   top: 50px;
 }
 
