@@ -18,10 +18,10 @@ export default function App() {
   return (
     <DataProvider>
       <Router>
-           <VideoPromocional />
+        <VideoPromocional />
         <ThemeProvider theme={theme}>
           <Box position="absolute" bottom="5px" right="5px">
-            <img style={{ width: 150 }} src={Juego} alt="juego Responsable" />
+            <img style={{ width: 90 }} src={Juego} alt="juego Responsable" />
           </Box>
 
           {navigator.onLine ? null : (
