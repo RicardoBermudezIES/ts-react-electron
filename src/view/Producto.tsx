@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import {
   Box,
   Button,
@@ -16,9 +17,10 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
-import { formatMoney, formatNumber, shortName } from '../helpers/format';
 import { ipcRenderer } from 'electron';
+import { formatMoney, formatNumber, shortName } from '../helpers/format';
 import Alert from '../component/Alert/Alert';
+import { Product } from '../types/Products';
 
 const ipc = ipcRenderer;
 
@@ -87,7 +89,7 @@ export default function Producto() {
   const [productos] = useState(barList);
   const [scroll, setScroll] = useState(0);
   const [isMax, setIsMax] = useState(false);
-  const [listarProductos, setListarProductos] = useState([]);
+  const [listarProductos, setListarProductos] = useState<[]>([]);
   const classes = useStyles();
   const history = useHistory();
 
@@ -103,6 +105,7 @@ export default function Producto() {
 
   const getListProducts = () => {
     const auth = JSON.parse(localStorage.getItem('authConfig'));
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const user = JSON.parse(localStorage.getItem('user'));
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
@@ -111,7 +114,7 @@ export default function Producto() {
       const args = {
         host: auth.host,
         numeroDocumento: user?.numeroDocumento ?? null,
-        maquina: maquina,
+        maquina,
         token: localToken,
       };
 
@@ -127,10 +130,11 @@ export default function Producto() {
     ipc.on('listar-peticiones', (event, arg) => {
       // eslint-disable-next-line no-console
 
+      // eslint-disable-next-line no-empty
       if (arg?.statusDTO?.code !== '00') {
       }
 
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         setListarProductos(arg?.peticiones);
       }
     });
@@ -155,8 +159,14 @@ export default function Producto() {
     setScroll(scroll2);
   };
 
+  const handleOpenBuyModal = () => {
+    setBuyModal(true);
+  };
+
   const doBuy = (puk: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const auth = JSON.parse(localStorage.getItem('authConfig'));
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const user = JSON.parse(localStorage.getItem('user'));
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
@@ -175,25 +185,25 @@ export default function Producto() {
   };
 
   const doRedimir = (puk: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const auth = JSON.parse(localStorage.getItem('authConfig'));
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const user = JSON.parse(localStorage.getItem('user'));
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
 
     const args = {
       host: auth.host,
       numeroDocumento: user?.numeroDocumento ?? null,
-      maquina: maquina,
+      maquina,
       token: localToken,
-      puk: puk,
+      puk,
     };
 
     ipc.send('realizar-peticion', args);
   };
 
-  const handleOpenBuyModal = () => {
-    setBuyModal(true);
-  };
 
   const handleCloseBuyModal = () => {
     setBuyModal(false);
@@ -208,7 +218,7 @@ export default function Producto() {
   };
 
   useEffect(() => {
-    ipc.on('comprar-productos', (event, arg) => {
+    ipc.on('comprar-productos', (_event, arg) => {
       // eslint-disable-next-line no-console
 
       if (arg?.statusDTO?.code !== '00') {
@@ -217,7 +227,7 @@ export default function Producto() {
         setOpenError(true);
       }
 
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         getListProducts();
         handleOpenBuyModal();
       }
@@ -225,7 +235,7 @@ export default function Producto() {
   }, []);
 
   useEffect(() => {
-    ipc.on('realizar-peticion', (event, arg) => {
+    ipc.on('realizar-peticion', (_event, arg) => {
       // eslint-disable-next-line no-console
 
       if (arg?.statusDTO?.code !== '00') {
@@ -234,16 +244,17 @@ export default function Producto() {
         setOpenError(true);
       }
 
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         getListProducts();
         handleOpenRedimirModal();
       }
     });
   }, []);
 
-  const cancelarPeticion = (idPremio) => {
-    const product = listarProductos?.find((l) => l?.idPremio === idPremio);
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
+  const cancelarPeticion = (idPremio: string) => {
+    const product: [] = listarProductos?.find((l) => l?.idPremio === idPremio);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const auth = JSON.parse(localStorage.getItem('authConfig')!);
 
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
@@ -269,7 +280,7 @@ export default function Producto() {
     const args = {
       host: auth.host,
       numeroDocumento: auth?.numeroDocumento,
-      maquina: maquina,
+      maquina,
       token: localToken,
       puk: product?.idPeticion,
     };
@@ -303,7 +314,7 @@ export default function Producto() {
         setOpenError(true);
       }
 
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         getListProducts();
       }
     });
@@ -372,7 +383,10 @@ export default function Producto() {
           <Box id="content" className={classes.root}>
             {productos
               ? productos
-                  .filter((bar) => bar?.categoriaPremio === param?.id)
+                  .filter(
+                    (bar: { categoriaPremio: string }) =>
+                      bar?.categoriaPremio === param?.id
+                  )
                   .map((p, i) => (
                     <Card key={i} className={classes.item}>
                       <CardContent className={classes.content}>

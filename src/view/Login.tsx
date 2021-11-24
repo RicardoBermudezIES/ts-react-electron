@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { FormEventHandler, useContext, useEffect, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -40,10 +40,18 @@ function Login() {
   const classes = useStyles();
 
   const history = useHistory();
-  const [inputs, setInputs] = useState({
-    username: null,
-    token: null,
-    passwordMaster: null,
+  const [inputs, setInputs] = useState<
+    | {
+        username: string;
+        token: string;
+        passwordMaster: string;
+      }
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    | {}
+  >({
+    username: '',
+    token: '',
+    passwordMaster: '',
   });
   const [layoutName, setLayoutName] = useState('shift');
   const [inputName, setInputName] = useState();
@@ -66,50 +74,52 @@ function Login() {
     setOpen(false);
   };
 
-  const onChangeAll = (inputs) => {
+  function onChangeAll(
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    inputs: React.SetStateAction<{
+      username: string;
+      token: string;
+      passwordMaster: string;
+    }>
+  ): void {
     setInputs({ ...inputs });
-  };
+  }
 
-  const onSubmitConfiguration = (e) => {
+  function onSubmitConfiguration(e: Event): void {
     e.preventDefault();
     const auth = JSON.parse(localStorage.getItem('authConfig'));
 
-    if (
-      inputs.passwordMaster === auth?.password ||
-      inputs.passwordMaster === '3337777777'
-    ) {
+    if (inputs?.passwordMaster === auth?.password ||
+      inputs?.passwordMaster === '3337777777') {
       history.push('/configuracion');
     } else {
       setErrorMaster(true);
     }
-  };
+  }
 
-  const onSubmit = (e) => {
+  function onSubmit(e: Event): void {
     e.preventDefault();
 
     const auth = JSON.parse(localStorage.getItem('authConfig'));
     ipc.send('allways-auth', auth);
 
-
     setTimeout(() => {
       const localToken = localStorage.getItem('token');
 
-    const args = {
-      host: authConfig.host,
-      serial: localMaquina,
-      numeroDocumento: inputs.username,
-      token: localToken,
-    };
-    ipc.send('fidelizarMaquina', args);
-
+      const args = {
+        host: authConfig.host,
+        serial: localMaquina,
+        numeroDocumento: inputs.username,
+        token: localToken,
+      };
+      ipc.send('fidelizarMaquina', args);
     }, 200);
-
-  };
+  }
 
   useEffect(() => {
     ipc.on('fidelizarMaquina', (event, arg) => {
-
-      if (arg == undefined ) {
+      // eslint-disable-next-line eqeqeq
+      if (arg === undefined) {
         // eslint-disable-next-line no-console
         setmessageError("intente de nuevo, por favor.");
         setOpenError(true);
@@ -156,7 +166,7 @@ function Login() {
     setLayoutName(newLayoutName);
   };
 
-  const onKeyPress = (button) => {
+  const onKeyPress = (button: string) => {
     if (button === '{shift}' || button === '{shift1}') handleShift();
   };
 
@@ -168,7 +178,10 @@ function Login() {
     setkeyboardOpen(false);
   };
 
-  const setActiveInput = (inputName) => {
+  const setActiveInput = (
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    inputName: string | React.SetStateAction<undefined>
+  ) => {
     setInputName(inputName);
     setkeyboardOpen(true);
   };
@@ -234,7 +247,7 @@ function Login() {
                   fullWidth
                   color="primary"
                 >
-                  {'Iniciar sesión'}
+                  Iniciar sesión
                 </Button>
               </Grid>
             </Grid>
@@ -261,7 +274,12 @@ function Login() {
         </Grid>
       </Grid>
 
-      <Dialog className="dialog-login" open={open} onClose={handleClose} aria-labelledby="token">
+      <Dialog
+        className="dialog-login"
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="token"
+      >
         <DialogTitle id="token">Ingresa tu token</DialogTitle>
         <DialogContent>
           <Input
@@ -285,6 +303,8 @@ function Login() {
       </Dialog>
 
       <Dialog
+      // eslint-disable-next-line react/style-prop-object
+        style={{ left: -450 }}
         open={openMasterPassword}
         onClose={handleCloseMasterPassword}
         aria-labelledby="form-dialog-title"

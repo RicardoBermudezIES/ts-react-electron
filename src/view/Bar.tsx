@@ -7,19 +7,15 @@ import {
   Grid,
   makeStyles,
   Typography,
-  CircularProgress
+  CircularProgress,
 } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import React, { JSXElementConstructor, ReactElement, useState } from 'react';
 import { useHistory } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
-import { formatNumber, shortName } from '../helpers/format'
-import { ipcRenderer } from 'electron';
+import { formatNumber, shortName } from '../helpers/format';
 import Alert from '../component/Alert/Alert';
 import useProduct from '../Hook/useProduct';
 import usePuntosDia from '../Hook/usePuntosDia';
-
-
-const ipc = ipcRenderer;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,52 +29,52 @@ const useStyles = makeStyles((theme) => ({
     padding: '1rem 0',
   },
   item: {
+    minWidth: '320px',
     margin: '0 1em',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    background: "transparent",
+    background: 'transparent',
     color: theme.palette.primary.main,
     border: '5px solid',
     borderColor: theme.palette.primary.main,
     borderRadius: 20,
-
   },
-  cardContent:{
-    width:"100%"
+  cardContent: {
+    width: '100%',
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  title:{
-    paddingLeft:15,
+  title: {
+    paddingLeft: 15,
     paddingRight: 15,
-    borderRadius:5,
-    marginBottom:10,
-
+    borderRadius: 5,
+    marginBottom: 10,
   },
   buttons: {
-    color: "#fff"
+    color: '#fff',
   },
-  cardAction:{
-    width:"100%",
-    padding:0
+  cardAction: {
+    width: '100%',
+    padding: 0,
   },
-  blue: {
-  },
+  blue: {},
 }));
 
-export default function Bar() {
+export default function Bar(): ReactElement {
+  const { productos, openError, messageError, setOpenError } = useProduct();
 
-  const { productos,
-    openError,
-    messageError} = useProduct();
-
-    const { puntosBar } = usePuntosDia();
+  const { puntosBar } = usePuntosDia();
 
   const [scroll, setScroll] = useState(0);
   const [isMax, setIsMax] = useState(false);
   const classes = useStyles();
   const history = useHistory();
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const user = JSON.parse(localStorage.getItem('user')!);
   const GotoLeft = () => {
     const content = document.getElementById('content');
     const scroll1 = (content.scrollLeft -= 200);
@@ -98,8 +94,6 @@ export default function Bar() {
     setScroll(scroll2);
   };
 
-
-
   return (
     <Box p={1}>
       <Box className={classes.blue} />
@@ -111,21 +105,29 @@ export default function Bar() {
                 size="large"
                 variant="contained"
                 color="primary"
-                onClick={() => history.goBack()}
+                onClick={() => history.go(-1)}
               >
                 Volver
               </Button>
             </Grid>
             <Grid item lg={7} md={7} sm={7} xs={7}>
-              <Typography variant="h3" component="p" align="center"  style={{fontWeight:"bold"}}>
+              <Typography
+                variant="h3"
+                component="p"
+                align="center"
+                style={{ fontWeight: 'bold' }}
+              >
                 {user ? shortName(user?.nombre) : 'Anonimo'}
               </Typography>
             </Grid>
             <Grid item lg={3} md={3} sm={3} xs={3}>
-              <Typography variant="h4" align="right" component="p"  style={{fontWeight:"bold"}}>
-                {puntosBar
-                  ? ( formatNumber(puntosBar)
-                ) : null}
+              <Typography
+                variant="h4"
+                align="right"
+                component="p"
+                style={{ fontWeight: 'bold' }}
+              >
+                {puntosBar ? formatNumber(puntosBar) : null}
               </Typography>
               <Typography variant="h6" align="right" component="p">
                 Puntos
@@ -134,7 +136,6 @@ export default function Bar() {
           </Grid>
         </Grid>
         {/* fin del header */}
-
         <Box width="100%" display="flex" alignItems="center">
           {scroll > 0 ? (
             <Grid id="left" onClick={GotoLeft}>
@@ -145,36 +146,47 @@ export default function Bar() {
           ) : null}
 
           <Box id="content" className={classes.root}>
-            {
-            productos
-              ? (
-              productos.map((c, i) => (
-                  <Card key={i} className={classes.item}
-              >
-                    <CardContent className={classes.cardContent}>
-                      <Typography  className={classes.title} variant="h3" align="center">
-                        {c}
-                      </Typography>
-                    </CardContent>
-                    <CardActions   className={classes.cardAction}>
-                      <Grid container justify="center" >
-                        <Grid item lg={12} style={{width:"100%"}}>
-                          <Button
-                           className={classes.buttons}
-                            onClick={() => history.push(`/producto/${c}`)}
-                            size="medium"
-                            variant="contained"
-                            color="primary"
-                            fullWidth
-                          >
-                            ver productos
-                          </Button>
+            {productos ? (
+              productos.map(
+                (
+                  c,
+                  i
+                ): ReactElement<string, JSXElementConstructor<unknown>> => {
+                  return (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <Card key={i} className={classes.item}>
+                      <CardContent className={classes.cardContent}>
+                        <Typography
+                          className={classes.title}
+                          variant="h3"
+                          align="center"
+                        >
+                          {c}
+                        </Typography>
+                      </CardContent>
+                      <CardActions className={classes.cardAction}>
+                        <Grid container justify="center">
+                          <Grid item lg={12} style={{ width: '100%' }}>
+                            <Button
+                              className={classes.buttons}
+                              onClick={() => history.push(`/producto/${c}`)}
+                              size="medium"
+                              variant="contained"
+                              color="primary"
+                              fullWidth
+                            >
+                              ver productos
+                            </Button>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </CardActions>
-                  </Card>
-                ))
-              ): <CircularProgress />  }
+                      </CardActions>
+                    </Card>
+                  );
+                }
+              )
+            ) : (
+              <CircularProgress />
+            )}
           </Box>
 
           {isMax ? null : (
