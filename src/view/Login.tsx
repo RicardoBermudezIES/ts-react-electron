@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { FormEventHandler, useContext, useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -15,14 +15,13 @@ import {
 } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import Keyboard from 'react-simple-keyboard';
-import { ipcRenderer } from 'electron';
+
 import { Settings } from '@material-ui/icons';
-import { DataContext } from '../context/Context';
 import Alert from '../component/Alert/Alert';
 import { BarIcon } from '../iconos/Bar';
-import { setTimeout } from 'timers';
 import ButtonHelper from '../component/ButtonHelper/ButtonHelper';
-const ipc = ipcRenderer;
+import useLoginUser from '../Hook/useLoginUser';
+
 
 const useStyles = makeStyles(() => ({
   login: {},
@@ -30,29 +29,18 @@ const useStyles = makeStyles(() => ({
 
 function Login() {
   // estado Globales
-  const { setData } = useContext(DataContext);
-
-  const authConfig = JSON.parse(localStorage.getItem('authConfig'))
-    ? JSON.parse(localStorage.getItem('authConfig'))
-    : null;
-
-  const localMaquina = localStorage.getItem('maquina');
+  const {
+    openError,
+    setOpenError,
+    messageError,
+    fidelizar,
+    inputs,
+    setInputs,
+  } = useLoginUser();
   const classes = useStyles();
 
   const history = useHistory();
-  const [inputs, setInputs] = useState<
-    | {
-        username: string;
-        token: string;
-        passwordMaster: string;
-      }
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    | {}
-  >({
-    username: '',
-    token: '',
-    passwordMaster: '',
-  });
+
   const [layoutName, setLayoutName] = useState('shift');
   const [inputName, setInputName] = useState();
   const [keyboardOpen, setkeyboardOpen] = useState(false);
@@ -62,8 +50,7 @@ function Login() {
   const [open, setOpen] = useState(false);
   const [openMasterPassword, setOpenMasterPassword] = useState(false);
 
-  const [openError, setOpenError] = useState(false);
-  const [messageError, setmessageError] = useState('');
+
 
   const handleCloseMasterPassword = () => {
     setOpenMasterPassword(false);
@@ -74,86 +61,38 @@ function Login() {
     setOpen(false);
   };
 
-  function onChangeAll(
+  const onChangeAll = (
     // eslint-disable-next-line @typescript-eslint/no-shadow
     inputs: React.SetStateAction<{
       username: string;
       token: string;
       passwordMaster: string;
     }>
-  ): void {
+  ): void => {
     setInputs({ ...inputs });
-  }
+  };
 
-  function onSubmitConfiguration(e: Event): void {
+  const onSubmitConfiguration = (e: Event): void => {
     e.preventDefault();
     const auth = JSON.parse(localStorage.getItem('authConfig'));
 
-    if (inputs?.passwordMaster === auth?.password ||
-      inputs?.passwordMaster === '3337777777') {
+    if (
+      inputs?.passwordMaster === auth?.password ||
+      inputs?.passwordMaster === '3337777777'
+    ) {
       history.push('/configuracion');
     } else {
       setErrorMaster(true);
     }
-  }
+  };
 
-  function onSubmit(e: Event): void {
-    e.preventDefault();
+  const onSubmit = () => {
+    console.log('Hago clik');
+     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+     fidelizar();
+  };
 
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
-    ipc.send('allways-auth', auth);
-
-    setTimeout(() => {
-      const localToken = localStorage.getItem('token');
-
-      const args = {
-        host: authConfig.host,
-        serial: localMaquina,
-        numeroDocumento: inputs.username,
-        token: localToken,
-      };
-      ipc.send('fidelizarMaquina', args);
-    }, 200);
-  }
-
-  useEffect(() => {
-    ipc.on('fidelizarMaquina', (event, arg) => {
-      // eslint-disable-next-line eqeqeq
-      if (arg === undefined) {
-        // eslint-disable-next-line no-console
-        setmessageError("intente de nuevo, por favor.");
-        setOpenError(true);
-      }
-      if (arg?.statusDTO?.code !== '00') {
-        // eslint-disable-next-line no-console
-        setmessageError(arg?.statusDTO?.message);
-        setOpenError(true);
-      }
-
-      if (arg?.statusDTO?.code == '00') {
-        setData({
-          numeroDocumento: inputs.username,
-          nombre: arg.nombreCompleto,
-          clave: arg.clave,
-          billetero: arg.enableBilletero,
-        });
-
-        localStorage.setItem(
-          'user',
-          JSON.stringify({
-            numeroDocumento: inputs.username,
-            nombre: arg.nombreCompleto,
-            clave: arg.clave,
-            billetero: arg.enableBilletero,
-          })
-        );
-
-        if (localStorage.getItem('user')) history.push('/');
-      }
-    });
-  });
-
-    const onChangeInput = (event) => {
+ const onChangeInput = (event) => {
     const inputVal = event.target.value;
 
     setInputs({
@@ -161,6 +100,7 @@ function Login() {
       [inputName]: inputVal,
     });
   };
+
   const handleShift = () => {
     const newLayoutName = layoutName === 'default' ? 'shift' : 'default';
     setLayoutName(newLayoutName);
@@ -222,7 +162,7 @@ function Login() {
             {'Iniciar sesión'.toUpperCase()}
           </Typography>
         </Grid>
-        <form onSubmit={onSubmit} noValidate autoComplete="off">
+        <Grid container direction="column">
           <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
             <Grid container direction="row" justify="flex-start" spacing={2}>
               <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
@@ -236,24 +176,21 @@ function Login() {
                   onFocus={() => setActiveInput('username')}
                 />
               </Grid>
-              </Grid>
-              <Grid container direction="row" justify="flex-start" spacing={2}>
+            </Grid>
+            <Grid container direction="row" justify="flex-start" spacing={2}>
               <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
                 <Button
-                  style={{ height: '100%' }}
-                  size="large"
-                  type="submit"
-                  variant="outlined"
-                  fullWidth
+                  style={{ width: '100%'}}
+                  variant="contained"
                   color="primary"
+                  onClick={ () => onSubmit()}
                 >
                   Iniciar sesión
                 </Button>
               </Grid>
             </Grid>
-
           </Grid>
-        </form>
+        </Grid>
       </Grid>
 
       <Grid container justify="flex-end" spacing={0}>
