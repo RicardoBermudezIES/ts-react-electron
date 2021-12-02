@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Producto() {
   const barList = JSON.parse(localStorage.getItem('bar'));
-  const [productos] = useState(barList);
+  const [productos] = useState<Product[]>(barList);
   const [scroll, setScroll] = useState(0);
   const [isMax, setIsMax] = useState(false);
   const [listarProductos, setListarProductos] = useState<[]>([]);
@@ -392,15 +392,15 @@ export default function Producto() {
                       <CardContent className={classes.content}>
                         <CardMedia
                           className={classes.cover}
-                          image={`${p?.imagen}`}
+                          image={p.imagen}
                           title="Live from space album cover"
                         />
                         <Box className={classes.details}>
                           <Typography variant="h4" align="center">
-                            {p?.nombre}
+                            {p.nombre}
                           </Typography>
                           <Typography variant="h4" align="center">
-                            Disponibles: {p?.unidadesDisponibles}
+                            Disponibles: {p.unidadesDisponibles}
                           </Typography>
                           <Grid
                             style={{ marginBottom: 30, padding: 15 }}

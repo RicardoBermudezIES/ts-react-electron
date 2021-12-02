@@ -151,41 +151,39 @@ export default function Bar(): ReactElement {
                 (
                   c,
                   i
-                ): ReactElement<string, JSXElementConstructor<unknown>> => {
-                  return (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <Card key={i} className={classes.item}>
-                      <CardContent className={classes.cardContent}>
-                        <Typography
-                          className={classes.title}
-                          variant="h3"
-                          align="center"
-                        >
-                          {c}
-                        </Typography>
-                      </CardContent>
-                      <CardActions className={classes.cardAction}>
-                        <Grid container justify="center">
-                          <Grid item lg={12} style={{ width: '100%' }}>
-                            <Button
-                              className={classes.buttons}
-                              onClick={() => history.push(`/producto/${c}`)}
-                              size="medium"
-                              variant="contained"
-                              color="primary"
-                              fullWidth
-                            >
-                              ver productos
-                            </Button>
-                          </Grid>
+                ): ReactElement<string, JSXElementConstructor<unknown>> => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <Card key={i} className={classes.item}>
+                    <CardContent className={classes.cardContent}>
+                      <Typography
+                        className={classes.title}
+                        variant="h3"
+                        align="center"
+                      >
+                        {c}
+                      </Typography>
+                    </CardContent>
+                    <CardActions className={classes.cardAction}>
+                      <Grid container justify="center">
+                        <Grid item lg={12} style={{ width: '100%' }}>
+                          <Button
+                            className={classes.buttons}
+                            onClick={() => history.push(`/producto/${c}`)}
+                            size="medium"
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                          >
+                            ver productos
+                          </Button>
                         </Grid>
-                      </CardActions>
-                    </Card>
-                  );
-                }
+                      </Grid>
+                    </CardActions>
+                  </Card>
+                )
               )
             ) : (
-              <CircularProgress />
+              <CircularProgress color="primary" />
             )}
           </Box>
 
