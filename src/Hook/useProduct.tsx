@@ -4,8 +4,9 @@ import { Product } from '../types/Products';
 
 const ipc = ipcRenderer;
 
+
 export default function useProduct() {
-  const [productos, setProductos] = useState<Product[]>([]);
+  const [productos, setProductos] = useState<Set<string>>();
   const [openError, setOpenError] = useState(false);
   const [messageError, setmessageError] = useState('');
 
@@ -14,17 +15,23 @@ export default function useProduct() {
     const auth = JSON.parse(localStorage.getItem('authConfig'));
     ipc.send('allways-auth', auth);
 
-    setTimeout(() => {
-      const localCasino = localStorage.getItem('casino');
-      const localToken = localStorage.getItem('token');
+    const localCasino = localStorage.getItem('casino');
+    const localToken = localStorage.getItem('token');
 
-      const args = {
-        host: auth.host,
-        casino: localCasino,
-        token: localToken,
-      };
-      ipc.send('bar', args);
-    }, 500);
+    const args = {
+      host: auth.host,
+      casino: localCasino,
+      token: localToken,
+    };
+    ipc.send('bar', args);
+  };
+
+  const saveProduct = (Products: Product[]) => {
+    const newSet = new Set<string>();
+    Products.forEach((l: Product) => {
+      return newSet.add(l.categoriaPremio);
+    });
+    setProductos(newSet);
   };
 
   useEffect(() => {
@@ -44,11 +51,7 @@ export default function useProduct() {
           'bar',
           JSON.stringify(arg?.listaVisualizarPremiosDTO)
         );
-        const newSet = new Set<string>();
-        arg?.listaVisualizarPremiosDTO.forEach((l: string) =>
-          newSet.add(l?.categoriaPremio)
-        );
-        setProductos(newSet);
+        saveProduct(arg?.listaVisualizarPremiosDTO);
       }
     });
   }, []);
