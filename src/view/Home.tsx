@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-import NavButton from '../component/NavButton';
 import Odometer from 'react-odometerjs';
+import NavButton from '../component/NavButton';
 import Alert from '../component/Alert/Alert';
 import usePuntos from '../Hook/usePuntos';
 import useCloseSession from '../Hook/useCloseSession';
@@ -29,30 +29,23 @@ function Home() {
     ? JSON.parse(localStorage.getItem('user'))
     : null;
 
-  const {puntos}= usePuntos();
+  const { puntos } = usePuntos();
 
-  const {
-    CloseSession,
-    messageError,
-    openError} = useCloseSession()
+  const { CloseSession, messageError, openError } = useCloseSession();
 
   const goToLogin = () => {
-    localStorage.removeItem('user')
-    localStorage.removeItem('puntos')
-     history.push('/login')
-  }
-
-  useEffect(() => {
-    user === null ?  goToLogin()
-       : null;
-  }, []);
-
-
-
-  const leaveLobby = () => {
-    CloseSession()
+    localStorage.removeItem('user');
+    localStorage.removeItem('puntos');
+    history.push('/login');
   };
 
+  useEffect(() => {
+    user === null ? goToLogin() : null;
+  }, []);
+
+  const leaveLobby = () => {
+    CloseSession();
+  };
 
   const classes = useStyles();
   return (
@@ -128,24 +121,24 @@ function Home() {
             direction="column"
           >
             <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
-              <Box display="flex" flexDirection="column" >
-              <Typography
-                variant="h2"
-                component="h2"
-                color="secondary"
-                align="right"
-                className={classes.NumberPoint}
-              >
-                {isShow && user ? user?.nombre : ''}
-              </Typography>
-              <Button
-                size="small"
-                onClick={() => setIsShow(!isShow)}
-                variant="contained"
-                color="secondary"
-              >
-                {isShow ? 'Ocultar nombre' : 'Mostrar nombre'}
-              </Button>
+              <Box display="flex" flexDirection="column">
+                <Typography
+                  variant="h2"
+                  component="h2"
+                  color="secondary"
+                  align="right"
+                  className={classes.NumberPoint}
+                >
+                  {isShow && user ? user?.nombre : ''}
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => setIsShow(!isShow)}
+                  variant="contained"
+                  color="secondary"
+                >
+                  {isShow ? 'Ocultar nombre' : 'Mostrar nombre'}
+                </Button>
               </Box>
             </Grid>
           </Grid>

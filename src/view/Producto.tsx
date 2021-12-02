@@ -298,7 +298,7 @@ export default function Producto() {
         setOpenError(true);
       }
 
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         getListProducts();
       }
     });

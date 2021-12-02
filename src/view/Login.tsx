@@ -132,7 +132,7 @@ function Login() {
   };
 
   return (
-    <Box p={2}>
+    <Box paddingLeft={3} paddingTop={2}>
       <Grid container justify="flex-end" spacing={1}>
         <Grid item lg={2} md={2} sm={3} xs={4}>
           <Button
