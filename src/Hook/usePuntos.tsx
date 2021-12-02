@@ -1,11 +1,11 @@
-import { ipcRenderer } from "electron";
-import { useEffect, useState } from "react";
-import useCloseSession from "./useCloseSession";
+import { ipcRenderer } from 'electron';
+import { useEffect, useState } from 'react';
+import useCloseSession from './useCloseSession';
+
 const ipc = ipcRenderer;
 
 export default function usePuntos() {
-
- const {CloseSession} = useCloseSession()
+  const { CloseSession } = useCloseSession();
 
   const [puntos, setPuntos] = useState({
     cantidadPuntosDisponibles: null,
@@ -34,19 +34,23 @@ export default function usePuntos() {
   };
 
   useEffect(() => {
-    const myInterval = setInterval( () => sendPuntos(), 1000 * 30);
-    myInterval
+    const myInterval = setInterval(() => sendPuntos(), 1000 * 30);
+    myInterval;
     return () => {
       clearInterval(myInterval);
-    }
+    };
+  }, []);
+
+  useEffect(() => {
+    sendPuntos();
   }, []);
 
   const getPuntos = () => {
     ipc.on('visualizarPuntos', (event, arg) => {
-      if (arg?.statusDTO?.code == '38') {
-        CloseSession()
+      if (arg?.statusDTO?.code === '38') {
+        CloseSession();
       }
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         localStorage.setItem(
           'puntos',
           JSON.stringify({
@@ -65,5 +69,5 @@ export default function usePuntos() {
   useEffect(() => {
     getPuntos();
   }, []);
-  return {puntos}
+  return { puntos };
 }
