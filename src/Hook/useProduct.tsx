@@ -6,7 +6,7 @@ const ipc = ipcRenderer;
 
 
 export default function useProduct() {
-  const [productos, setProductos] = useState<Set<string>>();
+  const [productos, setProductos] = useState<string[]>();
   const [openError, setOpenError] = useState(false);
   const [messageError, setmessageError] = useState('');
 
