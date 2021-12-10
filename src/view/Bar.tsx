@@ -46,12 +46,21 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    "&::before":{
+      content: "' '",
+      background: "rgba(0, 0, 0, 0.54)",
+      width: "100%",
+      height: "100%",
+      position: 'absolute',
+      zIndex:"-1",
+    }
   },
   title: {
     paddingLeft: 15,
     paddingRight: 15,
     borderRadius: 5,
     marginBottom: 10,
+    
   },
   buttons: {
     color: '#fff',
@@ -77,8 +86,8 @@ export default function Bar(): ReactElement {
   const user = JSON.parse(localStorage.getItem('user')!);
   const GotoLeft = () => {
     const content = document.getElementById('content');
-    const scroll1 = (content.scrollLeft -= 200);
-    if (scroll <= content.scrollWidth) {
+    const scroll1 = (content!.scrollLeft -= 200);
+    if (scroll <= content!.scrollWidth) {
       setIsMax(false);
     }
     setScroll(scroll1);
@@ -87,10 +96,10 @@ export default function Bar(): ReactElement {
   const GotoRight = () => {
     const content = document.getElementById('content');
     let scroll2 = 0;
-    if (scroll > content.scrollWidth) {
+    if (scroll > content!.scrollWidth) {
       setIsMax(true);
     }
-    scroll2 = content.scrollLeft += 200;
+    scroll2 = content!.scrollLeft += 200;
     setScroll(scroll2);
   };
 
@@ -148,12 +157,15 @@ export default function Bar(): ReactElement {
           <Box id="content" className={classes.root}>
             {productos ? (
               productos.map(
-                (
-                  c,
-                  i
-                ): ReactElement<string, JSXElementConstructor<unknown>> => (
+                (c :string): ReactElement<string, JSXElementConstructor<unknown>> => (
                   // eslint-disable-next-line react/no-array-index-key
-                  <Card key={i} className={classes.item}>
+                  <Card key={c} className={classes.item}
+                  style={{ 
+                    background: `url(fidelizacion/assets/images/categorias/${c}.png)`, 
+                    objectFit:"cover", 
+                    backgroundSize:"cover", 
+                    backgroundRepeat:"no-repeat",
+                    backdropFilter:'opacity(50%)' }}>
                     <CardContent className={classes.cardContent}>
                       <Typography
                         className={classes.title}
