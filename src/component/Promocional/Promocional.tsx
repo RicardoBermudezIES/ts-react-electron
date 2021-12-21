@@ -2,7 +2,7 @@ import React, { createRef, RefObject } from 'react';
 import useInactivy from '../../Hook/useInactivy';
 import useListVideos from '../../Hook/useListVideos';
 
-export default function VideoPromocional() {
+export default function Promocional() {
   const videoRef: RefObject<HTMLVideoElement> = createRef();
   const { isVideoPlay, setIsVideoPlay } = useInactivy();
   const { hasVideos,numberSong, URL, OnClickHiddenVideo } = useListVideos(

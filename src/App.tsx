@@ -9,7 +9,7 @@ import Juego from './iconos/JuegoResponsable.png';
 import Alert from './component/Alert/Alert';
 import useToken from './Hook/useToken';
 import useOnline from './Hook/useOnline';
-import VideoPromocional from './component/VideoPromocional/VideoPromocional';
+import Promocional from './component/Promocional/Promocional';
 
 export default function App() {
   useToken();
@@ -18,7 +18,7 @@ export default function App() {
   return (
     <DataProvider>
       <Router>
-        <VideoPromocional />
+        <Promocional />
         <ThemeProvider theme={theme}>
           <Box position="absolute" bottom="5px" right="5px">
             <img style={{ width: 90 }} src={Juego} alt="juego Responsable" />
