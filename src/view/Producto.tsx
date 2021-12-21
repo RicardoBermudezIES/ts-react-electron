@@ -339,7 +339,7 @@ export default function Producto() {
                 size="large"
                 variant="contained"
                 color="primary"
-                onClick={() => history.goBack()}
+                onClick={() => history.go(-1)}
               >
                 Volver
               </Button>
