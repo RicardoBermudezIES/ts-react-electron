@@ -24,7 +24,7 @@ export default function App() {
             <img style={{ width: 90 }} src={Juego} alt="juego Responsable" />
           </Box>
 
-          {navigator.onLine ? null : (
+          { !open ? null : (
             <Alert
               open={open}
               onClose={() => setOpen(false)}

@@ -288,13 +288,26 @@ body {
   top: 50px;
 }
 
-video {
+/* caroousel */
+
+.carousel {
   width: 100vw;
   height: 100vh;
-  object-fit: fill;
-  position: absolute;
-  z-index: 2;
+  position: relative;
+  z-index: 20;
 }
+
+.carousel-item {
+  position: absolute;
+  width: 100%;
+  visibility: hidden;
+}
+
+.carousel-item.visible {
+  visibility: visible;
+}
+
+/* Scroll bar */
 
 ::-webkit-scrollbar {
   width: 6px;
