@@ -5,7 +5,7 @@ import useListVideos from '../../Hook/useListVideos';
 export default function VideoPromocional() {
   const videoRef: RefObject<HTMLVideoElement> = createRef();
   const { isVideoPlay, setIsVideoPlay } = useInactivy();
-  const { numberSong, URL, OnClickHiddenVideo } = useListVideos(
+  const { hasVideos,numberSong, URL, OnClickHiddenVideo } = useListVideos(
     setIsVideoPlay,
     isVideoPlay,
     videoRef
@@ -13,13 +13,18 @@ export default function VideoPromocional() {
 
   return (
     <section className={`${isVideoPlay ? '' : 'hidden'} `}>
-      <video
+      {
+        !hasVideos ? 
+        <video
         ref={videoRef}
         onTouchStart={OnClickHiddenVideo}
         muted
         loop
         src={numberSong ? `${URL}${numberSong}` : ''}
       />
+      : null
+      }
+      
     </section>
   );
 }
