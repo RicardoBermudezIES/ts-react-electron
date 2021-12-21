@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import {
   Box,
   Button,
@@ -16,9 +17,10 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
-import { formatMoney, formatNumber, shortName } from '../helpers/format';
 import { ipcRenderer } from 'electron';
+import { formatMoney, formatNumber, shortName } from '../helpers/format';
 import Alert from '../component/Alert/Alert';
+import { Product } from '../types/Products';
 
 const ipc = ipcRenderer;
 
@@ -30,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     scrollBehavior: 'smooth',
     overflowWrap: 'anywhere',
     height: 300,
-    maxWidth: '70%',
+    maxWidth: '80%',
     margin: '0 auto',
     padding: '1rem 0',
   },
@@ -54,9 +56,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    width: '80%',
   },
   CardAction: {
-    width: '90%',
+    width: '95%',
     margin: '0 auto',
   },
   cover: {
@@ -65,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 300,
     maxHeight: 100,
     objectFit: 'cover',
+    backgroundSize: 'auto !important',
     marginBottom: 20,
   },
   modal: {
@@ -82,10 +86,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Producto() {
   const barList = JSON.parse(localStorage.getItem('bar'));
-  const [productos] = useState(barList);
+  const [productos] = useState<Product[]>(barList);
   const [scroll, setScroll] = useState(0);
   const [isMax, setIsMax] = useState(false);
-  const [listarProductos, setListarProductos] = useState([]);
+  const [listarProductos, setListarProductos] = useState<[]>([]);
   const classes = useStyles();
   const history = useHistory();
 
@@ -101,22 +105,21 @@ export default function Producto() {
 
   const getListProducts = () => {
     const auth = JSON.parse(localStorage.getItem('authConfig'));
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const user = JSON.parse(localStorage.getItem('user'));
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
 
     setTimeout(() => {
+      const args = {
+        host: auth.host,
+        numeroDocumento: user?.numeroDocumento ?? null,
+        maquina,
+        token: localToken,
+      };
 
-    const args = {
-      host: auth.host,
-      numeroDocumento: user?.numeroDocumento ?? null,
-      maquina: maquina,
-      token: localToken,
-    };
-
-    ipc.send('listar-peticiones', args);
+      ipc.send('listar-peticiones', args);
     }, 200);
-
   };
 
   useEffect(() => {
@@ -127,11 +130,11 @@ export default function Producto() {
     ipc.on('listar-peticiones', (event, arg) => {
       // eslint-disable-next-line no-console
 
+      // eslint-disable-next-line no-empty
       if (arg?.statusDTO?.code !== '00') {
-
       }
 
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         setListarProductos(arg?.peticiones);
       }
     });
@@ -156,8 +159,14 @@ export default function Producto() {
     setScroll(scroll2);
   };
 
+  const handleOpenBuyModal = () => {
+    setBuyModal(true);
+  };
+
   const doBuy = (puk: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const auth = JSON.parse(localStorage.getItem('authConfig'));
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const user = JSON.parse(localStorage.getItem('user'));
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
@@ -165,9 +174,9 @@ export default function Producto() {
     const args = {
       host: auth.host,
       numeroDocumento: user?.numeroDocumento ?? null,
-      maquina: maquina,
+      maquina,
       token: localToken,
-      puk: puk,
+      puk,
     };
 
     ipc.send('comprar-productos', args);
@@ -176,25 +185,25 @@ export default function Producto() {
   };
 
   const doRedimir = (puk: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const auth = JSON.parse(localStorage.getItem('authConfig'));
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const user = JSON.parse(localStorage.getItem('user'));
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
 
     const args = {
       host: auth.host,
       numeroDocumento: user?.numeroDocumento ?? null,
-      maquina: maquina,
+      maquina,
       token: localToken,
-      puk: puk,
+      puk,
     };
 
     ipc.send('realizar-peticion', args);
   };
 
-  const handleOpenBuyModal = () => {
-    setBuyModal(true);
-  };
 
   const handleCloseBuyModal = () => {
     setBuyModal(false);
@@ -209,7 +218,7 @@ export default function Producto() {
   };
 
   useEffect(() => {
-    ipc.on('comprar-productos', (event, arg) => {
+    ipc.on('comprar-productos', (_event, arg) => {
       // eslint-disable-next-line no-console
 
       if (arg?.statusDTO?.code !== '00') {
@@ -218,15 +227,15 @@ export default function Producto() {
         setOpenError(true);
       }
 
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         getListProducts();
         handleOpenBuyModal();
       }
     });
-  },[]);
+  }, []);
 
   useEffect(() => {
-    ipc.on('realizar-peticion', (event, arg) => {
+    ipc.on('realizar-peticion', (_event, arg) => {
       // eslint-disable-next-line no-console
 
       if (arg?.statusDTO?.code !== '00') {
@@ -235,16 +244,17 @@ export default function Producto() {
         setOpenError(true);
       }
 
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         getListProducts();
         handleOpenRedimirModal();
       }
     });
-  },[]);
+  }, []);
 
-  const cancelarPeticion = (idPremio) => {
-    const product = listarProductos?.find((l) => l?.idPremio === idPremio)
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
+  const cancelarPeticion = (idPremio: string) => {
+    const product: [] = listarProductos?.find((l) => l?.idPremio === idPremio);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const auth = JSON.parse(localStorage.getItem('authConfig')!);
 
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
@@ -252,7 +262,7 @@ export default function Producto() {
     const args = {
       host: auth.host,
       numeroDocumento: auth?.numeroDocumento,
-      maquina: maquina,
+      maquina,
       token: localToken,
       puk: product?.idPeticion,
     };
@@ -261,7 +271,7 @@ export default function Producto() {
   };
 
   const confirmarPeticion = (idPremio) => {
-    const product = listarProductos?.find((l) => l?.idPremio === idPremio)
+    const product = listarProductos?.find((l) => l?.idPremio === idPremio);
     const auth = JSON.parse(localStorage.getItem('authConfig'));
 
     const maquina = localStorage.getItem('maquina');
@@ -270,13 +280,12 @@ export default function Producto() {
     const args = {
       host: auth.host,
       numeroDocumento: auth?.numeroDocumento,
-      maquina: maquina,
+      maquina,
       token: localToken,
       puk: product?.idPeticion,
     };
 
     ipc.send('confirmar-peticiones', args);
-
   };
 
   useEffect(() => {
@@ -289,12 +298,11 @@ export default function Producto() {
         setOpenError(true);
       }
 
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         getListProducts();
       }
     });
-  },[]);
-
+  }, []);
 
   useEffect(() => {
     ipc.on('confirmar-peticiones', (event, arg) => {
@@ -306,22 +314,20 @@ export default function Producto() {
         setOpenError(true);
       }
 
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         getListProducts();
       }
     });
-  },[]);
+  }, []);
 
   const hasQueque = (idPremio, estado) => {
-    const product = listarProductos?.find((l) => l?.idPremio === idPremio)
+    const product = listarProductos?.find((l) => l?.idPremio === idPremio);
 
     if (product?.estadoPeticion === estado) {
-      return true
+      return true;
     }
-    return false
-
-  }
-
+    return false;
+  };
 
   return (
     <Box p={1}>
@@ -333,7 +339,7 @@ export default function Producto() {
                 size="large"
                 variant="contained"
                 color="primary"
-                onClick={() => history.goBack()}
+                onClick={() => history.go(-1)}
               >
                 Volver
               </Button>
@@ -355,9 +361,7 @@ export default function Producto() {
                 component="p"
                 style={{ fontWeight: 'bold' }}
               >
-                {puntos? (
-                  formatNumber(Number(puntos))
-                ) : null}
+                {puntos ? formatNumber(Number(puntos)) : null}
               </Typography>
               <Typography variant="h6" align="right" component="p">
                 Puntos
@@ -379,196 +383,160 @@ export default function Producto() {
           <Box id="content" className={classes.root}>
             {productos
               ? productos
-                  .filter((bar) => bar?.categoriaPremio === param?.id)
+                  .filter(
+                    (bar: { categoriaPremio: string }) =>
+                      bar?.categoriaPremio === param?.id
+                  )
                   .map((p, i) => (
                     <Card key={i} className={classes.item}>
                       <CardContent className={classes.content}>
                         <CardMedia
                           className={classes.cover}
-                          image={`data:image/png;base64,${p?.imagen}`}
+                          image={p.imagen}
                           title="Live from space album cover"
                         />
                         <Box className={classes.details}>
                           <Typography variant="h4" align="center">
-                            {p?.nombre}
+                            {p.nombre}
                           </Typography>
                           <Typography variant="h4" align="center">
-                            Disponibles: {p?.unidadesDisponibles}
+                            Disponibles: {p.unidadesDisponibles}
                           </Typography>
                           <Grid
-                            style={{ marginBottom: 30, padding: 20 }}
+                            style={{ marginBottom: 30, padding: 15 }}
                             container
                             justify="space-between"
                             alignContent="center"
                           >
-                            {
-                            hasQueque(p?.pk, "EN_COLA") ?
-                                      <>
-
-                                        <Grid item lg={4} md={4} sm={4} xs={4}>
-                                          <Button
-                                            onClick={() =>
-                                              cancelarPeticion(
-                                                p?.pk
-                                              )
-                                            }
-                                            variant="contained"
-                                            color="secondary"
-                                            size="large"
-                                          >
-                                            Cancelar
-                                          </Button>
-                                        </Grid>
-
-                                        <Grid item lg={6} md={6} sm={6} xs={6}>
-                                          <Button
-                                            onClick={() =>
-                                              confirmarPeticion(
-                                                p?.pk
-                                              )
-                                            }
-                                            disabled
-                                            variant="contained"
-                                            color="primary"
-                                            size="large"
-                                          >
-                                            Confirmar
-                                          </Button>
-                                        </Grid>
-                                      </>
-                                     :  hasQueque(p?.pk, "EN_CAMINO") ?
-                                     <>
-                                       <Grid item lg={4} md={4} sm={4} xs={4}>
-                                         <Button
-                                           onClick={() =>
-                                             cancelarPeticion(
-                                               p?.pk
-                                             )
-                                           }
-                                           disabled
-                                           variant="contained"
-                                           color="secondary"
-                                           size="large"
-                                         >
-                                           Cancelar
-                                         </Button>
-                                       </Grid>
-
-                                       <Grid item lg={6} md={6} sm={6} xs={6}>
-                                         <Button
-                                           onClick={() =>
-                                             confirmarPeticion(
-                                               p?.pk
-                                             )
-                                           }
-                                           variant="contained"
-                                           color="primary"
-                                           size="large"
-                                         >
-                                           Confirmar
-                                         </Button>
-                                       </Grid>
-                                     </>
-                                    : <>
+                            {hasQueque(p?.pk, 'EN_COLA') ? (
+                              <>
+                                <Grid item lg={12} md={12} sm={12} xs={12}>
+                                  <Grid
+                                    container
+                                    direction="row"
+                                    alignItems="center"
+                                    spacing={1}
+                                  >
                                     <Grid item lg={6} md={6} sm={6} xs={6}>
-                                      <Grid
-                                        container
-                                        direction="row"
-                                        alignItems="center"
-                                        spacing={2}
+                                      <Button
+                                        onClick={() => cancelarPeticion(p?.pk)}
+                                        variant="contained"
+                                        color="secondary"
                                       >
-                                        <Grid
-                                          item
-                                          lg={12}
-                                          md={12}
-                                          sm={12}
-                                          xs={12}
-                                        >
-                                          <Typography
-                                            variant="h5"
-                                            align="center"
-                                          >
-                                            Puntos
-                                            <Typography
-                                              variant="h5"
-                                              align="center"
-                                            >
-                                              {formatNumber(
-                                                p?.puntosParaCanjear
-                                              )}
-                                            </Typography>
-                                          </Typography>
-                                        </Grid>
-                                        <Grid
-                                          item
-                                          lg={12}
-                                          md={12}
-                                          sm={12}
-                                          xs={12}
-                                        >
-                                          <Button
-                                            disabled={user === null}
-                                            onClick={() => doRedimir(p?.pk)}
-                                            variant="contained"
-                                            color="secondary"
-                                            size="large"
-                                          >
-                                            redimir
-                                          </Button>
-                                        </Grid>
-                                      </Grid>
+                                        Anular
+                                      </Button>
                                     </Grid>
 
                                     <Grid item lg={6} md={6} sm={6} xs={6}>
-                                      <Grid
-                                        container
-                                        direction="row"
-                                        spacing={2}
-                                        alignItems="center"
+                                      <Button
+                                        onClick={() => confirmarPeticion(p?.pk)}
+                                        disabled
+                                        variant="contained"
+                                        color="primary"
                                       >
-                                        <Grid
-                                          item
-                                          lg={12}
-                                          md={12}
-                                          sm={12}
-                                          xs={12}
-                                        >
-                                          <Typography
-                                            variant="h5"
-                                            align="center"
-                                          >
-                                            Precio
-                                            <Typography
-                                              variant="h5"
-                                              align="center"
-                                            >
-                                              {formatMoney(
-                                                p?.valorParaCanjear
-                                              )}
-                                            </Typography>
-                                          </Typography>
-                                        </Grid>
-                                        <Grid
-                                          item
-                                          lg={12}
-                                          md={12}
-                                          sm={12}
-                                          xs={12}
-                                        >
-                                          <Button
-                                            onClick={() => doBuy(p?.pk)}
-                                            variant="contained"
-                                            color="primary"
-                                            size="large"
-                                          >
-                                            Comprar
-                                          </Button>
-                                        </Grid>
-                                      </Grid>
+                                        Aceptar
+                                      </Button>
                                     </Grid>
-                                  </>
-                              }
+                                  </Grid>
+                                  <Typography style={{ color:"#efb810" }} variant="h4" align="center">
+                                    En cola
+                                  </Typography>
+                                </Grid>
+                              </>
+                            ) : hasQueque(p?.pk, 'EN_CAMINO') ? (
+                              <>
+                                <Grid
+                                  container
+                                  direction="row"
+                                  alignItems="center"
+                                  spacing={2}
+                                >
+                                  <Grid item lg={6} md={6} sm={6} xs={6}>
+                                    <Button
+                                      onClick={() => cancelarPeticion(p?.pk)}
+                                      disabled
+                                      variant="contained"
+                                      color="secondary"
+                                      size="medium"
+                                    >
+                                      Anular
+                                    </Button>
+                                  </Grid>
 
+                                  <Grid item lg={6} md={6} sm={6} xs={6}>
+                                    <Button
+                                      onClick={() => confirmarPeticion(p?.pk)}
+                                      variant="contained"
+                                      color="primary"
+                                    >
+                                      Aceptar
+                                    </Button>
+                                  </Grid>
+                                  <Typography style={{ color:"#efb810" }}  variant="h4" align="center">
+                                    En camino
+                                  </Typography>
+                                </Grid>
+                              </>
+                            ) : (
+                              <>
+                                <Grid item lg={6} md={6} sm={6} xs={6}>
+                                  <Grid
+                                    container
+                                    direction="row"
+                                    alignItems="center"
+                                    spacing={2}
+                                  >
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                      <Typography variant="h5" align="center">
+                                        Puntos
+                                        <Typography variant="h5" align="center">
+                                          {formatNumber(p?.puntosParaCanjear)}
+                                        </Typography>
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                      <Button
+                                        disabled={user === null}
+                                        onClick={() => doRedimir(p?.pk)}
+                                        variant="contained"
+                                        color="secondary"
+                                        size="large"
+                                      >
+                                        redimir
+                                      </Button>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+
+                                <Grid item lg={6} md={6} sm={6} xs={6}>
+                                  <Grid
+                                    container
+                                    direction="row"
+                                    spacing={2}
+                                    alignItems="center"
+                                  >
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                      <Typography variant="h5" align="center">
+                                        Precio
+                                        <Typography variant="h5" align="center">
+                                          {formatMoney(p?.valorParaCanjear)}
+                                        </Typography>
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                      <Button
+                                        onClick={() => doBuy(p?.pk)}
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                      >
+                                        Comprar
+                                      </Button>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                              </>
+                            )}
                           </Grid>
                         </Box>
                       </CardContent>

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -15,14 +15,13 @@ import {
 } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import Keyboard from 'react-simple-keyboard';
-import { ipcRenderer } from 'electron';
+
 import { Settings } from '@material-ui/icons';
-import { DataContext } from '../context/Context';
 import Alert from '../component/Alert/Alert';
-import { PhoneIcon } from '../iconos/PhoneIcon';
 import { BarIcon } from '../iconos/Bar';
-import { setTimeout } from 'timers';
-const ipc = ipcRenderer;
+import ButtonHelper from '../component/ButtonHelper/ButtonHelper';
+import useLoginUser from '../Hook/useLoginUser';
+
 
 const useStyles = makeStyles(() => ({
   login: {},
@@ -30,22 +29,18 @@ const useStyles = makeStyles(() => ({
 
 function Login() {
   // estado Globales
-  const { setData } = useContext(DataContext);
-
-  const authConfig = JSON.parse(localStorage.getItem('authConfig'))
-    ? JSON.parse(localStorage.getItem('authConfig'))
-    : null;
-
-  const localMaquina = localStorage.getItem('maquina');
-
+  const {
+    openError,
+    setOpenError,
+    messageError,
+    fidelizar,
+    inputs,
+    setInputs,
+  } = useLoginUser();
   const classes = useStyles();
 
   const history = useHistory();
-  const [inputs, setInputs] = useState({
-    username: null,
-    token: null,
-    passwordMaster: null,
-  });
+
   const [layoutName, setLayoutName] = useState('shift');
   const [inputName, setInputName] = useState();
   const [keyboardOpen, setkeyboardOpen] = useState(false);
@@ -55,8 +50,7 @@ function Login() {
   const [open, setOpen] = useState(false);
   const [openMasterPassword, setOpenMasterPassword] = useState(false);
 
-  const [openError, setOpenError] = useState(false);
-  const [messageError, setmessageError] = useState('');
+
 
   const handleCloseMasterPassword = () => {
     setOpenMasterPassword(false);
@@ -67,18 +61,24 @@ function Login() {
     setOpen(false);
   };
 
-  const onChangeAll = (inputs) => {
+  const onChangeAll = (
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    inputs: React.SetStateAction<{
+      username: string;
+      token: string;
+      passwordMaster: string;
+    }>
+  ): void => {
     setInputs({ ...inputs });
   };
 
-  const onSubmitConfiguration = (e) => {
+  const onSubmitConfiguration = (e: Event): void => {
     e.preventDefault();
-    console.log(inputs);
     const auth = JSON.parse(localStorage.getItem('authConfig'));
 
     if (
-      inputs.passwordMaster === auth?.password ||
-      inputs.passwordMaster === '3337777777'
+      inputs?.passwordMaster === auth?.password ||
+      inputs?.passwordMaster === '3337777777'
     ) {
       history.push('/configuracion');
     } else {
@@ -86,67 +86,13 @@ function Login() {
     }
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
-    ipc.send('allways-auth', auth);
-
-
-    setTimeout(() => {
-      const localToken = localStorage.getItem('token');
-
-    const args = {
-      host: authConfig.host,
-      serial: localMaquina,
-      numeroDocumento: inputs.username,
-      token: localToken,
-    };
-    ipc.send('fidelizarMaquina', args);
-
-    }, 200);
-
+  const onSubmit = () => {
+    console.log('Hago clik');
+     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+     fidelizar();
   };
 
-  useEffect(() => {
-    ipc.on('fidelizarMaquina', (event, arg) => {
-      // eslint-disable-next-line no-console
-      console.log(arg, 'fidelizarMaquina login.tsx');
-
-      if (arg == undefined ) {
-        // eslint-disable-next-line no-console
-        setmessageError("intente de nuevo, por favor.");
-        setOpenError(true);
-      }
-      if (arg?.statusDTO?.code !== '00') {
-        // eslint-disable-next-line no-console
-        setmessageError(arg?.statusDTO?.message);
-        setOpenError(true);
-      }
-
-      if (arg?.statusDTO?.code == '00') {
-        setData({
-          numeroDocumento: inputs.username,
-          nombre: arg.nombreCompleto,
-          clave: arg.clave,
-          billetero: arg.enableBilletero,
-        });
-
-        localStorage.setItem(
-          'user',
-          JSON.stringify({
-            numeroDocumento: inputs.username,
-            nombre: arg.nombreCompleto,
-            clave: arg.clave,
-            billetero: arg.enableBilletero,
-          })
-        );
-        if (localStorage.getItem('user')) history.push('/');
-      }
-    });
-  });
-
-    const onChangeInput = (event) => {
+ const onChangeInput = (event) => {
     const inputVal = event.target.value;
 
     setInputs({
@@ -154,12 +100,13 @@ function Login() {
       [inputName]: inputVal,
     });
   };
+
   const handleShift = () => {
     const newLayoutName = layoutName === 'default' ? 'shift' : 'default';
     setLayoutName(newLayoutName);
   };
 
-  const onKeyPress = (button) => {
+  const onKeyPress = (button: string) => {
     if (button === '{shift}' || button === '{shift1}') handleShift();
   };
 
@@ -171,7 +118,10 @@ function Login() {
     setkeyboardOpen(false);
   };
 
-  const setActiveInput = (inputName) => {
+  const setActiveInput = (
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    inputName: string | React.SetStateAction<undefined>
+  ) => {
     setInputName(inputName);
     setkeyboardOpen(true);
   };
@@ -182,7 +132,7 @@ function Login() {
   };
 
   return (
-    <Box p={2}>
+    <Box paddingLeft={3} paddingTop={2}>
       <Grid container justify="flex-end" spacing={1}>
         <Grid item lg={2} md={2} sm={3} xs={4}>
           <Button
@@ -212,7 +162,7 @@ function Login() {
             {'Iniciar sesión'.toUpperCase()}
           </Typography>
         </Grid>
-        <form onSubmit={onSubmit} noValidate autoComplete="off">
+        <Grid container direction="column">
           <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
             <Grid container direction="row" justify="flex-start" spacing={2}>
               <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
@@ -226,24 +176,21 @@ function Login() {
                   onFocus={() => setActiveInput('username')}
                 />
               </Grid>
-              </Grid>
-              <Grid container direction="row" justify="flex-start" spacing={2}>
+            </Grid>
+            <Grid container direction="row" justify="flex-start" spacing={2}>
               <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
                 <Button
-                  style={{ height: '100%' }}
-                  size="large"
-                  type="submit"
-                  variant="outlined"
-                  fullWidth
+                  style={{ width: '100%'}}
+                  variant="contained"
                   color="primary"
+                  onClick={ () => onSubmit()}
                 >
-                  {'Iniciar sesión'}
+                  Iniciar sesión
                 </Button>
               </Grid>
             </Grid>
-
           </Grid>
-        </form>
+        </Grid>
       </Grid>
 
       <Grid container justify="flex-end" spacing={0}>
@@ -260,17 +207,16 @@ function Login() {
           </Button>
         </Grid>
         <Grid item lg={2} md={2} sm={2} xs={2}>
-          <Button style={{ display: 'grid' }}>
-            <PhoneIcon />
-            <Typography variant="h6" style={{ color: 'white' }}>
-              {' '}
-              Ayuda{' '}
-            </Typography>
-          </Button>
+        <ButtonHelper />
         </Grid>
       </Grid>
 
-      <Dialog className="dialog-login" open={open} onClose={handleClose} aria-labelledby="token">
+      <Dialog
+        className="dialog-login"
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="token"
+      >
         <DialogTitle id="token">Ingresa tu token</DialogTitle>
         <DialogContent>
           <Input
@@ -294,6 +240,8 @@ function Login() {
       </Dialog>
 
       <Dialog
+      // eslint-disable-next-line react/style-prop-object
+        style={{ left: -450 }}
         open={openMasterPassword}
         onClose={handleCloseMasterPassword}
         aria-labelledby="form-dialog-title"

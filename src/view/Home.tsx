@@ -1,12 +1,12 @@
-import { ipcRenderer } from 'electron';
 import React, { useEffect, useState } from 'react';
 import { Button, Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-import NavButton from '../component/NavButton';
 import Odometer from 'react-odometerjs';
+import NavButton from '../component/NavButton';
 import Alert from '../component/Alert/Alert';
-const ipc = ipcRenderer;
+import usePuntos from '../Hook/usePuntos';
+import useCloseSession from '../Hook/useCloseSession';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -24,134 +24,28 @@ const useStyles = makeStyles(() => ({
 function Home() {
   const history = useHistory();
   const [isShow, setIsShow] = useState(false);
-  const [openError, setOpenError] = useState(false);
-  const [messageError, setmessageError] = useState('');
 
   const user = JSON.parse(localStorage.getItem('user'))
     ? JSON.parse(localStorage.getItem('user'))
     : null;
 
-  const [puntos, setPuntos] = useState({
-    cantidadPuntosDisponibles: null,
-    cantidadPuntosRedimidos: null,
-  });
+  const { puntos } = usePuntos();
 
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    user === null ? history.push('/login') : null;
-  }, []);
+  const { CloseSession, messageError, openError } = useCloseSession();
 
-  const sendPuntos = () => {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const authConfig = JSON.parse(localStorage.getItem('authConfig'));
-    const localMaquina = localStorage.getItem('maquina');
-    const localCasino = localStorage.getItem('casino');
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const localToken = localStorage.getItem('token');
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const user = JSON.parse(localStorage.getItem('user'));
-    const args = {
-      host: authConfig?.host,
-      casino: localCasino,
-      maquina: localMaquina,
-      numeroDocumento: user?.numeroDocumento,
-      token: localToken,
-    };
-    if (user !== null) {
-      ipc.send('visualizarPuntos', args);
-    }
+  const goToLogin = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('puntos');
+    history.push('/login');
   };
 
   useEffect(() => {
-    setInterval(() => {
-      sendPuntos();
-    }, 1000 * 30);
+    user === null ? goToLogin() : null;
   }, []);
 
-  const getPuntos = () => {
-    ipc.on('visualizarPuntos', (event, arg) => {
-      if (arg?.Error) {
-        console.log(arg?.Error);
-        CloseSession()
-      }
-
-      if (arg?.statusDTO?.code !== '00') {
-        CloseSession()
-      }
-      if (arg?.statusDTO?.code == '00') {
-        localStorage.setItem(
-          'puntos',
-          JSON.stringify({
-            cantidadPuntosDisponibles: arg.cantidadPuntosDisponibles,
-            cantidadPuntosRedimidos: arg.cantidadPuntosRedimidos,
-          })
-        );
-        setPuntos({
-          cantidadPuntosDisponibles: arg.cantidadPuntosDisponibles,
-          cantidadPuntosRedimidos: arg.cantidadPuntosRedimidos,
-        });
-      }
-    });
-  };
-
-  useEffect(() => {
-    getPuntos();
-  }, []);
-
-
-  const CloseSession = () => {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const authConfig = JSON.parse(localStorage.getItem('authConfig'));
-    const localMaquina = localStorage.getItem('maquina');
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const localToken = localStorage.getItem('token');
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const user = JSON.parse(localStorage.getItem('user'));
-    const args = {
-      host: authConfig?.host,
-      maquina: localMaquina,
-      numeroDocumento: user?.numeroDocumento,
-      token: localToken,
-    };
-    if (user !== null && localMaquina) {
-      ipc.send('cerrar-sesion', args);
-    }
-  };
   const leaveLobby = () => {
-    console.log('click para salir')
-    CloseSession()
+    CloseSession();
   };
-
-  const ipcCloseSession = () => {
-    console.log('ipc Render')
-    ipc.on('cerrar-sesion', (_, arg) => {
-
-      if (arg?.Error) {
-        history.push('/login')
-      }
-
-      if (arg?.statusDTO?.code !== '00') {
-        console.log(arg?.statusDTO?.message);
-        setmessageError(arg?.statusDTO?.message);
-        setOpenError(true);
-      }
-      if (arg?.statusDTO?.code == '00') {
-        localStorage.removeItem('user');
-        localStorage.removeItem('puntos');
-        history.push('/login')
-      }
-    });
-  };
-
-  // useEffect(() => {
-
-  //   setInterval(() => {CloseSession()}, 1000*60*5)
-
-  // }, []);
-
-  useEffect(() => {
-      ipcCloseSession();
-  }, []);
 
   const classes = useStyles();
   return (
@@ -227,24 +121,24 @@ function Home() {
             direction="column"
           >
             <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
-              <Box display="flex" flexDirection="column" >
-              <Typography
-                variant="h2"
-                component="h2"
-                color="secondary"
-                align="right"
-                className={classes.NumberPoint}
-              >
-                {isShow && user ? user?.nombre : ''}
-              </Typography>
-              <Button
-                size="small"
-                onClick={() => setIsShow(!isShow)}
-                variant="contained"
-                color="secondary"
-              >
-                {isShow ? 'Ocultar nombre' : 'Mostrar nombre'}
-              </Button>
+              <Box display="flex" flexDirection="column">
+                <Typography
+                  variant="h2"
+                  component="h2"
+                  color="secondary"
+                  align="right"
+                  className={classes.NumberPoint}
+                >
+                  {isShow && user ? user?.nombre : ''}
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => setIsShow(!isShow)}
+                  variant="contained"
+                  color="secondary"
+                >
+                  {isShow ? 'Ocultar nombre' : 'Mostrar nombre'}
+                </Button>
               </Box>
             </Grid>
           </Grid>

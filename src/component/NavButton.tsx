@@ -1,22 +1,12 @@
-import { Button, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router';
-import {
-  CallEndTwoTone,
-  Fastfood,
-  ScatterPlot,
-  AccountBalanceWallet,
-  Style,
-} from '@material-ui/icons';
 import { BarIcon } from '../iconos/Bar';
 import { PuntosIcon } from '../iconos/PuntosIcon';
-import { PhoneIcon } from '../iconos/PhoneIcon';
 import { BilleteraIcon } from '../iconos/BilleteraIcon';
-
-const useStyles = makeStyles(() => ({}));
+import ButtonHelper from './ButtonHelper/ButtonHelper';
 
 export default function NavButton() {
-  const classes = useStyles();
   const history = useHistory();
 
   const goBar = () => {
@@ -54,13 +44,7 @@ export default function NavButton() {
         <Grid item>
           <Grid container alignItems="flex-end" direction="column" spacing={3}>
             <Grid item>
-              <Button style={{ display: 'grid' }} disabled>
-                <PhoneIcon />
-                <Typography variant="h6" style={{ color: 'white' }}>
-                  {' '}
-                  Ayuda{' '}
-                </Typography>
-              </Button>
+              <ButtonHelper />
             </Grid>
             <Grid item>
               <Button onClick={goBar} style={{ display: 'grid' }}>
