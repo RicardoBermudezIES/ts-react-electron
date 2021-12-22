@@ -12,7 +12,7 @@ export default function useCarrousel(carouselItems: string[]) {
       } else {
         setActive(active + 1);
       }
-    }, 1000 * 10);
+    }, 1000 * 5);
     return () => clearTimeout(scrollInterval);
   }, [active]);
 
