@@ -10,7 +10,7 @@ export default function useListVideos(
   const URL_BASE: string = path.join(os.homedir(), 'fidelizacion');
 
   const [listPromocional, setListPromocional] = useState<string[]>([]);
-  const [error, setError] = useState();
+  const [error, setError] = useState('');
 
   const getListVideos = (URL_BASE: string): Promise<Array<string>> => {
     return new Promise((resolve, reject) => {
@@ -32,8 +32,14 @@ export default function useListVideos(
         console.log(listPromocional);
         
       })
-      .catch((error) => {
-          setError(error);
+      .catch(() => {
+          setError('Volviendo a buscar videos');
+          getListVideos(URL_BASE)
+          .then((res: string[]) => {
+            setListPromocional(res);
+            console.log(listPromocional);
+        
+      })
       });
   }, []);
 
