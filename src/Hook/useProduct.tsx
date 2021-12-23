@@ -4,7 +4,6 @@ import { Product } from '../types/Products';
 
 const ipc = ipcRenderer;
 
-
 export default function useProduct() {
   const [productos, setProductos] = useState<string[]>();
   const [openError, setOpenError] = useState(false);
@@ -12,7 +11,7 @@ export default function useProduct() {
 
   const getBar = () => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
+    const auth = JSON.parse(localStorage.getItem('authConfig')!);
     ipc.send('allways-auth', auth);
 
     const localCasino = localStorage.getItem('casino');
