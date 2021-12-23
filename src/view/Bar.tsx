@@ -26,17 +26,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'grid',
     gridAutoFlow: 'column',
-    overflowX: 'scroll',
+    overflowX: 'hidden',
     gap: '1rem',
-    scrollBehavior: 'smooth',
-    overscrollBehaviorX: 'contain',
-    scrollSnapType: 'x mandatory',
-    maxWidth: '70%',
+    maxWidth: '1200px',
     margin: '50px auto',
     padding: '1rem 0',
   },
   item: {
     minWidth: '300px',
+    height: '250px',
     margin: '0 1em',
     display: 'flex',
     flexDirection: 'column',
@@ -86,30 +84,41 @@ export default function Bar(): ReactElement {
   const { puntosBar } = usePuntosDia();
 
   const RefContent = useRef<HTMLDivElement>(null);
-
-  const [scroll, setScroll] = useState(0);
-  const [isMax, setIsMax] = useState(false);
-
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = JSON.parse(localStorage.getItem('user')!);
-  const GotoLeft = () => {
-    const scroll1 = RefContent.current.scrollLeft - 300;
-    RefContent.current.scrollLeft = scroll1;
-    // (content!.scrollLeft -= 200);
-    if (scroll <= RefContent.current?.scrollWidth) {
-      setIsMax(false);
+
+  const [currentItemIdx, setCurrentItemgIdx] = useState(0);
+
+  const prevSlide = () => {
+    if (productos) {
+      const resetToVeryBack = currentItemIdx === 0;
+      const index = resetToVeryBack ? productos.length - 1 : currentItemIdx - 1;
+      setCurrentItemgIdx(index);
     }
-    setScroll(scroll1);
   };
 
-  const GotoRight = () => {
-    let scroll2 = 0;
-    if (scroll >= RefContent.current.scrollWidth) {
-      setIsMax(true);
+  const nextSlide = () => {
+    if (productos) {
+      const resetIndex = currentItemIdx === productos.length - 1;
+      const index = resetIndex ? 0 : currentItemIdx + 1;
+      setCurrentItemgIdx(index);
     }
-    scroll2 = RefContent.current.scrollLeft + 300;
-    RefContent.current.scrollLeft = scroll2;
-    setScroll(scroll2);
+  };
+
+  const activeItemsSourcesFromState = productos
+    ? productos.slice(currentItemIdx, currentItemIdx + 3)
+    : [];
+
+  const itemsSourcesToDisplay = () => {
+    if (productos) {
+      return activeItemsSourcesFromState.length < 3
+        ? [
+            ...activeItemsSourcesFromState,
+            ...productos.slice(0, 3 - activeItemsSourcesFromState.length),
+          ]
+        : activeItemsSourcesFromState;
+    }
+    return [];
   };
 
   return (
@@ -155,17 +164,17 @@ export default function Bar(): ReactElement {
         </Grid>
         {/* fin del header */}
         <Box width="100%" display="flex" alignItems="center">
-          {scroll > 0 ? (
-            <Grid id="left" onClick={GotoLeft}>
-              <Button style={{ color: 'white' }}>
-                <ArrowBackIos style={{ fontSize: 80 }} />
-              </Button>
-            </Grid>
-          ) : null}
+          <Grid id="left" onClick={prevSlide}>
+            <Button
+              style={{ color: 'white', width: '80px', marginLeft: '1rem' }}
+            >
+              <ArrowBackIos style={{ fontSize: 80 }} />
+            </Button>
+          </Grid>
 
           <section ref={RefContent} id="content" className={classes.root}>
             {productos ? (
-              productos.map(
+              itemsSourcesToDisplay().map(
                 (
                   c: string
                 ): ReactElement<string, JSXElementConstructor<unknown>> => (
@@ -214,13 +223,11 @@ export default function Bar(): ReactElement {
             )}
           </section>
 
-          {isMax ? null : (
-            <Grid onClick={GotoRight}>
-              <Button style={{ color: 'white' }}>
-                <ArrowForwardIos style={{ fontSize: 80 }} />
-              </Button>
-            </Grid>
-          )}
+          <Grid onClick={nextSlide}>
+            <Button style={{ color: 'white' }}>
+              <ArrowForwardIos style={{ fontSize: 80 }} />
+            </Button>
+          </Grid>
         </Box>
       </Grid>
       {messageError ? (
