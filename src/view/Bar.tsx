@@ -175,7 +175,7 @@ export default function Bar(): ReactElement {
                     key={c}
                     className={classes.item}
                     style={{
-                      background: `url(fidelizacion/assets/images/categorias/${c}.png)`,
+                      background: `url(${__dirname}/../assets/images/categorias/${c}.png)`,
                       objectFit: 'cover',
                       backgroundSize: 'cover',
                       backgroundRepeat: 'no-repeat',
