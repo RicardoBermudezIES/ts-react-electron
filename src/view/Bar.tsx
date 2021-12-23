@@ -33,9 +33,9 @@ const useStyles = makeStyles((theme) => ({
     padding: '1rem 0',
   },
   item: {
-    minWidth: '300px',
+    minWidth: 300,
+    maxWidth: 300,
     height: '250px',
-    margin: '0 1em',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

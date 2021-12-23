@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     height: 280,
     minWidth: 500,
     width: 'fit-content',
-    margin: '0 1em',
+    padding: '0 1em',
     alignItems: 'center',
     background: 'linear-gradient(180deg, #019aff 0%, #181d45 100%);',
     borderRadius: 20,
@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'center',
   },
   details: {
     display: 'flex',
