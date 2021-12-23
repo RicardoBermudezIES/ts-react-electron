@@ -9,7 +9,12 @@ import {
   Typography,
   CircularProgress,
 } from '@material-ui/core';
-import React, { JSXElementConstructor, ReactElement, useState } from 'react';
+import React, {
+  ReactElement,
+  useState,
+  useRef,
+  JSXElementConstructor,
+} from 'react';
 import { useHistory } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatNumber, shortName } from '../helpers/format';
@@ -19,17 +24,19 @@ import usePuntosDia from '../Hook/usePuntosDia';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: 'grid',
+    gridAutoFlow: 'column',
     overflowX: 'scroll',
+    gap: '1rem',
     scrollBehavior: 'smooth',
-    overflowWrap: 'anywhere',
+    overscrollBehaviorX: 'contain',
+    scrollSnapType: 'x mandatory',
     maxWidth: '70%',
     margin: '50px auto',
     padding: '1rem 0',
   },
   item: {
-    minWidth: '320px',
+    minWidth: '300px',
     margin: '0 1em',
     display: 'flex',
     flexDirection: 'column',
@@ -39,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     border: '5px solid',
     borderColor: theme.palette.primary.main,
     borderRadius: 20,
+    scrollSnapAlign: 'center',
   },
   cardContent: {
     width: '100%',
@@ -46,21 +54,20 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    "&::before":{
+    '&::before': {
       content: "' '",
-      background: "rgba(0, 0, 0, 0.54)",
-      width: "100%",
-      height: "100%",
+      background: 'rgba(0, 0, 0, 0.54)',
+      width: '100%',
+      height: '100%',
       position: 'absolute',
-      zIndex:"-1",
-    }
+      zIndex: '-1',
+    },
   },
   title: {
     paddingLeft: 15,
     paddingRight: 15,
     borderRadius: 5,
     marginBottom: 10,
-    
   },
   buttons: {
     color: '#fff',
@@ -73,33 +80,35 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Bar(): ReactElement {
+  const history = useHistory();
+  const classes = useStyles();
   const { productos, openError, messageError, setOpenError } = useProduct();
-
   const { puntosBar } = usePuntosDia();
+
+  const RefContent = useRef<HTMLDivElement>(null);
 
   const [scroll, setScroll] = useState(0);
   const [isMax, setIsMax] = useState(false);
-  const classes = useStyles();
-  const history = useHistory();
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = JSON.parse(localStorage.getItem('user')!);
   const GotoLeft = () => {
-    const content = document.getElementById('content');
-    const scroll1 = (content!.scrollLeft -= 200);
-    if (scroll <= content!.scrollWidth) {
+    const scroll1 = RefContent.current.scrollLeft - 300;
+    RefContent.current.scrollLeft = scroll1;
+    // (content!.scrollLeft -= 200);
+    if (scroll <= RefContent.current?.scrollWidth) {
       setIsMax(false);
     }
     setScroll(scroll1);
   };
 
   const GotoRight = () => {
-    const content = document.getElementById('content');
     let scroll2 = 0;
-    if (scroll > content!.scrollWidth) {
+    if (scroll >= RefContent.current.scrollWidth) {
       setIsMax(true);
     }
-    scroll2 = content!.scrollLeft += 200;
+    scroll2 = RefContent.current.scrollLeft + 300;
+    RefContent.current.scrollLeft = scroll2;
     setScroll(scroll2);
   };
 
@@ -136,7 +145,7 @@ export default function Bar(): ReactElement {
                 component="p"
                 style={{ fontWeight: 'bold' }}
               >
-                {puntosBar ? formatNumber(puntosBar) : null}
+                {user ? formatNumber(puntosBar) : null}
               </Typography>
               <Typography variant="h6" align="right" component="p">
                 Puntos
@@ -154,18 +163,25 @@ export default function Bar(): ReactElement {
             </Grid>
           ) : null}
 
-          <Box id="content" className={classes.root}>
+          <section ref={RefContent} id="content" className={classes.root}>
             {productos ? (
               productos.map(
-                (c :string): ReactElement<string, JSXElementConstructor<unknown>> => (
+                (
+                  c: string
+                ): ReactElement<string, JSXElementConstructor<unknown>> => (
                   // eslint-disable-next-line react/no-array-index-key
-                  <Card key={c} className={classes.item}
-                  style={{ 
-                    background: `url(fidelizacion/assets/images/categorias/${c}.png)`, 
-                    objectFit:"cover", 
-                    backgroundSize:"cover", 
-                    backgroundRepeat:"no-repeat",
-                    backdropFilter:'opacity(50%)' }}>
+                  <Card
+                    onClick={() => history.push(`/producto/${c}`)}
+                    key={c}
+                    className={classes.item}
+                    style={{
+                      background: `url(fidelizacion/assets/images/categorias/${c}.png)`,
+                      objectFit: 'cover',
+                      backgroundSize: 'cover',
+                      backgroundRepeat: 'no-repeat',
+                      backdropFilter: 'opacity(50%)',
+                    }}
+                  >
                     <CardContent className={classes.cardContent}>
                       <Typography
                         className={classes.title}
@@ -180,7 +196,6 @@ export default function Bar(): ReactElement {
                         <Grid item lg={12} style={{ width: '100%' }}>
                           <Button
                             className={classes.buttons}
-                            onClick={() => history.push(`/producto/${c}`)}
                             size="medium"
                             variant="contained"
                             color="primary"
@@ -197,7 +212,7 @@ export default function Bar(): ReactElement {
             ) : (
               <CircularProgress color="primary" />
             )}
-          </Box>
+          </section>
 
           {isMax ? null : (
             <Grid onClick={GotoRight}>

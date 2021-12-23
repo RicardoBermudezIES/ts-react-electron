@@ -47,7 +47,7 @@ export default function useHelp() {
       token: localToken,
     };
     console.log(hasPending);
-    if (hasPending == true) {
+    if (hasPending === true) {
       console.log("haciedno peticion de solicitudes")
       ipc.send('todas-solicitudes', arg);
     }
