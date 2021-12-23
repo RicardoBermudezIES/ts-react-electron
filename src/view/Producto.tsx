@@ -26,22 +26,19 @@ const ipc = ipcRenderer;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    flexDirection: 'row',
-    overflowX: 'scroll',
-    scrollBehavior: 'smooth',
-    overflowWrap: 'anywhere',
-    height: 300,
-    maxWidth: '80%',
-    margin: '0 auto',
+    display: 'grid',
+    gridAutoFlow: 'column',
+    overflowX: 'hidden',
+    gap: '1rem',
+    maxWidth: '1200px',
+    margin: '50px auto',
     padding: '1rem 0',
   },
   item: {
     height: 280,
-    minWidth: 600,
+    minWidth: 500,
     width: 'fit-content',
     margin: '0 1em',
-
     alignItems: 'center',
     background: 'linear-gradient(180deg, #019aff 0%, #181d45 100%);',
     borderRadius: 20,
@@ -85,17 +82,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Producto() {
-  const barList = JSON.parse(localStorage.getItem('bar'));
-  const [productos] = useState<Product[]>(barList);
-  const [scroll, setScroll] = useState(0);
-  const [isMax, setIsMax] = useState(false);
-  const [listarProductos, setListarProductos] = useState<[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const barList = JSON.parse(localStorage.getItem('bar')!);
   const classes = useStyles();
   const history = useHistory();
 
   const param = useParams();
-  const puntos = JSON.parse(localStorage.getItem('puntosDiaxBar'));
-  const user = JSON.parse(localStorage.getItem('user'));
+  const [productos] = useState<Product[]>(
+    barList.filter(
+      (bar: { categoriaPremio: string }) => bar?.categoriaPremio === param?.id
+    )
+  );
+  const [scroll, setScroll] = useState(0);
+  const [listarProductos, setListarProductos] = useState<[]>([]);
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const puntos = JSON.parse(localStorage.getItem('puntosDiaxBar')!);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const user = JSON.parse(localStorage.getItem('user')!);
 
   const [buyModal, setBuyModal] = useState(false);
   const [redimirModal, setRedimirModal] = useState(false);
@@ -104,9 +108,10 @@ export default function Producto() {
   const [messageError, setmessageError] = useState('');
 
   const getListProducts = () => {
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const user = JSON.parse(localStorage.getItem('user'));
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const auth = JSON.parse(localStorage.getItem('authConfig')!);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const user = JSON.parse(localStorage.getItem('user')!);
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
 
@@ -140,23 +145,38 @@ export default function Producto() {
     });
   }, []);
 
-  const GotoLeft = () => {
-    const content = document.getElementById('content');
-    const scroll = (content.scrollLeft -= 300);
-    setScroll(scroll);
-    if (scroll <= content.scrollWidth) {
-      setIsMax(false);
+  const [currentItemIdx, setCurrentItemgIdx] = useState(0);
+
+  const prevSlide = () => {
+    if (productos) {
+      const resetToVeryBack = currentItemIdx === 0;
+      const index = resetToVeryBack ? productos.length - 1 : currentItemIdx - 1;
+      setCurrentItemgIdx(index);
     }
   };
 
-  const GotoRight = () => {
-    const content = document.getElementById('content');
-    let scroll2 = 0;
-    if (scroll > content.scrollWidth) {
-      setIsMax(true);
+  const nextSlide = () => {
+    if (productos) {
+      const resetIndex = currentItemIdx === productos.length - 1;
+      const index = resetIndex ? 0 : currentItemIdx + 1;
+      setCurrentItemgIdx(index);
     }
-    scroll2 = content.scrollLeft += 300;
-    setScroll(scroll2);
+  };
+
+  const activeItemsSourcesFromState = productos
+    ? productos.slice(currentItemIdx, currentItemIdx + 2)
+    : [];
+
+  const itemsSourcesToDisplay = () => {
+    if (productos) {
+      return activeItemsSourcesFromState.length < 2
+        ? [
+            ...activeItemsSourcesFromState,
+            ...productos.slice(0, 2 - activeItemsSourcesFromState.length),
+          ]
+        : activeItemsSourcesFromState;
+    }
+    return [];
   };
 
   const handleOpenBuyModal = () => {
@@ -372,17 +392,17 @@ export default function Producto() {
         {/* fin del header */}
 
         <Box width="100%" display="flex" alignItems="center">
-          {scroll > 0 ? (
-            <Grid id="left" onClick={GotoLeft}>
+        
+            <Grid id="left" onClick={prevSlide}>
               <Button style={{ color: 'white' }}>
                 <ArrowBackIos style={{ fontSize: 80 }} />
               </Button>
             </Grid>
-          ) : null}
+       
 
           <Box id="content" className={classes.root}>
             {productos
-              ? productos
+              ? itemsSourcesToDisplay()
                   .filter(
                     (bar: { categoriaPremio: string }) =>
                       bar?.categoriaPremio === param?.id
@@ -545,13 +565,13 @@ export default function Producto() {
               : 'cargando...'}
           </Box>
 
-          {isMax ? null : (
-            <Grid onClick={GotoRight}>
+       
+            <Grid onClick={nextSlide}>
               <Button style={{ color: 'white' }}>
                 <ArrowForwardIos style={{ fontSize: 80 }} />
               </Button>
             </Grid>
-          )}
+        
         </Box>
       </Grid>
 
