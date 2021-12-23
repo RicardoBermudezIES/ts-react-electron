@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
     border: '5px solid',
     borderColor: theme.palette.primary.main,
     borderRadius: 20,
-    scrollSnapAlign: 'center',
   },
   cardContent: {
     width: '100%',
@@ -83,7 +82,6 @@ export default function Bar(): ReactElement {
   const { productos, openError, messageError, setOpenError } = useProduct();
   const { puntosBar } = usePuntosDia();
 
-  const RefContent = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = JSON.parse(localStorage.getItem('user')!);
 
@@ -172,7 +170,7 @@ export default function Bar(): ReactElement {
             </Button>
           </Grid>
 
-          <section ref={RefContent} id="content" className={classes.root}>
+          <Box className={classes.root}>
             {productos ? (
               itemsSourcesToDisplay().map(
                 (
@@ -221,7 +219,7 @@ export default function Bar(): ReactElement {
             ) : (
               <CircularProgress color="primary" />
             )}
-          </section>
+          </Box>
 
           <Grid onClick={nextSlide}>
             <Button style={{ color: 'white' }}>
