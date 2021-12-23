@@ -31,7 +31,8 @@ export default function useProduct() {
     Products.forEach((l: Product) => {
       return newSet.add(l.categoriaPremio);
     });
-    setProductos(newSet);
+    const uniq = [...newSet];
+    setProductos(uniq);
   };
 
   useEffect(() => {
