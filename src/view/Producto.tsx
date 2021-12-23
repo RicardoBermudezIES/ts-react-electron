@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
 import {
   Box,
@@ -14,15 +15,13 @@ import {
   DialogActions,
   CardMedia,
 } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
-import { ipcRenderer } from 'electron';
 import { formatMoney, formatNumber, shortName } from '../helpers/format';
 import Alert from '../component/Alert/Alert';
 import { Product } from '../types/Products';
-
-const ipc = ipcRenderer;
+import useListarPedido from '../Hook/useListarPedido';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -93,59 +92,27 @@ export default function Producto() {
       (bar: { categoriaPremio: string }) => bar?.categoriaPremio === param?.id
     )
   );
-  const [scroll, setScroll] = useState(0);
-  const [listarProductos, setListarProductos] = useState<[]>([]);
-
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const puntos = JSON.parse(localStorage.getItem('puntosDiaxBar')!);
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = JSON.parse(localStorage.getItem('user')!);
 
-  const [buyModal, setBuyModal] = useState(false);
-  const [redimirModal, setRedimirModal] = useState(false);
-
-  const [openError, setOpenError] = useState(false);
-  const [messageError, setmessageError] = useState('');
-
-  const getListProducts = () => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const auth = JSON.parse(localStorage.getItem('authConfig')!);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const user = JSON.parse(localStorage.getItem('user')!);
-    const maquina = localStorage.getItem('maquina');
-    const localToken = localStorage.getItem('token');
-
-    setTimeout(() => {
-      const args = {
-        host: auth.host,
-        numeroDocumento: user?.numeroDocumento ?? null,
-        maquina,
-        token: localToken,
-      };
-
-      ipc.send('listar-peticiones', args);
-    }, 200);
-  };
-
-  useEffect(() => {
-    getListProducts();
-  }, []);
-
-  useEffect(() => {
-    ipc.on('listar-peticiones', (event, arg) => {
-      // eslint-disable-next-line no-console
-
-      // eslint-disable-next-line no-empty
-      if (arg?.statusDTO?.code !== '00') {
-      }
-
-      if (arg?.statusDTO?.code === '00') {
-        setListarProductos(arg?.peticiones);
-      }
-    });
-  }, []);
-
   const [currentItemIdx, setCurrentItemgIdx] = useState(0);
+
+  const {
+    hasQueque,
+    doBuy,
+    doRedimir,
+    cancelarPeticion,
+    confirmarPeticion,
+    openError,
+    setOpenError,
+    messageError,
+    handleCloseRedimirModal,
+    CloseModalBuy,
+    redimirModal,
+    buyModal,
+  } = useListarPedido();
 
   const prevSlide = () => {
     if (productos) {
@@ -177,176 +144,6 @@ export default function Producto() {
         : activeItemsSourcesFromState;
     }
     return [];
-  };
-
-  const handleOpenBuyModal = () => {
-    setBuyModal(true);
-  };
-
-  const doBuy = (puk: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const user = JSON.parse(localStorage.getItem('user'));
-    const maquina = localStorage.getItem('maquina');
-    const localToken = localStorage.getItem('token');
-
-    const args = {
-      host: auth.host,
-      numeroDocumento: user?.numeroDocumento ?? null,
-      maquina,
-      token: localToken,
-      puk,
-    };
-
-    ipc.send('comprar-productos', args);
-
-    handleOpenBuyModal();
-  };
-
-  const doRedimir = (puk: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const user = JSON.parse(localStorage.getItem('user'));
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const maquina = localStorage.getItem('maquina');
-    const localToken = localStorage.getItem('token');
-
-    const args = {
-      host: auth.host,
-      numeroDocumento: user?.numeroDocumento ?? null,
-      maquina,
-      token: localToken,
-      puk,
-    };
-
-    ipc.send('realizar-peticion', args);
-  };
-
-
-  const handleCloseBuyModal = () => {
-    setBuyModal(false);
-  };
-
-  const handleOpenRedimirModal = () => {
-    setRedimirModal(true);
-  };
-
-  const handleCloseRedimirModal = () => {
-    setRedimirModal(false);
-  };
-
-  useEffect(() => {
-    ipc.on('comprar-productos', (_event, arg) => {
-      // eslint-disable-next-line no-console
-
-      if (arg?.statusDTO?.code !== '00') {
-        // eslint-disable-next-line no-console
-        setmessageError(arg?.statusDTO?.message);
-        setOpenError(true);
-      }
-
-      if (arg?.statusDTO?.code === '00') {
-        getListProducts();
-        handleOpenBuyModal();
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    ipc.on('realizar-peticion', (_event, arg) => {
-      // eslint-disable-next-line no-console
-
-      if (arg?.statusDTO?.code !== '00') {
-        // eslint-disable-next-line no-console
-        setmessageError(arg?.statusDTO?.message);
-        setOpenError(true);
-      }
-
-      if (arg?.statusDTO?.code === '00') {
-        getListProducts();
-        handleOpenRedimirModal();
-      }
-    });
-  }, []);
-
-  const cancelarPeticion = (idPremio: string) => {
-    const product: [] = listarProductos?.find((l) => l?.idPremio === idPremio);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const auth = JSON.parse(localStorage.getItem('authConfig')!);
-
-    const maquina = localStorage.getItem('maquina');
-    const localToken = localStorage.getItem('token');
-
-    const args = {
-      host: auth.host,
-      numeroDocumento: auth?.numeroDocumento,
-      maquina,
-      token: localToken,
-      puk: product?.idPeticion,
-    };
-
-    ipc.send('anular-peticiones', args);
-  };
-
-  const confirmarPeticion = (idPremio) => {
-    const product = listarProductos?.find((l) => l?.idPremio === idPremio);
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
-
-    const maquina = localStorage.getItem('maquina');
-    const localToken = localStorage.getItem('token');
-
-    const args = {
-      host: auth.host,
-      numeroDocumento: auth?.numeroDocumento,
-      maquina,
-      token: localToken,
-      puk: product?.idPeticion,
-    };
-
-    ipc.send('confirmar-peticiones', args);
-  };
-
-  useEffect(() => {
-    ipc.on('anular-peticiones', (event, arg) => {
-      // eslint-disable-next-line no-console
-
-      if (arg?.statusDTO?.code !== '00') {
-        // eslint-disable-next-line no-console
-        setmessageError(arg?.statusDTO?.message);
-        setOpenError(true);
-      }
-
-      if (arg?.statusDTO?.code === '00') {
-        getListProducts();
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    ipc.on('confirmar-peticiones', (event, arg) => {
-      // eslint-disable-next-line no-console
-
-      if (arg?.statusDTO?.code !== '00') {
-        // eslint-disable-next-line no-console
-        setmessageError(arg?.statusDTO?.message);
-        setOpenError(true);
-      }
-
-      if (arg?.statusDTO?.code === '00') {
-        getListProducts();
-      }
-    });
-  }, []);
-
-  const hasQueque = (idPremio, estado) => {
-    const product = listarProductos?.find((l) => l?.idPremio === idPremio);
-
-    if (product?.estadoPeticion === estado) {
-      return true;
-    }
-    return false;
   };
 
   return (
@@ -392,13 +189,11 @@ export default function Producto() {
         {/* fin del header */}
 
         <Box width="100%" display="flex" alignItems="center">
-        
-            <Grid id="left" onClick={prevSlide}>
-              <Button style={{ color: 'white' }}>
-                <ArrowBackIos style={{ fontSize: 80 }} />
-              </Button>
-            </Grid>
-       
+          <Grid id="left" onClick={prevSlide}>
+            <Button style={{ color: 'white' }}>
+              <ArrowBackIos style={{ fontSize: 80 }} />
+            </Button>
+          </Grid>
 
           <Box id="content" className={classes.root}>
             {productos
@@ -458,7 +253,11 @@ export default function Producto() {
                                       </Button>
                                     </Grid>
                                   </Grid>
-                                  <Typography style={{ color:"#efb810" }} variant="h4" align="center">
+                                  <Typography
+                                    style={{ color: '#efb810' }}
+                                    variant="h4"
+                                    align="center"
+                                  >
                                     En cola
                                   </Typography>
                                 </Grid>
@@ -492,7 +291,11 @@ export default function Producto() {
                                       Aceptar
                                     </Button>
                                   </Grid>
-                                  <Typography style={{ color:"#efb810" }}  variant="h4" align="center">
+                                  <Typography
+                                    style={{ color: '#efb810' }}
+                                    variant="h4"
+                                    align="center"
+                                  >
                                     En camino
                                   </Typography>
                                 </Grid>
@@ -565,22 +368,15 @@ export default function Producto() {
               : 'cargando...'}
           </Box>
 
-       
-            <Grid onClick={nextSlide}>
-              <Button style={{ color: 'white' }}>
-                <ArrowForwardIos style={{ fontSize: 80 }} />
-              </Button>
-            </Grid>
-        
+          <Grid onClick={nextSlide}>
+            <Button style={{ color: 'white' }}>
+              <ArrowForwardIos style={{ fontSize: 80 }} />
+            </Button>
+          </Grid>
         </Box>
       </Grid>
 
-      <Dialog
-        fullWidth
-        maxWidth="sm"
-        open={buyModal}
-        onClose={handleCloseBuyModal}
-      >
+      <Dialog fullWidth maxWidth="sm" open={buyModal} onClose={CloseModalBuy}>
         <DialogTitle>Producto Comprado</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -588,7 +384,7 @@ export default function Producto() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseBuyModal} color="primary">
+          <Button onClick={CloseModalBuy} color="primary">
             Cerrar
           </Button>
         </DialogActions>
