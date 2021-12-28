@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import { IPedidos } from '../types/Pedidos';
+import { Product } from '../types/Products';
 
 const ipc = ipcRenderer;
 
@@ -11,6 +14,11 @@ export default function useListarPedido() {
   const [messageError, setmessageError] = useState('');
   const [buyModal, setBuyModal] = useState(false);
   const [redimirModal, setRedimirModal] = useState(false);
+
+  const [pedidos, setPedidos] = useState([]);
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const barList = JSON.parse(localStorage.getItem('bar')!);
 
   const handleOpenRedimirModal = () => {
     setRedimirModal(true);
@@ -53,9 +61,17 @@ export default function useListarPedido() {
       }
       if (arg?.statusDTO?.code === '00') {
         setListarProductos(arg?.peticiones);
+        arg?.peticiones?.forEach((pedido: IPedidos) => {
+          const list = barList?.filter((bar: Product) => {
+            bar.estado = pedido.estadoPeticion;
+            bar.medioPago = pedido.medioPago;
+            return bar?.pk === pedido?.idPremio;
+          });
+          setPedidos(list);
+        });
       }
     });
-  }, []);
+  }, [barList]);
 
   const doBuy = (puk: string) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -98,7 +114,9 @@ export default function useListarPedido() {
   };
 
   const cancelarPeticion = (idPremio: string) => {
-    const product: [] = listarProductos?.find((l) => l?.idPremio === idPremio);
+    const product = listarProductos?.find(
+      (l: IPedidos) => l?.idPremio === idPremio
+    );
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const auth = JSON.parse(localStorage.getItem('authConfig')!);
 
@@ -117,8 +135,10 @@ export default function useListarPedido() {
   };
 
   const confirmarPeticion = (idPremio: string) => {
-    const product = listarProductos?.find((l) => l?.idPremio === idPremio);
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
+    const product = listarProductos?.find(
+      (l: IPedidos) => l?.idPremio === idPremio
+    );
+    const auth = JSON.parse(localStorage.getItem('authConfig')!);
 
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
@@ -200,9 +220,10 @@ export default function useListarPedido() {
     });
   }, []);
 
-
   const hasQueque = (idPremio: string, estado: string) => {
-    const product = listarProductos?.find((l) => l?.idPremio === idPremio);
+    const product = listarProductos?.find(
+      (l: IPedidos) => l?.idPremio === idPremio
+    );
 
     if (product?.estadoPeticion === estado) {
       return true;
@@ -211,6 +232,7 @@ export default function useListarPedido() {
   };
 
   return {
+    pedidos,
     listarProductos,
     doBuy,
     doRedimir,
@@ -224,5 +246,6 @@ export default function useListarPedido() {
     redimirModal,
     buyModal,
     hasQueque,
+    getListProducts,
   };
 }

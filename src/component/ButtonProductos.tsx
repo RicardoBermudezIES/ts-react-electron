@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable import/prefer-default-export */
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Button, Chip, Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import { formatMoney, formatNumber } from '../helpers/format';
 import useListarPedido from '../Hook/useListarPedido';
@@ -43,13 +43,15 @@ export const ButtonProductos = ({ p }) => {
                 </Button>
               </Grid>
             </Grid>
-            <Typography
-              style={{ color: '#efb810' }}
-              variant="h4"
-              align="center"
+            <Grid
+              style={{ marginTop: 10 }}
+              container
+              justify="center"
+              alignItems="center"
+              spacing={1}
             >
-              En cola
-            </Typography>
+              <Chip label="Pendiente" color="secondary" />
+            </Grid>
           </Grid>
         </>
       ) : hasQueque(p?.pk, 'EN_CAMINO') ? (
@@ -76,13 +78,15 @@ export const ButtonProductos = ({ p }) => {
                 Aceptar
               </Button>
             </Grid>
-            <Typography
-              style={{ color: '#efb810' }}
-              variant="h4"
-              align="center"
+            <Grid
+              style={{ marginTop: 10 }}
+              container
+              justify="center"
+              alignItems="center"
+              spacing={1}
             >
-              En camino
-            </Typography>
+              <Chip label="En proceso" color="primary" />
+            </Grid>
           </Grid>
         </>
       ) : (
