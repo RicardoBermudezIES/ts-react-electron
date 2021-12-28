@@ -6,4 +6,6 @@ export interface Product {
   valorParaCanjear: string;
   categoriaPremio: string;
   imagen: string;
+  estado?: string;
+  medioPago?: string;
 }
