@@ -53,10 +53,10 @@ function Home() {
     <Box height="100vh" p={1}>
       <Box
         position="absolute"
-        top="-15%"
+        top="-20%"
         left="-33%"
         zIndex="-9999"
-        minHeight="150vh"
+        minHeight="160vh"
         width="70%"
         borderRadius="50%"
         className={classes.root}
@@ -122,7 +122,7 @@ function Home() {
             direction="column"
           >
             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-              <Box display="flex" flexDirection="column">
+              <Box display="flex" flexDirection="column" alignItems="flex-end">
                 <Typography
                   variant="h2"
                   component="h2"
@@ -137,6 +137,7 @@ function Home() {
                   onClick={() => setIsShow(!isShow)}
                   variant="contained"
                   color="secondary"
+                  style={{ maxWidth: 240, fontSize: 24 }}
                 >
                   {isShow ? 'Ocultar nombre' : 'Mostrar nombre'}
                 </Button>

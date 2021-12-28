@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router';
@@ -34,8 +35,8 @@ export default function Puntos() {
   const classes = useStyles();
   const history = useHistory();
 
-  const user = JSON.parse(localStorage.getItem('user'));
-  const puntos = JSON.parse(localStorage.getItem('puntos'));
+  const user = JSON.parse(localStorage.getItem('user')!);
+  const puntos = JSON.parse(localStorage.getItem('puntos')!);
   return (
     <Box p={2} className={classes.root}>
       <Box className={classes.red} />
@@ -54,11 +55,12 @@ export default function Puntos() {
               </Button>
             </Grid>
             <Grid item lg={8} md={8} sm={8} xs={8}>
-            <Typography
-            variant="h3"
-            component="p"
-            align="right"
-            style={{fontWeight:"bold"}}>
+              <Typography
+                variant="h3"
+                component="p"
+                align="right"
+                style={{ fontWeight: 'bold' }}
+              >
                 {user ? shortName(user?.nombre) : 'Anonimo'}
               </Typography>
             </Grid>
@@ -68,7 +70,12 @@ export default function Puntos() {
         <Box p={2}>
           <Grid container direction="row" spacing={3}>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography variant="h1" align="center" component="p" style={{fontWeight:"bold"}}>
+              <Typography
+                variant="h1"
+                align="center"
+                component="p"
+                style={{ fontWeight: 'bold' }}
+              >
                 {puntos?.cantidadPuntosDisponibles
                   ? formatNumber(puntos?.cantidadPuntosDisponibles)
                   : 'cargando..'}
@@ -78,7 +85,12 @@ export default function Puntos() {
               </Typography>
             </Grid>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography variant="h1" align="center" component="p"  style={{fontWeight:"bold"}}>
+              <Typography
+                variant="h1"
+                align="center"
+                component="p"
+                style={{ fontWeight: 'bold' }}
+              >
                 {puntos?.cantidadPuntosRedimidos
                   ? formatNumber(puntos?.cantidadPuntosRedimidos)
                   : 'cargando..'}

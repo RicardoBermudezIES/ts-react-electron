@@ -20,9 +20,9 @@ import { useHistory, useParams } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatNumber, shortName } from '../helpers/format';
 import Alert from '../component/Alert/Alert';
-import { IProduct } from '../types/Product';
 import useListarPedido from '../Hook/useListarPedido';
-import { ButtonIos } from '../component/ButtonIos';
+import { ButtonProductos } from '../component/ButtonProductos';
+import { IProduct } from '../types/Products';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -215,7 +215,7 @@ export default function Io() {
                           justify="space-between"
                           alignContent="center"
                         >
-                          <ButtonIos p={p} />
+                          <ButtonProductos p={p} />
                         </Grid>
                       </Box>
                     </CardContent>

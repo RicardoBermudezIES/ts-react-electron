@@ -9,12 +9,7 @@ import {
   Typography,
   CircularProgress,
 } from '@material-ui/core';
-import React, {
-  ReactElement,
-  useState,
-  useRef,
-  JSXElementConstructor,
-} from 'react';
+import React, { ReactElement, useState, JSXElementConstructor } from 'react';
 import { useHistory } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatNumber, shortName } from '../helpers/format';
