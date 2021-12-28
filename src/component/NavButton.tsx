@@ -5,6 +5,7 @@ import { BarIcon } from '../iconos/Bar';
 import { PuntosIcon } from '../iconos/PuntosIcon';
 import { BilleteraIcon } from '../iconos/BilleteraIcon';
 import ButtonHelper from './ButtonHelper/ButtonHelper';
+import ButtonPedidos from './ButtonPedidos/ButtonPedidos';
 
 export default function NavButton() {
   const history = useHistory();
@@ -24,7 +25,7 @@ export default function NavButton() {
             <Grid item>
               <Button style={{ display: 'grid' }} onClick={goPuntos}>
                 <PuntosIcon />
-                <Typography variant="h6" style={{ color: 'white' }}>
+                <Typography variant="h5" style={{ color: 'white' }}>
                   {' '}
                   Puntos{' '}
                 </Typography>
@@ -33,7 +34,7 @@ export default function NavButton() {
             <Grid item>
               <Button style={{ display: 'grid', opacity: 0.5 }}>
                 <BilleteraIcon />
-                <Typography variant="h6" style={{ color: 'white' }}>
+                <Typography variant="h5" style={{ color: 'white' }}>
                   {' '}
                   Billtera{' '}
                 </Typography>
@@ -49,11 +50,18 @@ export default function NavButton() {
             <Grid item>
               <Button onClick={goBar} style={{ display: 'grid' }}>
                 <BarIcon />
-                <Typography variant="h6" style={{ color: 'white' }}>
+                <Typography variant="h5" style={{ color: 'white' }}>
                   {' '}
                   Bar{' '}
                 </Typography>
               </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container alignItems="flex-end" direction="column" spacing={3}>
+            <Grid item>
+              <ButtonPedidos />
             </Grid>
           </Grid>
         </Grid>
