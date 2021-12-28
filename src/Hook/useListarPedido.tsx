@@ -3,7 +3,7 @@ import { ipcRenderer } from 'electron';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { IPedidos } from '../types/Pedidos';
-import { Product } from '../types/Products';
+import { IProduct } from '../types/Products';
 
 const ipc = ipcRenderer;
 
@@ -15,7 +15,7 @@ export default function useListarPedido() {
   const [buyModal, setBuyModal] = useState(false);
   const [redimirModal, setRedimirModal] = useState(false);
 
-  const [pedidos, setPedidos] = useState([]);
+  const [pedidos, setPedidos] = useState<IProduct[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const barList = JSON.parse(localStorage.getItem('bar')!);
@@ -25,13 +25,13 @@ export default function useListarPedido() {
   };
 
   const handleCloseRedimirModal = () => {
-    setRedimirModal(false);
     history.go(-2);
+    setRedimirModal(false);
   };
 
   const CloseModalBuy = () => {
-    setBuyModal(!buyModal);
     history.go(-2);
+    setBuyModal(false);
   };
 
   const getListProducts = () => {
@@ -51,8 +51,21 @@ export default function useListarPedido() {
   };
   useEffect(() => {
     getListProducts();
+    return () => {
+      setListarProductos([]); // This worked for me
+    };
   }, []);
-
+  const filterProducts = (arr: IPedidos[]) => {
+    const newArr = [...arr];
+    const results = barList.filter((b: IProduct) =>
+      newArr.some((p: IPedidos) => {
+        b.estado = p.estadoPeticion;
+        b.medioPago = p.medioPago;
+        return b.pk === p.idPremio;
+      })
+    );
+    setPedidos(results);
+  };
   useEffect(() => {
     ipc.on('listar-peticiones', (_event, arg) => {
       // eslint-disable-next-line no-console
@@ -61,17 +74,10 @@ export default function useListarPedido() {
       }
       if (arg?.statusDTO?.code === '00') {
         setListarProductos(arg?.peticiones);
-        arg?.peticiones?.forEach((pedido: IPedidos) => {
-          const list = barList?.filter((bar: Product) => {
-            bar.estado = pedido.estadoPeticion;
-            bar.medioPago = pedido.medioPago;
-            return bar?.pk === pedido?.idPremio;
-          });
-          setPedidos(list);
-        });
+        filterProducts(arg?.peticiones);
       }
     });
-  }, [barList]);
+  }, []);
 
   const doBuy = (puk: string) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

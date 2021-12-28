@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { useEffect, useState } from 'react';
-import { Product } from '../types/Products';
+import { IProduct } from '../types/Products';
 
 const ipc = ipcRenderer;
 
@@ -25,9 +25,9 @@ export default function useProduct() {
     ipc.send('bar', args);
   };
 
-  const saveProduct = (Products: Product[]) => {
+  const saveProduct = (Products: IProduct[]) => {
     const newSet = new Set<string>();
-    Products.forEach((l: Product) => {
+    Products.forEach((l: IProduct) => {
       return newSet.add(l.categoriaPremio);
     });
     const uniq = [...newSet];
