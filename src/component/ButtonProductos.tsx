@@ -6,7 +6,7 @@ import { formatMoney, formatNumber } from '../helpers/format';
 import useListarPedido from '../Hook/useListarPedido';
 import { IProduct } from '../types/Products';
 
-export const ButtonProductos = (p: IProduct) => {
+export const ButtonProductos = ({ p }: IProduct) => {
   const {
     hasQueque,
     doBuy,
@@ -16,7 +16,7 @@ export const ButtonProductos = (p: IProduct) => {
   } = useListarPedido();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = JSON.parse(localStorage.getItem('user')!);
-
+  const puntos = JSON.parse(localStorage.getItem('puntos')!);
   return (
     <>
       {hasQueque(p?.pk, 'EN_COLA') ? (
@@ -104,7 +104,10 @@ export const ButtonProductos = (p: IProduct) => {
               </Grid>
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Button
-                  disabled={user === null}
+                  disabled={
+                    user === null ||
+                    puntos?.cantidadPuntosDisponibles > p?.puntosParaCanjear
+                  }
                   onClick={() => doRedimir(p?.pk)}
                   variant="contained"
                   color="secondary"
