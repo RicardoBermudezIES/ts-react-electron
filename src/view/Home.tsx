@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useEffect, useState } from 'react';
 import { Button, Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,8 +26,8 @@ function Home() {
   const history = useHistory();
   const [isShow, setIsShow] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem('user'))
-    ? JSON.parse(localStorage.getItem('user'))
+  const user = JSON.parse(localStorage.getItem('user')!)
+    ? JSON.parse(localStorage.getItem('user')!)
     : null;
 
   const { puntos } = usePuntos();
@@ -120,7 +121,7 @@ function Home() {
             justify="flex-end"
             direction="column"
           >
-            <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
+            <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
               <Box display="flex" flexDirection="column">
                 <Typography
                   variant="h2"
