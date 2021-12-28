@@ -4,8 +4,9 @@ import { Button, Chip, Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import { formatMoney, formatNumber } from '../helpers/format';
 import useListarPedido from '../Hook/useListarPedido';
+import { IProduct } from '../types/Products';
 
-export const ButtonProductos = ({ p }) => {
+export const ButtonProductos = (p: IProduct) => {
   const {
     hasQueque,
     doBuy,
