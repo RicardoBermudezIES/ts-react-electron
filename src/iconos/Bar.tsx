@@ -20,7 +20,7 @@ export const BarIcon = (props: Props) => {
         height="57.6439"
         rx="8"
         stroke="#DB0380"
-        stroke-width="2"
+        strokeWidth="2"
       />
     </svg>
   );
