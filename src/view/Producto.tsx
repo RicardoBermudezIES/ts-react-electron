@@ -20,9 +20,9 @@ import { useHistory, useParams } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatNumber, shortName } from '../helpers/format';
 import Alert from '../component/Alert/Alert';
-import { Product } from '../types/Products';
+import { IProduct } from '../types/Product';
 import useListarPedido from '../Hook/useListarPedido';
-import { ButtonProductos } from '../component/ButtonProductos';
+import { ButtonIos } from '../component/ButtonIos';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,14 +82,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Producto() {
+export default function Io() {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const barList = JSON.parse(localStorage.getItem('bar')!);
   const classes = useStyles();
   const history = useHistory();
 
   const param = useParams();
-  const [productos] = useState<Product[]>(
+  const [Ios] = useState<IProduct[]>(
     barList.filter(
       (bar: { categoriaPremio: string }) => bar?.categoriaPremio === param?.id
     )
@@ -112,31 +112,31 @@ export default function Producto() {
   } = useListarPedido();
 
   const prevSlide = () => {
-    if (productos) {
+    if (Ios) {
       const resetToVeryBack = currentItemIdx === 0;
-      const index = resetToVeryBack ? productos.length - 1 : currentItemIdx - 1;
+      const index = resetToVeryBack ? Ios.length - 1 : currentItemIdx - 1;
       setCurrentItemgIdx(index);
     }
   };
 
   const nextSlide = () => {
-    if (productos) {
-      const resetIndex = currentItemIdx === productos.length - 1;
+    if (Ios) {
+      const resetIndex = currentItemIdx === Ios.length - 1;
       const index = resetIndex ? 0 : currentItemIdx + 1;
       setCurrentItemgIdx(index);
     }
   };
 
-  const activeItemsSourcesFromState = productos
-    ? productos.slice(currentItemIdx, currentItemIdx + 2)
+  const activeItemsSourcesFromState = Ios
+    ? Ios.slice(currentItemIdx, currentItemIdx + 2)
     : [];
 
   const itemsSourcesToDisplay = () => {
-    if (productos) {
+    if (Ios) {
       return activeItemsSourcesFromState.length < 2
         ? [
             ...activeItemsSourcesFromState,
-            ...productos.slice(0, 2 - activeItemsSourcesFromState.length),
+            ...Ios.slice(0, 2 - activeItemsSourcesFromState.length),
           ]
         : activeItemsSourcesFromState;
     }
@@ -193,7 +193,7 @@ export default function Producto() {
           </Grid>
 
           <Box id="content" className={classes.root}>
-            {productos
+            {Ios
               ? itemsSourcesToDisplay().map((p, i) => (
                   <Card key={i} className={classes.item}>
                     <CardContent className={classes.content}>
@@ -215,7 +215,7 @@ export default function Producto() {
                           justify="space-between"
                           alignContent="center"
                         >
-                          <ButtonProductos p={p} />
+                          <ButtonIos p={p} />
                         </Grid>
                       </Box>
                     </CardContent>
@@ -233,7 +233,7 @@ export default function Producto() {
       </Grid>
 
       <Dialog fullWidth maxWidth="sm" open={buyModal} onClose={CloseModalBuy}>
-        <DialogTitle>Producto Comprado</DialogTitle>
+        <DialogTitle>Io Comprado</DialogTitle>
         <DialogContent>
           <DialogContentText>
             En un momento, le traeran su pedido.
@@ -252,7 +252,7 @@ export default function Producto() {
         open={redimirModal}
         onClose={handleCloseRedimirModal}
       >
-        <DialogTitle>Producto Redimido</DialogTitle>
+        <DialogTitle>Io Redimido</DialogTitle>
         <DialogContent>
           <DialogContentText>
             En un momento, le traeran su pedido.
