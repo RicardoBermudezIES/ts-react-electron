@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardContent,
@@ -9,6 +10,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
   makeStyles,
   Typography,
 } from '@material-ui/core';
@@ -16,9 +18,7 @@ import React, { ReactElement } from 'react';
 import { formatMoney, formatNumber } from '../../helpers/format';
 import useListarPedido from '../../Hook/useListarPedido';
 import Cart from '../../iconos/Cart';
-import { Product } from '../../types/Products';
-
-interface Props {}
+import { IProduct } from '../../types/Products';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -53,9 +53,33 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
+  notificationYellow: {
+    width: 32,
+    height: 32,
+    backgroundColor: 'yellow',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    borderRadius: 99,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  notificationGreen: {
+    width: 32,
+    height: 32,
+    backgroundColor: 'Green',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    borderRadius: 99,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }));
 
-export default function ButtonPedidos({}: Props): ReactElement {
+export default function ButtonPedidos(): ReactElement {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -86,7 +110,23 @@ export default function ButtonPedidos({}: Props): ReactElement {
 
   return (
     <div>
-      <Button style={{ display: 'grid' }} onClick={handleClickOpen}>
+      <Button
+        style={{ display: 'grid', position: 'relative' }}
+        onClick={handleClickOpen}
+      >
+        {pedidos?.length > 0 ? (
+          <Box
+            className={`${
+              pedidos[0].estado === 'EN_COLA'
+                ? classes.notificationYellow
+                : classes.notificationGreen
+            }`}
+          >
+            {pedidos?.length}
+          </Box>
+        ) : (
+          ''
+        )}
         <Cart />
         <Typography variant="h6" style={{ color: 'white' }}>
           Órdenes
@@ -103,73 +143,77 @@ export default function ButtonPedidos({}: Props): ReactElement {
         <DialogTitle id="alert-dialog-title">Mis Pedidos</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {pedidos ? (
-              pedidos.map((pedido: Product) => (
-                <Card className={classes.root} key={pedido?.pk}>
-                  <CardMedia
-                    className={classes.cover}
-                    image={
-                      pedido?.imagen
-                        ? pedido?.imagen
-                        : 'https://via.placeholder.com/150'
-                    }
-                    title={pedido.nombre}
-                  />
-                  <section className={classes.details}>
-                    <CardContent className={classes.content}>
-                      <Typography component="p" variant="h5">
-                        {pedido.nombre}
-                      </Typography>
-                      <Typography
-                        component="p"
-                        variant="subtitle1"
-                        color="textSecondary"
-                      >
-                        {pedido.categoriaPremio}
-                      </Typography>
-                      <Chip
-                        label={
-                          pedido.estado === 'EN_COLA'
-                            ? 'Pendiente'
-                            : 'En proceso'
+            <Grid container direction="row" spacing={1}>
+              {pedidos?.length > 0 ? (
+                pedidos?.map((pedido: IProduct) => (
+                  <Grid item key={pedido?.pk}>
+                    <Card className={classes.root}>
+                      <CardMedia
+                        className={classes.cover}
+                        image={
+                          pedido?.imagen
+                            ? pedido?.imagen
+                            : 'https://via.placeholder.com/150'
                         }
-                        clickable
-                        color="primary"
+                        title={pedido.nombre}
                       />
-                    </CardContent>
+                      <section className={classes.details}>
+                        <CardContent className={classes.content}>
+                          <Typography component="p" variant="h5">
+                            {pedido.nombre}
+                          </Typography>
+                          <Typography
+                            component="p"
+                            variant="subtitle1"
+                            color="textSecondary"
+                          >
+                            {pedido.categoriaPremio}
+                          </Typography>
+                          <Chip
+                            label={
+                              pedido.estado === 'EN_COLA'
+                                ? 'Pendiente'
+                                : 'En proceso'
+                            }
+                            clickable
+                            color="primary"
+                          />
+                        </CardContent>
 
-                    <div className={classes.controls}>
-                      <Typography component="p" variant="h5">
-                        {pedido.medioPago === 'Efectivo'
-                          ? formatMoney(pedido.valorParaCanjear)
-                          : formatNumber(pedido.puntosParaCanjear)}
-                      </Typography>
-                      {pedido.estado === 'EN_COLA' ? (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => CancelPedido(pedido.pk)}
-                        >
-                          {' '}
-                          Anular
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => ConfirmPedido(pedido.pk)}
-                        >
-                          {' '}
-                          Confirmar
-                        </Button>
-                      )}
-                    </div>
-                  </section>
-                </Card>
-              ))
-            ) : (
-              <Typography component="p"> Sin pedidos </Typography>
-            )}
+                        <div className={classes.controls}>
+                          <Typography component="p" variant="h5">
+                            {pedido.medioPago === 'Efectivo'
+                              ? formatMoney(pedido.valorParaCanjear)
+                              : formatNumber(pedido.puntosParaCanjear)}
+                          </Typography>
+                          {pedido.estado === 'EN_COLA' ? (
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => CancelPedido(pedido.pk)}
+                            >
+                              {' '}
+                              Anular
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => ConfirmPedido(pedido.pk)}
+                            >
+                              {' '}
+                              Confirmar
+                            </Button>
+                          )}
+                        </div>
+                      </section>
+                    </Card>
+                  </Grid>
+                ))
+              ) : (
+                <Typography component="p"> Sin pedidos </Typography>
+              )}
+            </Grid>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
