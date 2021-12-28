@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useRef, useState } from 'react';
+import React, { RefObject, useRef, useState } from 'react';
 import {
   Box,
   Button,
@@ -21,7 +21,7 @@ import Alert from '../component/Alert/Alert';
 import { BarIcon } from '../iconos/Bar';
 import ButtonHelper from '../component/ButtonHelper/ButtonHelper';
 import useLoginUser from '../Hook/useLoginUser';
-
+import ButtonPedidos from '../component/ButtonPedidos/ButtonPedidos';
 
 const useStyles = makeStyles(() => ({
   login: {},
@@ -50,12 +50,9 @@ function Login() {
   const [open, setOpen] = useState(false);
   const [openMasterPassword, setOpenMasterPassword] = useState(false);
 
-
-
   const handleCloseMasterPassword = () => {
     setOpenMasterPassword(false);
   };
-  const handleClickOpen = () => {};
 
   const handleClose = () => {
     setOpen(false);
@@ -74,7 +71,8 @@ function Login() {
 
   const onSubmitConfiguration = (e: Event): void => {
     e.preventDefault();
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const auth = JSON.parse(localStorage.getItem('authConfig')!);
 
     if (
       inputs?.passwordMaster === auth?.password ||
@@ -87,12 +85,11 @@ function Login() {
   };
 
   const onSubmit = () => {
-    console.log('Hago clik');
-     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-     fidelizar();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    fidelizar();
   };
 
- const onChangeInput = (event) => {
+  const onChangeInput = (event) => {
     const inputVal = event.target.value;
 
     setInputs({
@@ -180,10 +177,10 @@ function Login() {
             <Grid container direction="row" justify="flex-start" spacing={2}>
               <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
                 <Button
-                  style={{ width: '100%'}}
+                  style={{ width: '100%' }}
                   variant="contained"
                   color="primary"
-                  onClick={ () => onSubmit()}
+                  onClick={() => onSubmit()}
                 >
                   Iniciar sesión
                 </Button>
@@ -207,7 +204,10 @@ function Login() {
           </Button>
         </Grid>
         <Grid item lg={2} md={2} sm={2} xs={2}>
-        <ButtonHelper />
+          <ButtonPedidos />
+        </Grid>
+        <Grid item lg={2} md={2} sm={2} xs={2}>
+          <ButtonHelper />
         </Grid>
       </Grid>
 
@@ -240,7 +240,7 @@ function Login() {
       </Dialog>
 
       <Dialog
-      // eslint-disable-next-line react/style-prop-object
+        // eslint-disable-next-line react/style-prop-object
         style={{ left: -450 }}
         open={openMasterPassword}
         onClose={handleCloseMasterPassword}
@@ -294,13 +294,18 @@ function Login() {
         className={`keyboardContainer-login ${!keyboardOpen ? 'hidden' : ''}`}
       >
         <div className="container-closeKeyBoard">
-
-        <button className="closeKeyBoard" onClick={closeKeyboard}>
-          Cerrar
-        </button>
+          <button
+            type="button"
+            className="closeKeyBoard"
+            onClick={closeKeyboard}
+          >
+            Cerrar
+          </button>
         </div>
         <Keyboard
-          keyboardRef={(r) => (keyboard.current = r)}
+          keyboardRef={(r: RefObject<HTMLBaseElement>) =>
+            (keyboard.current = r)
+          }
           inputName={inputName}
           onChangeAll={onChangeAll}
           layoutName={layoutName}
