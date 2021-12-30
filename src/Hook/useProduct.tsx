@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IProduct } from '../types/Products';
 
 const ipc = ipcRenderer;
@@ -34,9 +34,12 @@ export default function useProduct() {
     setProductos(uniq);
   };
 
+  const CallBackGetBar = useCallback(getBar, []);
+
   useEffect(() => {
-    getBar();
-  }, []);
+    CallBackGetBar();
+    return () => setProductos([]);
+  }, [CallBackGetBar]);
 
   useEffect(() => {
     ipc.on('bar', (_event, arg) => {
