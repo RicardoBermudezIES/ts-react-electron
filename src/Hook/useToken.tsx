@@ -1,38 +1,41 @@
-import { ipcRenderer } from "electron";
-import { useEffect, useState} from "react";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { ipcRenderer } from 'electron';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 const ipc = ipcRenderer;
 export default function useToken() {
-  const [token, setToken] = useState('')
+  const [token, setToken] = useState('');
+
+  const sendAuth = () => {
+    setInterval(() => {
+      const auth = JSON.parse(window.localStorage.getItem('authConfig')!);
+      ipc.send('allways-auth', auth);
+    }, 1000 * 60 * 4);
+  };
+
+  const callback = useCallback(sendAuth, []);
 
   useEffect(() => {
-    const sendAuth = () => {
-      const auth = JSON.parse(window.localStorage.getItem('authConfig'));
-      ipc.send('allways-auth', auth);
-    };
-    var myInterval3;
+    let id: any;
     if (localStorage.getItem('authConfig')) {
-      myInterval3 =  setInterval(() =>   sendAuth(), 1000 * 60 * 4);
-      myInterval3
+      id = callback();
     }
-    return () => {
-      clearInterval(myInterval3);
-    }
-  }, []);
-
-
+    return () => clearInterval(id);
+  }, [callback]);
 
   const getAuth = () => {
-    ipc.on('allways-auth', (event, arg) => {
+    ipc.on('allways-auth', (_event, arg) => {
       setToken(arg.token);
+      console.log('token');
       localStorage.setItem('token', arg.token);
     });
   };
 
+  const callbackgetAuth = useCallback(getAuth, []);
   useEffect(() => {
-    getAuth();
-  }, []);
+    callbackgetAuth();
+  }, [callbackgetAuth]);
 
-
-  return { token }
-
+  const tokenMemo = useMemo(() => token, [token]);
+  return { tokenMemo };
 }
