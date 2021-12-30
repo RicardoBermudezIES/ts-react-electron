@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
@@ -32,16 +32,25 @@ function Home() {
 
   const { puntos } = usePuntos();
 
-  const { CloseSession, messageError, openError } = useCloseSession();
+  const {
+    CloseSession,
+    messageError,
+    openError,
+    setOpenError,
+  } = useCloseSession();
 
   const goToLogin = () => {
+    console.log('Cerrando sesión');
+    
     localStorage.removeItem('user');
     localStorage.removeItem('puntos');
     history.push('/login');
   };
 
   useEffect(() => {
-    user === null ? goToLogin() : null;
+    if (user === null) {
+      goToLogin();
+    }
   }, []);
 
   const leaveLobby = () => {
