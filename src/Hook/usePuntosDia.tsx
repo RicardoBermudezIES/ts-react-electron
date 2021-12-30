@@ -1,18 +1,18 @@
 import { ipcRenderer } from 'electron';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const ipc = ipcRenderer;
 export default function usePuntosDia() {
   const [puntosBar, setPuntosBar] = useState(0);
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user')!);
 
   // solicitar el puntosbar.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const puntosXBar = () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const auth = JSON.parse(localStorage.getItem('authConfig')!);
     const localCasino = localStorage.getItem('casino');
     const localToken = localStorage.getItem('token');
     const localMaquina = localStorage.getItem('maquina');
@@ -26,11 +26,13 @@ export default function usePuntosDia() {
     ipc.send('visualizarPuntosxDia', args);
   };
 
+  const callback = useCallback(puntosXBar, [user?.numeroDocumento]);
+
   useEffect(() => {
     if (user) {
-      puntosXBar();
+      callback();
     }
-  }, [puntosXBar, user]);
+  }, [callback, user]);
 
   useEffect(() => {
     ipc.on('visualizarPuntosxDia', (_event, arg) => {
