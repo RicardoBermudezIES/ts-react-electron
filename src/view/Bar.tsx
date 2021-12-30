@@ -9,7 +9,12 @@ import {
   Typography,
   CircularProgress,
 } from '@material-ui/core';
-import React, { ReactElement, useState, JSXElementConstructor } from 'react';
+import React, {
+  ReactElement,
+  useState,
+  JSXElementConstructor,
+  memo,
+} from 'react';
 import { useHistory } from 'react-router';
 import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import { formatNumber, shortName } from '../helpers/format';
@@ -71,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
   blue: {},
 }));
 
-export default function Bar(): ReactElement {
+function Bar(): ReactElement {
   const history = useHistory();
   const classes = useStyles();
   const { productos, openError, messageError, setOpenError } = useProduct();
@@ -233,3 +238,5 @@ export default function Bar(): ReactElement {
     </Box>
   );
 }
+
+export default memo(Bar);
