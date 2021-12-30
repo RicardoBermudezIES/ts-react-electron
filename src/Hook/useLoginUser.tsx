@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useCallback, useEffect, useState } from 'react';
 import { ipcRenderer } from 'electron';
 import { useHistory } from 'react-router-dom';
 
@@ -8,15 +10,12 @@ export default function useLoginUser() {
   const [openError, setOpenError] = useState(false);
   const [messageError, setMessageError] = useState('');
 
-  const [inputs, setInputs] = useState<
-    | {
-        username: string;
-        token: string;
-        passwordMaster: string;
-      }
+  const [inputs, setInputs] = useState<{
+    username: string;
+    token: string;
+    passwordMaster: string;
+  }>({
     // eslint-disable-next-line @typescript-eslint/ban-types
-    | {}
-  >({
     username: '',
     token: '',
     passwordMaster: '',
@@ -25,13 +24,13 @@ export default function useLoginUser() {
   const history = useHistory();
 
   const fidelizar = () => {
-    const auth = JSON.parse(localStorage.getItem('authConfig'));
+    const auth = JSON.parse(localStorage.getItem('authConfig')!);
     ipc.send('allways-auth', auth);
 
     const localToken = localStorage.getItem('token');
 
-    const authConfig = JSON.parse(localStorage.getItem('authConfig'))
-      ? JSON.parse(localStorage.getItem('authConfig'))
+    const authConfig = JSON.parse(localStorage.getItem('authConfig')!)
+      ? JSON.parse(localStorage.getItem('authConfig')!)
       : null;
 
     const localMaquina = localStorage.getItem('maquina');
@@ -39,11 +38,14 @@ export default function useLoginUser() {
     const args = {
       host: authConfig.host,
       serial: localMaquina,
-      numeroDocumento: inputs?.username,
+      numeroDocumento: inputs?.username!,
       token: localToken,
     };
+
     ipc.send('fidelizarMaquina', args);
   };
+
+  const callBackFidelizar = useCallback(fidelizar, [inputs?.username]);
 
   useEffect(() => {
     ipc.on('fidelizarMaquina', (_event, arg) => {
@@ -75,13 +77,13 @@ export default function useLoginUser() {
         if (localStorage.getItem('user')) history.push('/');
       }
     });
-  }, []);
+  }, [history]);
 
   return {
     openError,
     setOpenError,
     messageError,
-    fidelizar,
+    callBackFidelizar,
     inputs,
     setInputs,
   };
