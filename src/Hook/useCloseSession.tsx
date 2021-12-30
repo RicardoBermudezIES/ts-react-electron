@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
 const ipc = ipcRenderer;
 
 export default function useCloseSession() {
@@ -29,34 +31,34 @@ export default function useCloseSession() {
 
   const ipcCloseSession = () => {
     ipc.on('cerrar-sesion', (_, arg) => {
-
       if (arg?.Error) {
         localStorage.removeItem('user');
         localStorage.removeItem('puntos');
-        history.push('/login')
+        history.push('/login');
       }
 
       if (arg?.statusDTO?.code !== '00') {
         setmessageError(arg?.statusDTO?.message);
         setOpenError(true);
       }
-      if (arg?.statusDTO?.code == '00') {
+      if (arg?.statusDTO?.code === '00') {
         localStorage.removeItem('user');
         localStorage.removeItem('puntos');
-        history.push('/login')
+        history.push('/login');
       }
     });
   };
 
+  const CallbackCloseSession = useCallback(ipcCloseSession, [history]);
+
   useEffect(() => {
-      ipcCloseSession();
-  }, []);
+    CallbackCloseSession();
+  }, [CallbackCloseSession]);
 
-
-  return{
+  return {
     CloseSession,
     messageError,
-    openError
-  }
-
+    openError,
+    setOpenError,
+  };
 }
