@@ -91,8 +91,8 @@ const createWindow = async () => {
     show: false,
     width: 1280,
     height: 480,
-    // frame: false,
-    // kiosk: true,
+    frame: false,
+    kiosk: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
