@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+/* eslint-disable promise/always-return */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
 import { useEffect, useState } from 'react';
@@ -14,7 +16,6 @@ export default function useListarPedido() {
   const [messageError, setmessageError] = useState('');
   const [buyModal, setBuyModal] = useState(false);
   const [redimirModal, setRedimirModal] = useState(false);
-
   const [pedidos, setPedidos] = useState<IProduct[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -34,6 +35,18 @@ export default function useListarPedido() {
     setBuyModal(false);
   };
 
+  const filterProducts = (arr: IPedidos[]) => {
+    const newArr = [...arr];
+    const results = barList.filter((b: IProduct) =>
+      newArr?.some((p: IPedidos) => {
+        b.estado = p.estadoPeticion;
+        b.medioPago = p.medioPago;
+        return b.pk === p.idPremio;
+      })
+    );
+    setPedidos(results);
+  };
+
   const getListProducts = () => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const auth = JSON.parse(localStorage.getItem('authConfig')!);
@@ -47,36 +60,21 @@ export default function useListarPedido() {
       maquina,
       token: localToken,
     };
-    ipc.send('listar-peticiones', args);
+    ipc
+      .invoke('listar-peticiones', args)
+      .then((res) => {
+        filterProducts(res?.peticiones);
+        setListarProductos(res?.peticiones);
+      })
+      // eslint-disable-next-line no-console
+      .catch((err) => console.log(err));
   };
+
   useEffect(() => {
     getListProducts();
     return () => {
       setListarProductos([]); // This worked for me
     };
-  }, []);
-  const filterProducts = (arr: IPedidos[]) => {
-    const newArr = [...arr];
-    const results = barList.filter((b: IProduct) =>
-      newArr.some((p: IPedidos) => {
-        b.estado = p.estadoPeticion;
-        b.medioPago = p.medioPago;
-        return b.pk === p.idPremio;
-      })
-    );
-    setPedidos(results);
-  };
-  useEffect(() => {
-    ipc.on('listar-peticiones', (_event, arg) => {
-      // eslint-disable-next-line no-console
-      // eslint-disable-next-line no-empty
-      if (arg?.statusDTO?.code !== '00') {
-      }
-      if (arg?.statusDTO?.code === '00') {
-        setListarProductos(arg?.peticiones);
-        filterProducts(arg?.peticiones);
-      }
-    });
   }, []);
 
   const doBuy = (puk: string) => {
@@ -120,9 +118,9 @@ export default function useListarPedido() {
   };
 
   const cancelarPeticion = (idPremio: string) => {
-    const product = listarProductos?.find(
+    const product: IPedidos = listarProductos?.find(
       (l: IPedidos) => l?.idPremio === idPremio
-    );
+    )!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const auth = JSON.parse(localStorage.getItem('authConfig')!);
 
@@ -141,9 +139,9 @@ export default function useListarPedido() {
   };
 
   const confirmarPeticion = (idPremio: string) => {
-    const product = listarProductos?.find(
+    const product: IPedidos = listarProductos?.find(
       (l: IPedidos) => l?.idPremio === idPremio
-    );
+    )!;
     const auth = JSON.parse(localStorage.getItem('authConfig')!);
 
     const maquina = localStorage.getItem('maquina');
@@ -225,11 +223,10 @@ export default function useListarPedido() {
       }
     });
   }, []);
-
   const hasQueque = (idPremio: string, estado: string) => {
-    const product = listarProductos?.find(
+    const product: IPedidos = listarProductos?.find(
       (l: IPedidos) => l?.idPremio === idPremio
-    );
+    )!;
 
     if (product?.estadoPeticion === estado) {
       return true;
