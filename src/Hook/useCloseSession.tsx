@@ -1,3 +1,4 @@
+/* eslint-disable promise/always-return */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
 import { useCallback, useEffect, useState } from 'react';
@@ -9,6 +10,10 @@ export default function useCloseSession() {
   const history = useHistory();
   const [openError, setOpenError] = useState(false);
   const [messageError, setmessageError] = useState('');
+
+  const user = JSON.parse(localStorage.getItem('user')!)
+    ? JSON.parse(localStorage.getItem('user')!)
+    : null;
 
   const CloseSession = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -25,38 +30,49 @@ export default function useCloseSession() {
       token: localToken,
     };
     if (user !== null && localMaquina) {
-      ipc.send('cerrar-sesion', args);
+      ipc
+        .invoke('cerrar-sesion', args)
+        .then((res) => {
+          if (res?.Error) {
+            localStorage.removeItem('user');
+            localStorage.removeItem('puntos');
+            history.push('/login');
+          }
+
+          if (res?.statusDTO?.code !== '00') {
+            setmessageError(res?.statusDTO?.message);
+            setOpenError(true);
+          }
+
+          localStorage.removeItem('user');
+          localStorage.removeItem('puntos');
+          history.push('/login');
+        })
+        .catch(() => {
+          localStorage.removeItem('user');
+          localStorage.removeItem('puntos');
+          history.push('/login');
+        });
     }
   };
 
-  const ipcCloseSession = () => {
-    ipc.on('cerrar-sesion', (_, arg) => {
-      if (arg?.Error) {
-        localStorage.removeItem('user');
-        localStorage.removeItem('puntos');
-        history.push('/login');
-      }
-
-      if (arg?.statusDTO?.code !== '00') {
-        setmessageError(arg?.statusDTO?.message);
-        setOpenError(true);
-      }
-      if (arg?.statusDTO?.code === '00') {
-        localStorage.removeItem('user');
-        localStorage.removeItem('puntos');
-        history.push('/login');
-      }
-    });
-  };
-
-  const CallbackCloseSession = useCallback(ipcCloseSession, [history]);
+  const CallbackCloseSession = useCallback(CloseSession, [history]);
 
   useEffect(() => {
-    CallbackCloseSession();
-  }, [CallbackCloseSession]);
+    const goToLogin = () => {
+      localStorage.removeItem('user');
+      localStorage.removeItem('puntos');
+      history.push('/login');
+    };
+
+    if (user === null) {
+      goToLogin();
+    }
+    return () => user;
+  }, [history, user]);
 
   return {
-    CloseSession,
+    CallbackCloseSession,
     messageError,
     openError,
     setOpenError,
