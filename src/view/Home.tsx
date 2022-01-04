@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
 import Odometer from 'react-odometerjs';
 import NavButton from '../component/NavButton';
 import Alert from '../component/Alert/Alert';
@@ -23,7 +22,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 function Home() {
-  const history = useHistory();
   const [isShow, setIsShow] = useState(false);
 
   const user = JSON.parse(localStorage.getItem('user')!)
@@ -33,28 +31,14 @@ function Home() {
   const { puntos } = usePuntos();
 
   const {
-    CloseSession,
+    CallbackCloseSession,
     messageError,
     openError,
     setOpenError,
   } = useCloseSession();
 
-  const goToLogin = () => {
-    console.log('Cerrando sesión');
-    
-    localStorage.removeItem('user');
-    localStorage.removeItem('puntos');
-    history.push('/login');
-  };
-
-  useEffect(() => {
-    if (user === null) {
-      goToLogin();
-    }
-  }, []);
-
   const leaveLobby = () => {
-    CloseSession();
+    CallbackCloseSession();
   };
 
   const classes = useStyles();
