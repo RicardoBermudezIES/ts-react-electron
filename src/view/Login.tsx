@@ -33,7 +33,7 @@ function Login() {
     openError,
     setOpenError,
     messageError,
-    fidelizar,
+    callBackFidelizar,
     inputs,
     setInputs,
   } = useLoginUser();
@@ -85,8 +85,7 @@ function Login() {
   };
 
   const onSubmit = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    fidelizar();
+    callBackFidelizar();
   };
 
   const onChangeInput = (event) => {
