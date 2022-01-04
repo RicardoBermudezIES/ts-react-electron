@@ -20,8 +20,8 @@ export default function App() {
       <Router>
         <Promocional />
         <ThemeProvider theme={theme}>
-          <Box position="absolute" bottom="5px" right="5px">
-            <img style={{ width: 90 }} src={Juego} alt="juego Responsable" />
+          <Box position="absolute" bottom="5px" left="5px">
+            <img style={{ width: 110 }} src={Juego} alt="juego Responsable" />
           </Box>
 
           {!open ? null : (
