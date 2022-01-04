@@ -1,3 +1,4 @@
+/* eslint-disable promise/always-return */
 import { ipcRenderer } from 'electron';
 import { useCallback, useEffect, useState } from 'react';
 import { IProduct } from '../types/Products';
@@ -8,6 +9,15 @@ export default function useProduct() {
   const [productos, setProductos] = useState<string[]>();
   const [openError, setOpenError] = useState(false);
   const [messageError, setmessageError] = useState('');
+
+  const saveProduct = (Products: IProduct[]) => {
+    const newSet = new Set<string>();
+    Products.forEach((l: IProduct) => {
+      return newSet.add(l.categoriaPremio);
+    });
+    const uniq = [...newSet];
+    setProductos(uniq);
+  };
 
   const getBar = () => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -22,16 +32,27 @@ export default function useProduct() {
       casino: localCasino,
       token: localToken,
     };
-    ipc.send('bar', args);
-  };
+    ipc
+      .invoke('bar', args)
+      .then((res) => {
+        if (res?.statusDTO?.code !== '00') {
+          // eslint-disable-next-line no-console
+          setmessageError(res?.statusDTO?.message);
+          setOpenError(true);
+        }
 
-  const saveProduct = (Products: IProduct[]) => {
-    const newSet = new Set<string>();
-    Products.forEach((l: IProduct) => {
-      return newSet.add(l.categoriaPremio);
-    });
-    const uniq = [...newSet];
-    setProductos(uniq);
+        if (res?.statusDTO?.code === '00') {
+          localStorage.setItem(
+            'bar',
+            JSON.stringify(res?.listaVisualizarPremiosDTO)
+          );
+          saveProduct(res?.listaVisualizarPremiosDTO);
+        }
+      })
+      .catch((err) => {
+        setmessageError(err?.statusDTO?.message);
+        setOpenError(true);
+      });
   };
 
   const CallBackGetBar = useCallback(getBar, []);
@@ -40,24 +61,6 @@ export default function useProduct() {
     CallBackGetBar();
     return () => setProductos([]);
   }, [CallBackGetBar]);
-
-  useEffect(() => {
-    ipc.on('bar', (_event, arg) => {
-      if (arg?.statusDTO?.code !== '00') {
-        // eslint-disable-next-line no-console
-        setmessageError(arg?.statusDTO?.message);
-        setOpenError(true);
-      }
-
-      if (arg?.statusDTO?.code === '00') {
-        localStorage.setItem(
-          'bar',
-          JSON.stringify(arg?.listaVisualizarPremiosDTO)
-        );
-        saveProduct(arg?.listaVisualizarPremiosDTO);
-      }
-    });
-  }, []);
 
   return {
     productos,
