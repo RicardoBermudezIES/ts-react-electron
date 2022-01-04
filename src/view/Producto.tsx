@@ -177,7 +177,7 @@ export default function Io() {
               >
                 {puntos ? formatNumber(Number(puntos)) : null}
               </Typography>
-              <Typography variant="h6" align="right" component="p">
+              <Typography component="p" variant="h6" align="right">
                 Puntos
               </Typography>
             </Grid>
@@ -194,8 +194,8 @@ export default function Io() {
 
           <Box id="content" className={classes.root}>
             {Ios
-              ? itemsSourcesToDisplay().map((p, i) => (
-                  <Card key={i} className={classes.item}>
+              ? itemsSourcesToDisplay().map((p) => (
+                  <Card key={p.nombre} className={classes.item}>
                     <CardContent className={classes.content}>
                       <CardMedia
                         className={classes.cover}
@@ -203,10 +203,10 @@ export default function Io() {
                         title={p.imagen}
                       />
                       <Box className={classes.details}>
-                        <Typography variant="h4" align="center">
+                        <Typography component="p" variant="h4" align="center">
                           {p.nombre}
                         </Typography>
-                        <Typography variant="h4" align="center">
+                        <Typography component="p" variant="h4" align="center">
                           Disponibles: {p.unidadesDisponibles}
                         </Typography>
                         <Grid
@@ -233,10 +233,12 @@ export default function Io() {
       </Grid>
 
       <Dialog fullWidth maxWidth="sm" open={buyModal} onClose={CloseModalBuy}>
-        <DialogTitle>Io Comprado</DialogTitle>
+        <DialogTitle>Comprado</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            En un momento, le traeran su pedido.
+            <Typography component="p" variant="h4" align="center">
+              En un momento, le traeran su pedido.
+            </Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
