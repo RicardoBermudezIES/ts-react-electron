@@ -1,54 +1,61 @@
+/* eslint-disable promise/catch-or-return */
+/* eslint-disable promise/always-return */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
-import { useEffect, useState } from 'react';
-import { setTimeout } from 'timers';
+import { useCallback, useEffect, useState } from 'react';
 
 const ipc = ipcRenderer;
 export default function useHelp() {
   const [hasPending, setHasPending] = useState(false);
   const [solicitudes, setSolicitudes] = useState([]);
 
-  useEffect(() => {
-    const ObtenerSolicitudes = () => {
-      ipc.on('todas-solicitudes', (_event, arg) => {
-        if (arg?.statusDTO?.code !== '00') {
-          setSolicitudes([]);
-        }
-        if (arg?.statusDTO?.code === '00') {
-          setHasPending(false);
-          setSolicitudes(arg?.solicitudes);
-        }
-      });
-    };
-    ObtenerSolicitudes();
-  }, [solicitudes]);
-
-  useEffect(() => {
-    const PedirSolicitudes = () => {
-      const authConfig = JSON.parse(localStorage.getItem('authConfig')!);
-      const localCasino = localStorage.getItem('casino');
-      const localToken = localStorage.getItem('token');
-      const arg = {
-        userAdmin: authConfig?.user,
-        host: authConfig?.host,
-        casino: localCasino,
-        token: localToken,
-      };
-      console.log(hasPending);
-      if (hasPending === true) {
-        console.log('haciedno peticion de solicitudes');
-        ipc.send('todas-solicitudes', arg);
+  const ObtenerSolicitudes = () => {
+    ipc.on('todas-solicitudes', (_event, arg) => {
+      if (arg?.statusDTO?.code !== '00') {
+        setSolicitudes([]);
       }
-    };
+      if (arg?.statusDTO?.code === '00') {
+        setHasPending(false);
+        setSolicitudes(arg?.solicitudes);
+      }
+    });
+  };
+  const CallBackObtenerSolicitudes = useCallback(ObtenerSolicitudes, []);
 
+  useEffect(() => {
+    CallBackObtenerSolicitudes();
+
+    return () => setSolicitudes([]);
+  }, [CallBackObtenerSolicitudes]);
+
+  const PedirSolicitudes = () => {
+    const authConfig = JSON.parse(localStorage.getItem('authConfig')!);
+    const localCasino = localStorage.getItem('casino');
+    const localToken = localStorage.getItem('token');
+    const arg = {
+      userAdmin: authConfig?.user,
+      host: authConfig?.host,
+      casino: localCasino,
+      token: localToken,
+    };
+    console.log(hasPending);
+    console.log('haciedno peticion de solicitudes');
+    ipc.send('todas-solicitudes', arg);
+  };
+
+  const callBackPedirSolicitudes = useCallback(PedirSolicitudes, [hasPending]);
+
+  useEffect(() => {
     const myInterval = setInterval(() => {
-      PedirSolicitudes();
-    }, 1000 * 60 * 2);
+      if (hasPending === true) {
+        callBackPedirSolicitudes();
+      }
+    }, 1000 * 30);
     return () => {
       clearInterval(myInterval);
     };
-  }, [hasPending]);
+  }, [callBackPedirSolicitudes, hasPending]);
 
   const solicitarAyuda = () => {
     setHasPending(true);
@@ -70,14 +77,19 @@ export default function useHelp() {
       token: localToken,
     };
 
-    setTimeout(() => {
-      ipc.send('crearSolicitud', args);
-    }, 500);
+    ipc
+      .invoke('crearSolicitud', args)
+      .then((res) => {
+        if (res?.statusDTO?.code === '00') {
+          console.log('haciedno peticion de solicitudes');
+          setHasPending(false);
+          callBackPedirSolicitudes();
+        }
+      })
+      .catch(() => setHasPending(false));
   };
 
-  const solicitar = () => {
-    solicitarAyuda();
-  };
+  const solicitar = useCallback(solicitarAyuda, [callBackPedirSolicitudes]);
 
   const hasSolicitudes = () => {
     const localMaquina = localStorage.getItem('maquina');
