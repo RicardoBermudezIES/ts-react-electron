@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Button, Typography } from '@material-ui/core';
-import React, { ReactElement } from 'react';
+import React, { memo, ReactElement } from 'react';
 
 import { PhoneIcon } from '../../iconos/PhoneIcon';
 import useHelp from '../../Hook/useHelp';
 
-export default function ButtonHelper(): ReactElement {
+function ButtonHelper(): ReactElement {
   const { hasPending, solicitar, hasSolicitudes } = useHelp();
 
   return (
@@ -33,3 +33,5 @@ export default function ButtonHelper(): ReactElement {
     </>
   );
 }
+
+export default memo(ButtonHelper);
