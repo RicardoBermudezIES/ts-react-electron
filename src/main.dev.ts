@@ -116,20 +116,20 @@ const createWindow = async () => {
     }
   });
 
-  mainWindow.webContents.session.webRequest.onHeadersReceived(
-    { urls: ['*://*/*'] },
-    (d, c) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      if (d?.responseHeaders!['X-Frame-Options']) {
-        delete d.responseHeaders['X-Frame-Options'];
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      } else if (d?.responseHeaders!['x-frame-options']) {
-        delete d.responseHeaders['x-frame-options'];
-      }
+  // mainWindow.webContents.session.webRequest.onHeadersReceived(
+  //   { urls: ['*://*/*'] },
+  //   (d, c) => {
+  //     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  //     if (d?.responseHeaders!['X-Frame-Options']) {
+  //       delete d.responseHeaders['X-Frame-Options'];
+  //       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  //     } else if (d?.responseHeaders!['x-frame-options']) {
+  //       delete d.responseHeaders['x-frame-options'];
+  //     }
 
-      c({ cancel: false, responseHeaders: d.responseHeaders });
-    }
-  );
+  //     c({ cancel: false, responseHeaders: d.responseHeaders });
+  //   }
+  // );
 
   mainWindow.on('closed', () => {
     mainWindow = undefined;
@@ -302,25 +302,23 @@ ipc.on('realizar-peticion', async (event, arg) => {
 });
 
 // consulta listar peticion por peticiones
-ipc.on('listar-peticiones', async (event, arg) => {
+ipc.handle('listar-peticiones', async (_event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
   res = await listarPeticionesXCliente(arg);
 
   if (res.response?.status === 400) {
-    event.reply('listar-peticiones', { Error: 'bad request' });
+    return { Error: 'bad request' };
   }
 
   if (res.response?.status === 404) {
-    event.reply('listar-peticiones', { Error: 'Recurso no encontrado' });
+    return { Error: 'Recurso no encontrado' };
   }
 
   if (res.statusDTO?.code !== '00') {
-    event.reply('listar-peticiones', res);
+    return res;
   }
-  if (res.statusDTO?.code === '00') {
-    event.reply('listar-peticiones', res);
-  }
+  return res;
 });
 
 // consulta anular peticiones
