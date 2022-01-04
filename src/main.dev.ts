@@ -91,8 +91,8 @@ const createWindow = async () => {
     show: false,
     width: 1280,
     height: 480,
-    // frame: false,
-    // kiosk: true,
+    frame: false,
+     kiosk: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -211,23 +211,18 @@ ipc.on('visualizarPuntos', async (event, arg) => {
   }
 });
 
-ipc.on('cerrar-sesion', async (event, arg) => {
-  let res;
-
-  res = await closeSession(arg);
+ipc.handle('cerrar-sesion', async (_event, arg) => {
+  const res = await closeSession(arg);
 
   if (res?.response?.status === 400) {
-    event.reply('cerrar-sesion', { Error: 'bad request' });
+    return { Error: 'bad request' };
   }
 
   if (res?.statusDTO?.code !== '00') {
-    event.reply('cerrar-sesion', res);
+    return res;
   }
 
-  if (res?.statusDTO?.code === '00') {
-    console.log(res, 'cerrar sesion');
-    event.reply('cerrar-sesion', res);
-  }
+  return res;
 });
 
 // consultar bar
