@@ -91,8 +91,8 @@ const createWindow = async () => {
     show: false,
     width: 1280,
     height: 480,
-    frame: false,
-     kiosk: true,
+    // frame: false,
+    // kiosk: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -376,41 +376,34 @@ ipc.on('visualizarPuntosxDia', async (event, arg) => {
 });
 
 // soporte ***** crear solicitud
-ipc.on('crearSolicitud', async (event, arg) => {
-  let res;
-  // eslint-disable-next-line prefer-const
-  res = await crearSolicitud(arg);
+ipc.handle('crearSolicitud', async (_event, arg) => {
+  const res = await crearSolicitud(arg);
 
   if (res.response?.status === 400) {
-    event.reply('crearSolicitud', { Error: 'bad request' });
+    return { Error: 'bad request' };
   }
   if (res.statusDTO?.code !== '00') {
     console.log(res);
-    event.reply('crearSolicitud', res);
+    return res;
   }
-  if (res.statusDTO?.code === '00') {
-    console.log(res);
-    event.reply('crearSolicitud', res);
-  }
+
+  console.log(res);
+  return res;
 });
 
 /// todas-solicitudes
-ipc.on('todas-solicitudes', async (event, arg) => {
-  let res;
-  // eslint-disable-next-line prefer-const
-  res = await todasSolicitudes(arg);
+ipc.handle('todas-solicitudes', async (_event, arg) => {
+  const res = await todasSolicitudes(arg);
 
   if (res.response?.status === 400) {
-    event.reply('todas-solicitudes', { Error: 'bad request' });
+    return { Error: 'bad request' };
   }
   if (res.statusDTO?.code !== '00') {
     console.log(res);
-    event.reply('todas-solicitudes', res);
+    return res;
   }
-  if (res.statusDTO?.code === '00') {
-    console.log(res);
-    event.reply('todas-solicitudes', res);
-  }
+
+  return res;
 });
 
 app.on('window-all-closed', () => {
