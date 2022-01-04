@@ -3,33 +3,14 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const ipc = ipcRenderer;
 export default function useHelp() {
   const [hasPending, setHasPending] = useState(false);
   const [solicitudes, setSolicitudes] = useState([]);
 
-  const ObtenerSolicitudes = () => {
-    ipc.on('todas-solicitudes', (_event, arg) => {
-      if (arg?.statusDTO?.code !== '00') {
-        setSolicitudes([]);
-      }
-      if (arg?.statusDTO?.code === '00') {
-        setHasPending(false);
-        setSolicitudes(arg?.solicitudes);
-      }
-    });
-  };
-  const CallBackObtenerSolicitudes = useCallback(ObtenerSolicitudes, []);
-
-  useEffect(() => {
-    CallBackObtenerSolicitudes();
-
-    return () => setSolicitudes([]);
-  }, [CallBackObtenerSolicitudes]);
-
-  const PedirSolicitudes = () => {
+  const PedirSolicitudes = useCallback(() => {
     const authConfig = JSON.parse(localStorage.getItem('authConfig')!);
     const localCasino = localStorage.getItem('casino');
     const localToken = localStorage.getItem('token');
@@ -41,21 +22,37 @@ export default function useHelp() {
     };
     console.log(hasPending);
     console.log('haciedno peticion de solicitudes');
-    ipc.send('todas-solicitudes', arg);
-  };
+    if (hasPending === true) return;
+    ipc
+      .invoke('todas-solicitudes', arg)
+      .then((res) => {
+        if (res?.statusDTO?.code !== '00') {
+          setSolicitudes([]);
+        }
+        if (res?.statusDTO?.code === '00') {
+          setHasPending(false);
+          setSolicitudes(res?.solicitudes);
+        }
+      })
+      .catch(() => {
+        setSolicitudes([]);
+      });
+  }, [hasPending]);
 
-  const callBackPedirSolicitudes = useCallback(PedirSolicitudes, [hasPending]);
+  useEffect(() => {
+    PedirSolicitudes();
+
+    return () => setSolicitudes([]);
+  }, [PedirSolicitudes]);
 
   useEffect(() => {
     const myInterval = setInterval(() => {
-      if (hasPending === true) {
-        callBackPedirSolicitudes();
-      }
+      PedirSolicitudes();
     }, 1000 * 30);
     return () => {
       clearInterval(myInterval);
     };
-  }, [callBackPedirSolicitudes, hasPending]);
+  }, [PedirSolicitudes]);
 
   const solicitarAyuda = () => {
     setHasPending(true);
@@ -81,15 +78,16 @@ export default function useHelp() {
       .invoke('crearSolicitud', args)
       .then((res) => {
         if (res?.statusDTO?.code === '00') {
-          console.log('haciedno peticion de solicitudes');
           setHasPending(false);
-          callBackPedirSolicitudes();
+          PedirSolicitudes();
         }
       })
-      .catch(() => setHasPending(false));
+      .catch(() => {
+        console.log('Hubo un error');
+      });
   };
 
-  const solicitar = useCallback(solicitarAyuda, [callBackPedirSolicitudes]);
+  const solicitar = useCallback(solicitarAyuda, [PedirSolicitudes]);
 
   const hasSolicitudes = () => {
     const localMaquina = localStorage.getItem('maquina');
