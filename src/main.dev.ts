@@ -232,27 +232,23 @@ ipc.on('cerrar-sesion', async (event, arg) => {
 });
 
 // consultar bar
-ipc.on('bar', async (event, arg) => {
-  let res;
-  // eslint-disable-next-line prefer-const
-  res = await barServices(arg);
+ipc.handle('bar', async (_event, arg) => {
+  const res = await barServices(arg);
 
   if (res.response?.status === 400) {
-    event.reply('bar', { Error: 'bad request' });
+    return { Error: 'bad request' };
   }
 
   if (res.response?.status === 404) {
-    event.reply('bar', { Error: 'Recurso no encontrado' });
+    return { Error: 'Recurso no encontrado' };
   }
 
   if (res.statusDTO?.code !== '00') {
     console.log(res);
-    event.reply('bar', res);
+    return res;
   }
-  if (res.statusDTO?.code === '00') {
-    console.log(res);
-    event.reply('bar', res);
-  }
+
+  return res;
 });
 
 // consulta comprar productos
