@@ -88,12 +88,12 @@ function Login() {
     callBackFidelizar();
   };
 
-  const onChangeInput = (event) => {
-    const inputVal = event.target.value;
+  const onChangeInput = (event: HTMLInputElement) => {
+    const inputVal = event.target;
 
     setInputs({
       ...inputs,
-      [inputName]: inputVal,
+      [inputName]: inputVal.value,
     });
   };
 
