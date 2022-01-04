@@ -128,21 +128,14 @@ export default function ButtonPedidos(): ReactElement {
           ''
         )}
         <Cart />
-        <Typography variant="h6" style={{ color: 'white' }}>
+        <Typography component="p" variant="h6" style={{ color: 'white' }}>
           Órdenes
         </Typography>
       </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        fullWidth
-        maxWidth="lg"
-      >
-        <DialogTitle id="alert-dialog-title">Mis Pedidos</DialogTitle>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
+        <DialogTitle>Mis Pedidos</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText>
             <Grid container direction="row" spacing={1}>
               {pedidos?.length > 0 ? (
                 pedidos?.map((pedido: IProduct) => (
@@ -157,7 +150,7 @@ export default function ButtonPedidos(): ReactElement {
                         }
                         title={pedido.nombre}
                       />
-                      <section className={classes.details}>
+                      <Box className={classes.details}>
                         <CardContent className={classes.content}>
                           <Typography component="p" variant="h5">
                             {pedido.nombre}
@@ -180,7 +173,7 @@ export default function ButtonPedidos(): ReactElement {
                           />
                         </CardContent>
 
-                        <div className={classes.controls}>
+                        <Box as="div" className={classes.controls}>
                           <Typography component="p" variant="h5">
                             {pedido.medioPago === 'Efectivo'
                               ? formatMoney(pedido.valorParaCanjear)
@@ -205,8 +198,8 @@ export default function ButtonPedidos(): ReactElement {
                               Confirmar
                             </Button>
                           )}
-                        </div>
-                      </section>
+                        </Box>
+                      </Box>
                     </Card>
                   </Grid>
                 ))
