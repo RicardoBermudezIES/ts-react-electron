@@ -6,7 +6,7 @@ import useCloseSession from './useCloseSession';
 const ipc = ipcRenderer;
 
 export default function usePuntos() {
-  const { CloseSession } = useCloseSession();
+  const { CallbackCloseSession } = useCloseSession();
 
   const [puntos, setPuntos] = useState({
     cantidadPuntosDisponibles: null,
@@ -52,12 +52,17 @@ export default function usePuntos() {
 
   useEffect(() => {
     sendPuntos();
+    return () =>
+      setPuntos({
+        cantidadPuntosDisponibles: null,
+        cantidadPuntosRedimidos: null,
+      });
   }, []);
 
   const getPuntos = () => {
     ipc.on('visualizarPuntos', (_event, arg) => {
       if (arg?.statusDTO?.code === '38') {
-        CloseSession();
+        CallbackCloseSession();
       }
       if (arg?.statusDTO?.code === '00') {
         localStorage.setItem(
@@ -75,7 +80,7 @@ export default function usePuntos() {
     });
   };
 
-  const callbackGetPuntos = useCallback(getPuntos, [CloseSession]);
+  const callbackGetPuntos = useCallback(getPuntos, [CallbackCloseSession]);
 
   useEffect(() => {
     callbackGetPuntos();
