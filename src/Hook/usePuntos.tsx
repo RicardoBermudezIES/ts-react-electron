@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useCloseSession from './useCloseSession';
 
 const ipc = ipcRenderer;
@@ -14,13 +15,13 @@ export default function usePuntos() {
 
   const sendPuntos = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    const authConfig = JSON.parse(localStorage.getItem('authConfig'));
+    const authConfig = JSON.parse(localStorage.getItem('authConfig')!);
     const localMaquina = localStorage.getItem('maquina');
     const localCasino = localStorage.getItem('casino');
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const localToken = localStorage.getItem('token');
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('user')!);
     const args = {
       host: authConfig?.host,
       casino: localCasino,
@@ -29,24 +30,32 @@ export default function usePuntos() {
       token: localToken,
     };
     if (user !== null) {
+      // eslint-disable-next-line no-console
+      console.log('pidiendo puntos');
+
       ipc.send('visualizarPuntos', args);
     }
   };
 
+  const callback = useCallback(
+    () => setInterval(() => sendPuntos(), 1000 * 30),
+    []
+  );
+
   useEffect(() => {
-    const myInterval = setInterval(() => sendPuntos(), 1000 * 30);
+    const myInterval = callback();
     myInterval;
     return () => {
       clearInterval(myInterval);
     };
-  }, []);
+  }, [callback]);
 
   useEffect(() => {
     sendPuntos();
   }, []);
 
   const getPuntos = () => {
-    ipc.on('visualizarPuntos', (event, arg) => {
+    ipc.on('visualizarPuntos', (_event, arg) => {
       if (arg?.statusDTO?.code === '38') {
         CloseSession();
       }
@@ -66,8 +75,10 @@ export default function usePuntos() {
     });
   };
 
+  const callbackGetPuntos = useCallback(getPuntos, [CloseSession]);
+
   useEffect(() => {
-    getPuntos();
-  }, []);
+    callbackGetPuntos();
+  }, [callbackGetPuntos]);
   return { puntos };
 }
