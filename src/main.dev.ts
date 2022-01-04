@@ -91,8 +91,8 @@ const createWindow = async () => {
     show: false,
     width: 1280,
     height: 480,
-    frame: false,
-    kiosk: true,
+    // frame: false,
+    // kiosk: true,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -186,10 +186,9 @@ ipc.on('VincularMaquina', async (event, arg) => {
 });
 
 // fidelizarMaquina
-ipc.on('fidelizarMaquina', async (event, arg) => {
+ipc.handle('fidelizarMaquina', async (_event, arg) => {
   const res = await fidelzarMaquina(arg);
-  console.log(res);
-  event.reply('fidelizarMaquina', res);
+  return res;
 });
 
 // VisualizarPuntos
