@@ -1,6 +1,7 @@
+/* eslint-disable promise/always-return */
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ipcRenderer } from 'electron';
 import { useHistory } from 'react-router-dom';
 
@@ -15,7 +16,6 @@ export default function useLoginUser() {
     token: string;
     passwordMaster: string;
   }>({
-    // eslint-disable-next-line @typescript-eslint/ban-types
     username: '',
     token: '',
     passwordMaster: '',
@@ -42,42 +42,40 @@ export default function useLoginUser() {
       token: localToken,
     };
 
-    ipc.send('fidelizarMaquina', args);
-  };
-
-  const callBackFidelizar = useCallback(fidelizar, [inputs?.username]);
-
-  useEffect(() => {
-    ipc.on('fidelizarMaquina', (_event, arg) => {
-      // eslint-disable-next-line eqeqeq
-      if (arg === undefined) {
-        // eslint-disable-next-line no-console
-        setMessageError('intente de nuevo, por favor.');
-        setOpenError(true);
-      }
-      if (arg?.statusDTO?.code !== '00') {
-        // eslint-disable-next-line no-console
-        setMessageError(arg?.statusDTO?.message);
-        setOpenError(true);
-      }
-
-      if (arg?.statusDTO?.code === '00') {
+    ipc
+      .invoke('fidelizarMaquina', args)
+      .then((res) => {
+        if (res === undefined) {
+          // eslint-disable-next-line no-console
+          setMessageError('intente de nuevo, por favor.');
+          setOpenError(true);
+        }
+        if (res?.statusDTO?.code !== '00') {
+          // eslint-disable-next-line no-console
+          setMessageError(res?.statusDTO?.message);
+          setOpenError(true);
+        }
         // eslint-disable-next-line no-console
         const numeroDocumento = localStorage.getItem('numeroDocumento');
         localStorage.setItem(
           'user',
           JSON.stringify({
             numeroDocumento,
-            nombre: arg.nombreCompleto,
-            clave: arg.clave,
-            billetero: arg.enableBilletero,
+            nombre: res.nombreCompleto,
+            clave: res.clave,
+            billetero: res.enableBilletero,
           })
         );
 
         if (localStorage.getItem('user')) history.push('/');
-      }
-    });
-  }, [history]);
+      })
+      .catch((err) => {
+        setMessageError(err?.statusDTO?.message);
+        setOpenError(true);
+      });
+  };
+
+  const callBackFidelizar = useCallback(fidelizar, [history, inputs?.username]);
 
   return {
     openError,
