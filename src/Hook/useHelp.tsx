@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const ipc = ipcRenderer;
 export default function useHelp() {
@@ -21,22 +21,22 @@ export default function useHelp() {
       token: localToken,
     };
     console.log(hasPending);
-    console.log('haciedno peticion de solicitudes');
-    if (hasPending === true) return;
+
     ipc
       .invoke('todas-solicitudes', arg)
       .then((res) => {
         if (res?.statusDTO?.code !== '00') {
+          setHasPending(false);
           setSolicitudes([]);
         }
         if (res?.statusDTO?.code === '00') {
-          setHasPending(false);
           setSolicitudes(res?.solicitudes);
         }
       })
       .catch(() => {
         setSolicitudes([]);
       });
+    console.log('haciedno peticion de solicitudes');
   }, [hasPending]);
 
   useEffect(() => {
@@ -46,16 +46,18 @@ export default function useHelp() {
   }, [PedirSolicitudes]);
 
   useEffect(() => {
-    const myInterval = setInterval(() => {
-      PedirSolicitudes();
-    }, 1000 * 30);
+    let myInterval: NodeJS.Timeout;
+    if (hasPending === true) {
+      myInterval = setInterval(() => {
+        PedirSolicitudes();
+      }, 1000 * 60);
+    }
     return () => {
       clearInterval(myInterval);
     };
-  }, [PedirSolicitudes]);
+  }, [PedirSolicitudes, hasPending]);
 
   const solicitarAyuda = () => {
-    setHasPending(true);
     const auth = JSON.parse(localStorage.getItem('authConfig')!);
     ipc.send('allways-auth', auth);
 
@@ -78,7 +80,7 @@ export default function useHelp() {
       .invoke('crearSolicitud', args)
       .then((res) => {
         if (res?.statusDTO?.code === '00') {
-          setHasPending(false);
+          setHasPending(true);
           PedirSolicitudes();
         }
       })
