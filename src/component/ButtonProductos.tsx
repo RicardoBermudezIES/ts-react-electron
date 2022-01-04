@@ -1,12 +1,16 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable import/prefer-default-export */
-import { Button, Chip, Grid, Typography } from '@material-ui/core';
 import React from 'react';
+import { Button, Chip, Grid, Typography } from '@material-ui/core';
 import { formatMoney, formatNumber } from '../helpers/format';
 import useListarPedido from '../Hook/useListarPedido';
 import { IProduct } from '../types/Products';
 
-export const ButtonProductos = ({ p }: IProduct) => {
+interface Props {
+  p: IProduct;
+}
+
+export const ButtonProductos = ({ p }: Props): JSX.Element => {
   const {
     hasQueque,
     doBuy,
@@ -65,7 +69,7 @@ export const ButtonProductos = ({ p }: IProduct) => {
                 disabled
                 variant="contained"
                 color="secondary"
-                size="medium"
+                size="small"
               >
                 Anular
               </Button>
@@ -76,6 +80,7 @@ export const ButtonProductos = ({ p }: IProduct) => {
                 onClick={() => confirmarPeticion(p?.pk)}
                 variant="contained"
                 color="primary"
+                size="small"
               >
                 Aceptar
               </Button>
