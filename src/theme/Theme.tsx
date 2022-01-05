@@ -30,6 +30,9 @@ export const theme = createMuiTheme({
     MuiTextField: {
       root: {
         background: '#fff',
+        '& label': {
+          fontSize: 24,
+        },
         '& input': {
           fontSize: '1.5em',
         },
