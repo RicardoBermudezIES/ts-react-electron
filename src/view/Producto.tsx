@@ -61,8 +61,8 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 auto',
   },
   cover: {
-    minWidth: 152,
-    width: '40%',
+    minWidth: 120,
+    width: 120,
     minHeight: 300,
     maxHeight: 100,
     objectFit: 'cover',
