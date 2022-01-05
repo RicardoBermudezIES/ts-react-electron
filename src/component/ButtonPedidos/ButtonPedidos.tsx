@@ -14,19 +14,19 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
+import { AlarmAddRounded, SendRounded } from '@material-ui/icons';
 import React, { ReactElement } from 'react';
 import { formatMoney, formatNumber } from '../../helpers/format';
 import useListarPedido from '../../Hook/useListarPedido';
 import Cart from '../../iconos/Cart';
 import { IProduct } from '../../types/Products';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    width: 360,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: '4px !important',
+    padding: '8px !important',
     gap: 12,
     '&:last-child': {
       padding: 0,
@@ -44,8 +44,10 @@ const useStyles = makeStyles(() => ({
     flex: '1 0 auto',
   },
   cover: {
-    width: 140,
-    height: 50,
+    width: 90,
+    height: 90,
+    objectFit: 'cover',
+    backgroundSize: 'contain',
   },
   controls: {
     display: 'flex',
@@ -76,6 +78,14 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  chipPending: {
+    background: theme.palette.warning.main,
+    color: '#000',
+  },
+  chipSend: {
+    background: theme.palette.success.main,
+    color: '#fff',
   },
 }));
 
@@ -140,7 +150,7 @@ export default function ButtonPedidos(): ReactElement {
               {pedidos?.length > 0 ? (
                 pedidos?.map((pedido: IProduct) => (
                   <Grid item key={pedido?.pk}>
-                    <Card className={classes.root}>
+                    <Card variant="outlined" className={classes.root}>
                       <CardMedia
                         className={classes.cover}
                         image={
@@ -163,17 +173,27 @@ export default function ButtonPedidos(): ReactElement {
                             {pedido.categoriaPremio}
                           </Typography>
                           <Chip
+                            icon={
+                              pedido.estado === 'EN_COLA' ? (
+                                <AlarmAddRounded />
+                              ) : (
+                                <SendRounded style={{ color: '#fff' }} />
+                              )
+                            }
+                            className={`${
+                              pedido.estado === 'EN_COLA'
+                                ? classes.chipPending
+                                : classes.chipSend
+                            }`}
                             label={
                               pedido.estado === 'EN_COLA'
                                 ? 'Pendiente'
-                                : 'En proceso'
+                                : 'Enviado'
                             }
-                            clickable
-                            color="primary"
                           />
                         </CardContent>
 
-                        <Box as="div" className={classes.controls}>
+                        <Box className={classes.controls}>
                           <Typography component="p" variant="h5">
                             {pedido.medioPago === 'Efectivo'
                               ? formatMoney(pedido.valorParaCanjear)
@@ -181,6 +201,7 @@ export default function ButtonPedidos(): ReactElement {
                           </Typography>
                           {pedido.estado === 'EN_COLA' ? (
                             <Button
+                              size="small"
                               variant="contained"
                               color="primary"
                               onClick={() => CancelPedido(pedido.pk)}
@@ -190,6 +211,7 @@ export default function ButtonPedidos(): ReactElement {
                             </Button>
                           ) : (
                             <Button
+                              size="small"
                               variant="contained"
                               color="secondary"
                               onClick={() => ConfirmPedido(pedido.pk)}
