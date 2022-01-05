@@ -19,7 +19,7 @@ export const theme = createMuiTheme({
     success: {
       main: lightGreen[500],
       contrastText: '#000',
-    }
+    },
   },
   overrides: {
     MuiButton: {
