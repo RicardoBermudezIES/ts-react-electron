@@ -61,8 +61,8 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 auto',
   },
   cover: {
-    minWidth: 152,
-    width: '40%',
+    minWidth: 120,
+    width: 120,
     minHeight: 300,
     maxHeight: 100,
     objectFit: 'cover',
@@ -147,7 +147,14 @@ export default function Io() {
     <Box p={1}>
       <Grid container direction="column" spacing={3}>
         <Grid item lg={12} md={12} sm={12} xs={12}>
-          <Grid container direction="row" spacing={2} alignItems="center">
+          <Grid
+            container
+            direction="row"
+            spacing={2}
+            alignItems="center"
+            alignContent="center"
+            justify="space-between"
+          >
             <Grid item lg={2} md={2} sm={2} xs={2}>
               <Button
                 size="large"
@@ -165,7 +172,7 @@ export default function Io() {
                 align="center"
                 style={{ fontWeight: 'bold' }}
               >
-                {user ? shortName(user.nombre) : 'Anonimo'}
+                {user ? shortName(user.nombre) : 'Anónimo'}
               </Typography>
             </Grid>
             <Grid item lg={3} md={3} sm={3} xs={3}>
@@ -175,7 +182,7 @@ export default function Io() {
                 component="p"
                 style={{ fontWeight: 'bold' }}
               >
-                {puntos ? formatNumber(Number(puntos)) : null}
+                {user ? formatNumber(Number(puntos)) : null}
               </Typography>
               <Typography component="p" variant="h6" align="right">
                 Puntos
@@ -254,10 +261,12 @@ export default function Io() {
         open={redimirModal}
         onClose={handleCloseRedimirModal}
       >
-        <DialogTitle>Io Redimido</DialogTitle>
+        <DialogTitle> Redimido</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            En un momento, le traeran su pedido.
+            <Typography component="p" variant="h4" align="center">
+              En un momento, le traeran su pedido.
+            </Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

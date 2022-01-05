@@ -1,6 +1,12 @@
 /* eslint-disable import/prefer-default-export */
 import { createMuiTheme } from '@material-ui/core/styles';
-import { pink, lightBlue } from '@material-ui/core/colors/';
+import {
+  pink,
+  lightBlue,
+  yellow,
+  lightGreen,
+  red,
+} from '@material-ui/core/colors/';
 
 export const theme = createMuiTheme({
   palette: {
@@ -10,6 +16,18 @@ export const theme = createMuiTheme({
     },
     secondary: {
       main: lightBlue[500],
+      contrastText: '#fff',
+    },
+    warning: {
+      main: yellow[500],
+      contrastText: '#000',
+    },
+    success: {
+      main: lightGreen[500],
+      contrastText: '#000',
+    },
+    error: {
+      main: red[500],
       contrastText: '#fff',
     },
   },
@@ -30,6 +48,9 @@ export const theme = createMuiTheme({
     MuiTextField: {
       root: {
         background: '#fff',
+        '& label': {
+          fontSize: 24,
+        },
         '& input': {
           fontSize: '1.5em',
         },

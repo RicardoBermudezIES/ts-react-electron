@@ -1,14 +1,14 @@
-*{
+* {
   box-shadow: none;
   transition: none !important;
-  animation:  none !important;
 }
 
 .hg-theme-default {
   background-color: #ececec;
   border-radius: 5px;
   box-sizing: border-box;
-  font-family: HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  font-family: HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue,
+    Helvetica, Arial, Lucida Grande, sans-serif;
   overflow: hidden;
   padding: 5px;
   touch-action: manipulation;
@@ -16,46 +16,46 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  width: 100%
+  width: 100%;
 }
 
 .hg-theme-default .hg-button span {
-  pointer-events: none
+  pointer-events: none;
 }
 
 .hg-theme-default button.hg-button {
   border-width: 0;
   font-size: inherit;
-  outline: 0
+  outline: 0;
 }
 
 .hg-theme-default .hg-button {
   display: inline-block;
-  flex-grow: 1
+  flex-grow: 1;
 }
 
 .hg-theme-default .hg-row {
-  display: flex
+  display: flex;
 }
 
 .hg-theme-default .hg-row:not(:last-child) {
-  margin-bottom: 5px
+  margin-bottom: 5px;
 }
 
 .hg-theme-default .hg-row .hg-button:not(:last-child) {
-  margin-right: 5px
+  margin-right: 5px;
 }
 
 .hg-theme-default .hg-row .hg-button-container {
-  margin-right: 5px
+  margin-right: 5px;
 }
 
-.hg-theme-default .hg-row>div:last-child {
-  margin-right: 0
+.hg-theme-default .hg-row > div:last-child {
+  margin-right: 0;
 }
 
 .hg-theme-default .hg-row .hg-button-container {
-  display: flex
+  display: flex;
 }
 
 .hg-theme-default .hg-button {
@@ -64,21 +64,21 @@
   background: #fff;
   border-bottom: 1px solid #b5b5b5;
   border-radius: 5px;
-  box-shadow: 0 0 3px -1px rgba(0, 0, 0, .3);
+  box-shadow: 0 0 3px -1px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
   cursor: pointer;
   display: flex;
   height: 40px;
   justify-content: center;
-  padding: 5px
+  padding: 5px;
 }
 
 .hg-theme-default .hg-button.hg-standardBtn {
-  width: 20px
+  width: 20px;
 }
 
 .hg-theme-default .hg-button.hg-activeButton {
-  background: #efefef
+  background: #efefef;
 }
 
 .hg-theme-default.hg-layout-numeric .hg-button {
@@ -86,37 +86,37 @@
   display: flex;
   height: 60px;
   justify-content: center;
-  width: 33.3%
+  width: 33.3%;
 }
 
 .hg-theme-default .hg-button.hg-button-numpadadd,
 .hg-theme-default .hg-button.hg-button-numpadenter {
-  height: 85px
+  height: 85px;
 }
 
 .hg-theme-default .hg-button.hg-button-numpad0 {
-  width: 105px
+  width: 105px;
 }
 
 .hg-theme-default .hg-button.hg-button-com {
-  max-width: 85px
+  max-width: 85px;
 }
 
 .hg-theme-default .hg-button.hg-standardBtn.hg-button-at {
-  max-width: 45px
+  max-width: 45px;
 }
 
 .hg-theme-default .hg-button.hg-selectedButton {
-  background: rgba(5, 25, 70, .53);
-  color: #fff
+  background: rgba(5, 25, 70, 0.53);
+  color: #fff;
 }
 
-.hg-theme-default .hg-button.hg-standardBtn[data-skbtn=".com"] {
-  max-width: 82px
+.hg-theme-default .hg-button.hg-standardBtn[data-skbtn='.com'] {
+  max-width: 82px;
 }
 
-.hg-theme-default .hg-button.hg-standardBtn[data-skbtn="@"] {
-  max-width: 60px
+.hg-theme-default .hg-button.hg-standardBtn[data-skbtn='@'] {
+  max-width: 60px;
 }
 
 .hg-candidate-box {
@@ -131,7 +131,7 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none
+  user-select: none;
 }
 
 ul.hg-candidate-box-list {
@@ -139,7 +139,7 @@ ul.hg-candidate-box-list {
   flex: 1;
   list-style: none;
   margin: 0;
-  padding: 0
+  padding: 0;
 }
 
 li.hg-candidate-box-list-item {
@@ -147,24 +147,24 @@ li.hg-candidate-box-list-item {
   display: flex;
   height: 40px;
   justify-content: center;
-  width: 40px
+  width: 40px;
 }
 
 li.hg-candidate-box-list-item:hover {
-  background: rgba(0, 0, 0, .03);
-  cursor: pointer
+  background: rgba(0, 0, 0, 0.03);
+  cursor: pointer;
 }
 
 li.hg-candidate-box-list-item:active {
-  background: rgba(0, 0, 0, .1)
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .hg-candidate-box-prev:before {
-  content: "◄"
+  content: '◄';
 }
 
 .hg-candidate-box-next:before {
-  content: "►"
+  content: '►';
 }
 
 .hg-candidate-box-next,
@@ -174,45 +174,41 @@ li.hg-candidate-box-list-item:active {
   color: #969696;
   cursor: pointer;
   display: flex;
-  padding: 0 10px
+  padding: 0 10px;
 }
 
 .hg-candidate-box-next {
   border-bottom-right-radius: 5px;
-  border-top-right-radius: 5px
+  border-top-right-radius: 5px;
 }
 
 .hg-candidate-box-prev {
   border-bottom-left-radius: 5px;
-  border-top-left-radius: 5px
+  border-top-left-radius: 5px;
 }
 
 .hg-candidate-box-btn-active {
-  color: #444
+  color: #444;
 }
-
 
 body {
   position: relative;
   color: white;
   height: 100vh;
-  background: radial-gradient(circle, rgba(24, 29, 69, 1) 0%, rgba(11, 16, 38, 1) 100%);
+  background: radial-gradient(
+    circle,
+    rgba(24, 29, 69, 1) 0%,
+    rgba(11, 16, 38, 1) 100%
+  );
   font-family: sans-serif;
   overflow: hidden;
   margin: 0;
 }
 
-
 .simple-keyboard.hg-layout-default .hg-button.hg-red {
   background: #ff0000b3;
   color: white;
 }
-
-.simple-keyboard.hg-layout-default .hg-button.hg-highlight {
-  box-shadow: 0px 0px 40px 5px #ffff0080;
-  z-index: 1;
-}
-
 
 .keyboardContainer {
   position: relative;
@@ -220,8 +216,7 @@ body {
   width: 100%;
   font-weight: 900;
   color: black;
-  bottom: 130px;
-
+  bottom: 110px;
 }
 
 .keyboardContainer-config {
@@ -247,12 +242,11 @@ body {
 }
 
 .keyboardContainer-login .hg-theme-default .hg-row .hg-button {
-  height: 112px;
+  height: 110px;
 }
 
 .hg-button {
   font-size: 1.5em;
-
 }
 
 .hg-theme-default .hg-row .hg-button {
@@ -266,7 +260,6 @@ body {
   left: -150px;
 }
 
-
 .closeKeyBoard {
   border: none;
   padding: 15px 30px;
@@ -278,7 +271,6 @@ body {
   margin-bottom: 12px;
   cursor: pointer;
 }
-
 
 .hidden {
   display: none;
@@ -328,11 +320,9 @@ body {
   border-radius: 5px;
 }
 
-.inactive{
+.inactive {
   opacity: 0.5;
 }
-
-
 
 /* Contador del Home */
 
@@ -395,13 +385,18 @@ body {
   -webkit-transform: translateZ(0);
 }
 
-.odometer.odometer-auto-theme .odometer-digit .odometer-value.odometer-last-value,
-.odometer.odometer-theme-slot-machine .odometer-digit .odometer-value.odometer-last-value {
+.odometer.odometer-auto-theme
+  .odometer-digit
+  .odometer-value.odometer-last-value,
+.odometer.odometer-theme-slot-machine
+  .odometer-digit
+  .odometer-value.odometer-last-value {
   position: absolute;
 }
 
 .odometer.odometer-auto-theme.odometer-animating-up .odometer-ribbon-inner,
-.odometer.odometer-theme-slot-machine.odometer-animating-up .odometer-ribbon-inner {
+.odometer.odometer-theme-slot-machine.odometer-animating-up
+  .odometer-ribbon-inner {
   -webkit-transition: -webkit-transform 2s;
   -moz-transition: -moz-transform 2s;
   -ms-transition: -ms-transform 2s;
@@ -409,8 +404,10 @@ body {
   transition: transform 2s;
 }
 
-.odometer.odometer-auto-theme.odometer-animating-up.odometer-animating .odometer-ribbon-inner,
-.odometer.odometer-theme-slot-machine.odometer-animating-up.odometer-animating .odometer-ribbon-inner {
+.odometer.odometer-auto-theme.odometer-animating-up.odometer-animating
+  .odometer-ribbon-inner,
+.odometer.odometer-theme-slot-machine.odometer-animating-up.odometer-animating
+  .odometer-ribbon-inner {
   -webkit-transform: translateY(-100%);
   -moz-transform: translateY(-100%);
   -ms-transform: translateY(-100%);
@@ -419,7 +416,8 @@ body {
 }
 
 .odometer.odometer-auto-theme.odometer-animating-down .odometer-ribbon-inner,
-.odometer.odometer-theme-slot-machine.odometer-animating-down .odometer-ribbon-inner {
+.odometer.odometer-theme-slot-machine.odometer-animating-down
+  .odometer-ribbon-inner {
   -webkit-transform: translateY(-100%);
   -moz-transform: translateY(-100%);
   -ms-transform: translateY(-100%);
@@ -427,8 +425,10 @@ body {
   transform: translateY(-100%);
 }
 
-.odometer.odometer-auto-theme.odometer-animating-down.odometer-animating .odometer-ribbon-inner,
-.odometer.odometer-theme-slot-machine.odometer-animating-down.odometer-animating .odometer-ribbon-inner {
+.odometer.odometer-auto-theme.odometer-animating-down.odometer-animating
+  .odometer-ribbon-inner,
+.odometer.odometer-theme-slot-machine.odometer-animating-down.odometer-animating
+  .odometer-ribbon-inner {
   -webkit-transition: -webkit-transform 2s;
   -moz-transition: -moz-transform 2s;
   -ms-transition: -ms-transform 2s;
@@ -448,42 +448,53 @@ body {
   border-radius: 0.34em;
   background-size: 100%;
   background-color: rgb(255, 255, 255);
-  padding: 0.10em;
+  padding: 0.1em;
   color: #ffffff;
   line-height: 1.15em;
 }
 
-
-
 .odometer.odometer-auto-theme .odometer-digit,
 .odometer.odometer-theme-slot-machine .odometer-digit {
-  -moz-box-shadow: inset 0 0 0.1em rgba(0, 0, 0, 0.5), 0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: inset 0 0 0.1em rgba(0, 0, 0, 0.5), 0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 0 0.1em rgba(0, 0, 0, 0.5), 0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset 0 0 0.1em rgba(0, 0, 0, 0.5),
+    0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0 0 0.1em rgba(0, 0, 0, 0.5),
+    0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 0.1em rgba(0, 0, 0, 0.5),
+    0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
   -moz-border-radius: 0.2em;
   -webkit-border-radius: 0.2em;
   border-radius: 0.2em;
   background-size: 100%;
-  background-image: linear-gradient(180deg, rgba(250, 93, 185, 1) 0%, rgba(239, 35, 35, 1) 100% );
-  padding: 0.1em 0.10em 0;
+  background-image: linear-gradient(
+    180deg,
+    rgba(250, 93, 185, 1) 0%,
+    rgba(239, 35, 35, 1) 100%
+  );
+  padding: 0.1em 0.1em 0;
 }
 
 .odometer.odometer-auto-theme .odometer-digit:first-child,
 .odometer.odometer-theme-slot-machine .odometer-digit:first-child {
-  -moz-box-shadow: inset 0.05em 0 0.1em rgba(0, 0, 0, 0.5), 0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: inset 0.05em 0 0.1em rgba(0, 0, 0, 0.5), 0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0.05em 0 0.1em rgba(0, 0, 0, 0.5), 0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset 0.05em 0 0.1em rgba(0, 0, 0, 0.5),
+    0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0.05em 0 0.1em rgba(0, 0, 0, 0.5),
+    0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0.05em 0 0.1em rgba(0, 0, 0, 0.5),
+    0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
 }
 
 .odometer.odometer-auto-theme .odometer-digit:last-child,
 .odometer.odometer-theme-slot-machine .odometer-digit:last-child {
-  -moz-box-shadow: inset -0.05em 0 0.1em rgba(0, 0, 0, 0.5), 0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: inset -0.05em 0 0.1em rgba(0, 0, 0, 0.5), 0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
-  box-shadow: inset -0.05em 0 0.1em rgba(0, 0, 0, 0.5), 0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset -0.05em 0 0.1em rgba(0, 0, 0, 0.5),
+    0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset -0.05em 0 0.1em rgba(0, 0, 0, 0.5),
+    0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
+  box-shadow: inset -0.05em 0 0.1em rgba(0, 0, 0, 0.5),
+    0 0 0 0.03em rgba(250, 93, 185, 1), 0 0 0 0.05em rgba(0, 0, 0, 0.2);
 }
 
-.odometer.odometer-auto-theme .odometer-digit+.odometer-digit,
-.odometer.odometer-theme-slot-machine .odometer-digit+.odometer-digit {
+.odometer.odometer-auto-theme .odometer-digit + .odometer-digit,
+.odometer.odometer-theme-slot-machine .odometer-digit + .odometer-digit {
   margin-left: 0.1em;
 }
 
@@ -493,15 +504,18 @@ body {
 }
 
 .odometer.odometer-auto-theme .odometer-digit .odometer-digit-inner,
-.odometer.odometer-auto-theme .odometer-digit .odometer-value.odometer-last-value,
+.odometer.odometer-auto-theme
+  .odometer-digit
+  .odometer-value.odometer-last-value,
 .odometer.odometer-theme-slot-machine .odometer-digit .odometer-digit-inner,
-.odometer.odometer-theme-slot-machine .odometer-digit .odometer-value.odometer-last-value {
+.odometer.odometer-theme-slot-machine
+  .odometer-digit
+  .odometer-value.odometer-last-value {
   left: 0;
   right: 0;
   text-align: center;
 }
 
-
-.odometer-formatting-mark{
-  color:  rgba(250, 93, 185, 1);
+.odometer-formatting-mark {
+  color: rgba(250, 93, 185, 1);
 }

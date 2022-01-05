@@ -45,27 +45,6 @@ const useStyles = makeStyles((theme) => ({
     borderColor: theme.palette.primary.main,
     borderRadius: 20,
   },
-  cardContent: {
-    width: '100%',
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '&::before': {
-      content: "' '",
-      background: 'rgba(0, 0, 0, 0.54)',
-      width: '100%',
-      height: '100%',
-      position: 'absolute',
-      zIndex: '-1',
-    },
-  },
-  title: {
-    paddingLeft: 15,
-    paddingRight: 15,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
   buttons: {
     color: '#fff',
   },
@@ -124,7 +103,14 @@ function Bar(): ReactElement {
       <Box className={classes.blue} />
       <Grid container direction="column" spacing={3}>
         <Grid item lg={12} md={12} sm={12} xs={12}>
-          <Grid container direction="row" spacing={2} alignItems="center">
+          <Grid
+            container
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            alignContent="center"
+            justify="space-between"
+          >
             <Grid item lg={2} md={2} sm={2} xs={2}>
               <Button
                 size="large"
@@ -142,7 +128,7 @@ function Bar(): ReactElement {
                 align="center"
                 style={{ fontWeight: 'bold' }}
               >
-                {user ? shortName(user?.nombre) : 'Anonimo'}
+                {user ? shortName(user?.nombre) : 'Anónimo'}
               </Typography>
             </Grid>
             <Grid item lg={3} md={3} sm={3} xs={3}>
@@ -189,15 +175,6 @@ function Bar(): ReactElement {
                       backdropFilter: 'opacity(50%)',
                     }}
                   >
-                    <CardContent className={classes.cardContent}>
-                      <Typography
-                        className={classes.title}
-                        variant="h3"
-                        align="center"
-                      >
-                        {c}
-                      </Typography>
-                    </CardContent>
                     <CardActions className={classes.cardAction}>
                       <Grid container justify="center">
                         <Grid item lg={12} style={{ width: '100%' }}>
@@ -208,7 +185,7 @@ function Bar(): ReactElement {
                             color="primary"
                             fullWidth
                           >
-                            ver productos
+                            {c}
                           </Button>
                         </Grid>
                       </Grid>

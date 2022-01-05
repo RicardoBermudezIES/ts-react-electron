@@ -357,22 +357,18 @@ ipc.on('confirmar-peticiones', async (event, arg) => {
 });
 
 // VisualizarPuntos
-ipc.on('visualizarPuntosxDia', async (event, arg) => {
-  let res;
-  // eslint-disable-next-line prefer-const
-  res = await visualizarPuntosDia(arg);
+ipc.handle('visualizarPuntosxDia', async (_event, arg) => {
+  const res = await visualizarPuntosDia(arg);
 
   if (res.response?.status === 400) {
-    event.reply('visualizarPuntosxDia', { Error: 'bad request' });
+    return { Error: 'bad request' };
   }
   if (res.statusDTO?.code !== '00') {
     console.log(res);
-    event.reply('visualizarPuntosxDia', res);
+    return res;
   }
-  if (res.statusDTO?.code === '00') {
-    console.log(res);
-    event.reply('visualizarPuntosxDia', res);
-  }
+
+  return res;
 });
 
 // soporte ***** crear solicitud

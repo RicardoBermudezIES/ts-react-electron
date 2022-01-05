@@ -1,7 +1,8 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable import/prefer-default-export */
 import React from 'react';
-import { Button, Chip, Grid, Typography } from '@material-ui/core';
+import { Button, Chip, Grid, makeStyles, Typography } from '@material-ui/core';
+import { AlarmAddRounded, SendRounded } from '@material-ui/icons';
 import { formatMoney, formatNumber } from '../helpers/format';
 import useListarPedido from '../Hook/useListarPedido';
 import { IProduct } from '../types/Products';
@@ -10,7 +11,19 @@ interface Props {
   p: IProduct;
 }
 
+const useStyles = makeStyles((theme) => ({
+  chipPending: {
+    background: theme.palette.warning.main,
+    color: '#000',
+  },
+  chipSend: {
+    background: theme.palette.success.main,
+    color: '#fff',
+  },
+}));
+
 export const ButtonProductos = ({ p }: Props): JSX.Element => {
+  const classes = useStyles();
   const {
     hasQueque,
     doBuy,
@@ -27,12 +40,20 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
       {hasQueque(p?.pk, 'EN_COLA') ? (
         <>
           <Grid item lg={12} md={12} sm={12} xs={12}>
-            <Grid container direction="row" alignItems="center" spacing={1}>
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              alignContent="center"
+              justify="center"
+              spacing={2}
+            >
               <Grid item lg={6} md={6} sm={6} xs={6}>
                 <Button
                   onClick={() => cancelarPeticion(p?.pk)}
                   variant="contained"
                   color="secondary"
+                  size="medium"
                 >
                   Anular
                 </Button>
@@ -44,6 +65,7 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
                   disabled
                   variant="contained"
                   color="primary"
+                  size="medium"
                 >
                   Aceptar
                 </Button>
@@ -56,20 +78,32 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
               alignItems="center"
               spacing={1}
             >
-              <Chip label="Pendiente" color="secondary" />
+              <Chip
+                icon={<AlarmAddRounded />}
+                className={classes.chipPending}
+                label="Pendiente"
+                color="secondary"
+              />
             </Grid>
           </Grid>
         </>
       ) : hasQueque(p?.pk, 'EN_CAMINO') ? (
         <>
-          <Grid container direction="row" alignItems="center" spacing={2}>
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
+            alignContent="center"
+            justify="center"
+            spacing={3}
+          >
             <Grid item lg={6} md={6} sm={6} xs={6}>
               <Button
                 onClick={() => cancelarPeticion(p?.pk)}
                 disabled
                 variant="contained"
                 color="secondary"
-                size="small"
+                size="medium"
               >
                 Anular
               </Button>
@@ -80,7 +114,7 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
                 onClick={() => confirmarPeticion(p?.pk)}
                 variant="contained"
                 color="primary"
-                size="small"
+                size="medium"
               >
                 Aceptar
               </Button>
@@ -92,14 +126,25 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
               alignItems="center"
               spacing={1}
             >
-              <Chip label="En proceso" color="primary" />
+              <Chip
+                icon={<SendRounded style={{ color: '#fff' }} />}
+                className={classes.chipSend}
+                label="Enviado"
+              />
             </Grid>
           </Grid>
         </>
       ) : (
         <>
           <Grid item lg={6} md={6} sm={6} xs={6}>
-            <Grid container direction="row" alignItems="center" spacing={2}>
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              alignContent="center"
+              justify="center"
+              spacing={1}
+            >
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Typography variant="h5" align="center">
                   Puntos
@@ -108,13 +153,13 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
                   </Typography>
                 </Typography>
               </Grid>
-              <Grid item lg={12} md={12} sm={12} xs={12}>
+              <Grid item lg={12} md={12} sm={12} xs={12} alignItems="flex-end">
                 <Button
                   disabled={user === null || puntos < p?.puntosParaCanjear}
                   onClick={() => doRedimir(p?.pk)}
                   variant="contained"
                   color="secondary"
-                  size="large"
+                  size="medium"
                 >
                   redimir
                 </Button>
@@ -123,7 +168,13 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
           </Grid>
 
           <Grid item lg={6} md={6} sm={6} xs={6}>
-            <Grid container direction="row" spacing={2} alignItems="center">
+            <Grid
+              container
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              justify="center"
+            >
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Typography variant="h5" align="center">
                   Precio
@@ -132,12 +183,19 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
                   </Typography>
                 </Typography>
               </Grid>
-              <Grid item lg={12} md={12} sm={12} xs={12}>
+              <Grid
+                item
+                lg={12}
+                md={12}
+                sm={12}
+                xs={12}
+                alignItems="flex-start"
+              >
                 <Button
                   onClick={() => doBuy(p?.pk)}
                   variant="contained"
                   color="primary"
-                  size="large"
+                  size="medium"
                 >
                   Comprar
                 </Button>
