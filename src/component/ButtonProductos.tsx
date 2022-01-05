@@ -62,7 +62,7 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
         </>
       ) : hasQueque(p?.pk, 'EN_CAMINO') ? (
         <>
-          <Grid container direction="row" alignItems="center" spacing={2}>
+          <Grid container direction="row" alignItems="center" spacing={1}>
             <Grid item lg={6} md={6} sm={6} xs={6}>
               <Button
                 onClick={() => cancelarPeticion(p?.pk)}
@@ -99,7 +99,7 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
       ) : (
         <>
           <Grid item lg={6} md={6} sm={6} xs={6}>
-            <Grid container direction="row" alignItems="center" spacing={2}>
+            <Grid container direction="row" alignItems="center" spacing={1}>
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Typography variant="h5" align="center">
                   Puntos
