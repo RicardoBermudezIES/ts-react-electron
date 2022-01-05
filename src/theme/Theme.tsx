@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { createMuiTheme } from '@material-ui/core/styles';
-import { pink, lightBlue } from '@material-ui/core/colors/';
+import { pink, lightBlue, yellow, lightGreen } from '@material-ui/core/colors/';
 
 export const theme = createMuiTheme({
   palette: {
@@ -12,6 +12,14 @@ export const theme = createMuiTheme({
       main: lightBlue[500],
       contrastText: '#fff',
     },
+    warning: {
+      main: yellow[500],
+      contrastText: '#000',
+    },
+    success: {
+      main: lightGreen[500],
+      contrastText: '#000',
+    }
   },
   overrides: {
     MuiButton: {
