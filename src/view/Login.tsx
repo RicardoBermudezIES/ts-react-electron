@@ -25,6 +25,7 @@ import ButtonPedidos from '../component/ButtonPedidos/ButtonPedidos';
 
 const useStyles = makeStyles(() => ({
   login: {},
+  input: {},
 }));
 
 function Login() {
@@ -163,6 +164,7 @@ function Login() {
             <Grid container direction="row" justify="flex-start" spacing={2}>
               <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
                 <TextField
+                  className={classes.input}
                   name="username"
                   fullWidth
                   label="Identificación cliente"
