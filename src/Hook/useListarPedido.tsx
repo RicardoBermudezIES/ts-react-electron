@@ -21,10 +21,6 @@ export default function useListarPedido() {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const barList = JSON.parse(localStorage.getItem('bar')!);
 
-  const handleOpenRedimirModal = () => {
-    setRedimirModal(true);
-  };
-
   const handleCloseRedimirModal = () => {
     history.go(-2);
     setRedimirModal(false);
@@ -95,7 +91,7 @@ export default function useListarPedido() {
     };
 
     ipc.send('comprar-productos', args);
-    setBuyModal(true);
+
   };
 
   const doRedimir = (puk: string) => {
@@ -186,7 +182,6 @@ export default function useListarPedido() {
 
       if (arg?.statusDTO?.code === '00') {
         getListProducts();
-        handleOpenRedimirModal();
       }
     });
   }, []);
@@ -220,6 +215,7 @@ export default function useListarPedido() {
 
       if (arg?.statusDTO?.code === '00') {
         getListProducts();
+        setRedimirModal(true);
       }
     });
   }, []);
