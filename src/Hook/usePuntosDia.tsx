@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+/* eslint-disable promise/always-return */
+/* eslint-disable promise/catch-or-return */
 import { ipcRenderer } from 'electron';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -23,7 +26,25 @@ export default function usePuntosDia() {
       casino: localCasino,
       token: localToken,
     };
-    ipc.send('visualizarPuntosxDia', args);
+    ipc
+      .invoke('visualizarPuntosxDia', args)
+      .then((res) => {
+        if (res?.statusDTO?.code !== '00') {
+          console.log(res);
+        }
+
+        if (res?.statusDTO?.code === '00') {
+          localStorage.setItem(
+            'puntosDiaxBar',
+            JSON.stringify(res?.cantidadPuntosDisponibles)
+          );
+
+          setPuntosBar(res?.cantidadPuntosDisponibles);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const callback = useCallback(puntosXBar, [user?.numeroDocumento]);
@@ -33,27 +54,6 @@ export default function usePuntosDia() {
       callback();
     }
   }, [callback, user]);
-
-  useEffect(() => {
-    ipc.on('visualizarPuntosxDia', (_event, arg) => {
-      // eslint-disable-next-line no-console
-      console.log(arg?.cantidadPuntosDisponibles, 'bar.tsx');
-
-      // eslint-disable-next-line no-empty
-      if (arg?.statusDTO?.code !== '00') {
-      }
-
-      if (arg?.statusDTO?.code === '00') {
-        localStorage.setItem(
-          'puntosDiaxBar',
-          JSON.stringify(arg?.cantidadPuntosDisponibles)
-        );
-
-        setPuntosBar(arg?.cantidadPuntosDisponibles);
-      }
-    });
-  }, []);
-
   return {
     puntosBar,
   };
