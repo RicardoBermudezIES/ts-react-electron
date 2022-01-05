@@ -146,7 +146,13 @@ export default function ButtonPedidos(): ReactElement {
         <DialogTitle>Mis Pedidos</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <Grid container direction="row" spacing={1}>
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignContent="center"
+              spacing={1}
+            >
               {pedidos?.length > 0 ? (
                 pedidos?.map((pedido: IProduct) => (
                   <Grid item key={pedido?.pk}>
@@ -226,13 +232,25 @@ export default function ButtonPedidos(): ReactElement {
                   </Grid>
                 ))
               ) : (
-                <Typography component="p"> Sin pedidos </Typography>
+                <Typography
+                  color="error"
+                  align="center"
+                  component="p"
+                  variant="h5"
+                >
+                  Sin pedidos
+                </Typography>
               )}
             </Grid>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary" autoFocus>
+          <Button
+            onClick={handleClose}
+            variant="contained"
+            color="primary"
+            autoFocus
+          >
             Cerrar
           </Button>
         </DialogActions>
