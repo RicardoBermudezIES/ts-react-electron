@@ -197,30 +197,11 @@ ipc.on('visualizarPuntos', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
   res = await visualizarPuntos(arg);
-
-  if (res.response?.status === 400) {
-    event.reply('visualizarPuntos', { Error: 'bad request' });
-  }
-  if (res.statusDTO?.code !== '00') {
-    console.log(res);
-    event.reply('visualizarPuntos', res);
-  }
-  if (res.statusDTO?.code === '00') {
-    console.log(res);
-    event.reply('visualizarPuntos', res);
-  }
+  event.reply('visualizarPuntos', res);
 });
 
 ipc.handle('cerrar-sesion', async (_event, arg) => {
   const res = await closeSession(arg);
-
-  if (res?.response?.status === 400) {
-    return { Error: 'bad request' };
-  }
-
-  if (res?.statusDTO?.code !== '00') {
-    return res;
-  }
 
   return res;
 });
@@ -228,19 +209,6 @@ ipc.handle('cerrar-sesion', async (_event, arg) => {
 // consultar bar
 ipc.handle('bar', async (_event, arg) => {
   const res = await barServices(arg);
-
-  if (res.response?.status === 400) {
-    return { Error: 'bad request' };
-  }
-
-  if (res.response?.status === 404) {
-    return { Error: 'Recurso no encontrado' };
-  }
-
-  if (res.statusDTO?.code !== '00') {
-    console.log(res);
-    return res;
-  }
 
   return res;
 });
@@ -251,22 +219,7 @@ ipc.on('comprar-productos', async (event, arg) => {
   // eslint-disable-next-line prefer-const
   res = await comprarPremio(arg);
 
-  if (res.response?.status === 400) {
-    event.reply('comprar-productos', { Error: 'bad request' });
-  }
-
-  if (res.response?.status === 404) {
-    event.reply('bcomprar-productosar', { Error: 'Recurso no encontrado' });
-  }
-
-  if (res.statusDTO?.code !== '00') {
-    console.log(res);
-    event.reply('comprar-productos', res);
-  }
-  if (res.statusDTO?.code === '00') {
-    console.log(res);
-    event.reply('comprar-productos', res);
-  }
+  event.reply('comprar-productos', res);
 });
 
 // consulta realizar peticion
@@ -275,20 +228,7 @@ ipc.on('realizar-peticion', async (event, arg) => {
   // eslint-disable-next-line prefer-const
   res = await realizarPeticion(arg);
 
-  if (res.response?.status === 400) {
-    event.reply('realizar-peticion', { Error: 'bad request' });
-  }
-
-  if (res.response?.status === 404) {
-    event.reply('realizar-peticion', { Error: 'Recurso no encontrado' });
-  }
-
-  if (res.statusDTO?.code !== '00') {
-    event.reply('realizar-peticion', res);
-  }
-  if (res.statusDTO?.code === '00') {
-    event.reply('realizar-peticion', res);
-  }
+  event.reply('realizar-peticion', res);
 });
 
 // consulta listar peticion por peticiones
@@ -297,17 +237,6 @@ ipc.handle('listar-peticiones', async (_event, arg) => {
   // eslint-disable-next-line prefer-const
   res = await listarPeticionesXCliente(arg);
 
-  if (res.response?.status === 400) {
-    return { Error: 'bad request' };
-  }
-
-  if (res.response?.status === 404) {
-    return { Error: 'Recurso no encontrado' };
-  }
-
-  if (res.statusDTO?.code !== '00') {
-    return res;
-  }
   return res;
 });
 
@@ -316,21 +245,7 @@ ipc.on('anular-peticiones', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
   res = await anularPeticion(arg);
-
-  if (res.response?.status === 400) {
-    event.reply('anular-peticiones', { Error: 'bad request' });
-  }
-
-  if (res.response?.status === 404) {
-    event.reply('anular-peticiones', { Error: 'Recurso no encontrado' });
-  }
-
-  if (res.statusDTO?.code !== '00') {
-    event.reply('anular-peticiones', res);
-  }
-  if (res.statusDTO?.code === '00') {
-    event.reply('anular-peticiones', res);
-  }
+  event.reply('anular-peticiones', res);
 });
 
 // consulta confirmar peticiones
@@ -339,66 +254,24 @@ ipc.on('confirmar-peticiones', async (event, arg) => {
   // eslint-disable-next-line prefer-const
   res = await confirmarPeticion(arg);
 
-  if (res.response?.status === 400) {
-    event.reply('confirmar-peticiones', { Error: 'bad request' });
-  }
-
-  if (res.response?.status === 404) {
-    event.reply('confirmar-peticiones', { Error: 'Recurso no encontrado' });
-  }
-
-  if (res.statusDTO?.code !== '00') {
-    event.reply('confirmar-peticiones', res);
-  }
-
-  if (res.statusDTO?.code === '00') {
-    event.reply('confirmar-peticiones', res);
-  }
+  event.reply('confirmar-peticiones', res);
 });
 
 // VisualizarPuntos
 ipc.handle('visualizarPuntosxDia', async (_event, arg) => {
   const res = await visualizarPuntosDia(arg);
-
-  if (res.response?.status === 400) {
-    return { Error: 'bad request' };
-  }
-  if (res.statusDTO?.code !== '00') {
-    console.log(res);
-    return res;
-  }
-
   return res;
 });
 
 // soporte ***** crear solicitud
 ipc.handle('crearSolicitud', async (_event, arg) => {
   const res = await crearSolicitud(arg);
-
-  if (res.response?.status === 400) {
-    return { Error: 'bad request' };
-  }
-  if (res.statusDTO?.code !== '00') {
-    console.log(res);
-    return res;
-  }
-
-  console.log(res);
   return res;
 });
 
 /// todas-solicitudes
 ipc.handle('todas-solicitudes', async (_event, arg) => {
   const res = await todasSolicitudes(arg);
-
-  if (res.response?.status === 400) {
-    return { Error: 'bad request' };
-  }
-  if (res.statusDTO?.code !== '00') {
-    console.log(res);
-    return res;
-  }
-
   return res;
 });
 
