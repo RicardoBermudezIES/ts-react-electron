@@ -216,7 +216,7 @@ body {
   width: 100%;
   font-weight: 900;
   color: black;
-  bottom: 110px;
+  bottom: 85px;
 }
 
 .keyboardContainer-config {
@@ -242,15 +242,15 @@ body {
 }
 
 .keyboardContainer-login .hg-theme-default .hg-row .hg-button {
-  height: 110px;
+  height: 105px;
 }
 
 .hg-button {
-  font-size: 1.5em;
+  font-size: 1.2em;
 }
 
 .hg-theme-default .hg-row .hg-button {
-  height: 60px;
+  height: 40px;
 }
 
 .container-closeKeyBoard {
