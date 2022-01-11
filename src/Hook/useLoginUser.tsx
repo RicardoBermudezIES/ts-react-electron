@@ -45,10 +45,11 @@ export default function useLoginUser() {
     ipc
       .invoke('fidelizarMaquina', args)
       .then((res) => {
-        if (res === undefined) {
+        if (res?.error === 'No se conecto al servidor') {
           // eslint-disable-next-line no-console
           setMessageError('intente de nuevo, por favor.');
           setOpenError(true);
+          history.push('/login');
           return;
         }
         if (res?.statusDTO?.code !== '00') {
