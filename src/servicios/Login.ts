@@ -1,21 +1,27 @@
+import axios, { AxiosResponse } from 'axios';
+/* eslint-disable import/prefer-default-export */
 import Https from 'https';
-import axios, { AxiosResponse, AxiosError } from 'axios';
 
-export const fidelzarMaquina = (arg) => {
+export const fidelzarMaquina = (arg: {
+  host: string;
+  numeroDocumento: string;
+  serial: string;
+  token: string;
+}) => {
   const { host, numeroDocumento, serial, token } = arg;
-  var data = {
+  const data = {
     nombreServicio: 'fidelizarMaquina',
     numeroDeParametros: '3',
     parametros: [
       { nombreParametro: 'serial', valorParametro: `${serial}` },
       {
         nombreParametro: 'numeroDocumento',
-        valorParametro: numeroDocumento+"",
+        valorParametro: `${numeroDocumento}`,
       },
       { nombreParametro: 'tipoDispositivo', valorParametro: 'MOVIL' },
     ],
   };
-  var config = {
+  const config = {
     method: 'post',
     url: `https://${host}:8443/MobilAppV2/fidelizacion/fidelizarMaquina`,
     httpsAgent: new Https.Agent({ rejectUnauthorized: false }),
@@ -25,14 +31,16 @@ export const fidelzarMaquina = (arg) => {
       'Content-Type': 'application/json',
       token: `${token}`,
     },
-    data: data,
+    data,
   };
 
   return axios(config)
     .then((res: AxiosResponse) => {
       return res.data;
     })
-    .catch((error: AxiosError) => {
-      return error;
+    .catch(() => {
+      return {
+        error: 'No se conecto al servidor',
+      };
     });
 };

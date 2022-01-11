@@ -1,5 +1,5 @@
 import Https from 'https';
-import axios, {  AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 
 export const closeSession = (arg) => {
   const { host, numeroDocumento, maquina, token } = arg;
@@ -9,13 +9,15 @@ export const closeSession = (arg) => {
     parametros: [
       {
         nombreParametro: 'serial',
-        valorParametro: `${maquina}`
-      },{
+        valorParametro: `${maquina}`,
+      },
+      {
         nombreParametro: 'numeroDocumento',
-        valorParametro: numeroDocumento+"",
-      },{
+        valorParametro: numeroDocumento + '',
+      },
+      {
         nombreParametro: 'tipoDispositivo',
-        valorParametro: 'MOVIL'
+        valorParametro: 'MOVIL',
       },
     ],
   };
@@ -34,11 +36,12 @@ export const closeSession = (arg) => {
 
   return axios(config)
     .then((res: AxiosResponse) => {
-      console.log(res.data, "servicio")
+      console.log(res.data, 'servicio');
       return res.data;
-
     })
     .catch((error: AxiosError) => {
-      return error
+      return {
+        error: 'No se conecto al servidor',
+      };
     });
 };

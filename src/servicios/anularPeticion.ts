@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import Https from 'https';
 import axios from 'axios';
 
@@ -9,22 +10,23 @@ export const anularPeticion = async (arg) => {
     parametros: [
       {
         nombreParametro: 'nota',
-        valorParametro: "",
-
-      },{
+        valorParametro: '',
+      },
+      {
         nombreParametro: 'haySesion',
-        valorParametro: numeroDocumento ? "si" : "no"
-      },{
+        valorParametro: numeroDocumento ? 'si' : 'no',
+      },
+      {
         nombreParametro: 'serial',
-        valorParametro: `${maquina}`
+        valorParametro: `${maquina}`,
       },
       {
         nombreParametro: 'idPeticion',
-        valorParametro: `${puk}`
+        valorParametro: `${puk}`,
       },
     ],
   };
-  var config = {
+  let config = {
     method: 'post',
     url: `https://${host}:8443/MobilAppV2/bar/anularPeticion`,
     httpsAgent: new Https.Agent({ rejectUnauthorized: false }),
@@ -41,6 +43,8 @@ export const anularPeticion = async (arg) => {
     const res = await axios(config);
     return res.data;
   } catch (error) {
-    return error;
+    return {
+      error: 'No se conecto al servidor',
+    };
   }
 };

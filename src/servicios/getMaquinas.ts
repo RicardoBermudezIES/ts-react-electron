@@ -30,6 +30,8 @@ export const getMaquinas = (arg) => {
       return res.data;
     })
     .catch((error: AxiosError) => {
-      return error;
+      return {
+        error: 'No se conecto al servidor',
+      };
     });
 };
