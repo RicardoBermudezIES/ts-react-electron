@@ -16,7 +16,6 @@ import {
 import { useHistory } from 'react-router';
 import Keyboard from 'react-simple-keyboard';
 
-import { Settings } from '@material-ui/icons';
 import Alert from '../component/Alert/Alert';
 import { BarIcon } from '../iconos/Bar';
 import ButtonHelper from '../component/ButtonHelper/ButtonHelper';
@@ -24,6 +23,15 @@ import useLoginUser from '../Hook/useLoginUser';
 import ButtonPedidos from '../component/ButtonPedidos/ButtonPedidos';
 
 const useStyles = makeStyles(() => ({
+  config: {
+    color: 'transparent',
+    background: 'transparent',
+    height: 50,
+    width: 50,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
   login: {},
   input: {},
 }));
@@ -130,18 +138,11 @@ function Login() {
 
   return (
     <Box paddingLeft={3} paddingTop={2}>
-      <Grid container justify="flex-end" spacing={1}>
-        <Grid item lg={2} md={2} sm={3} xs={4}>
-          <Button
-            size="large"
-            onClick={() => setOpenMasterPassword(true)}
-            variant="contained"
-            color="secondary"
-          >
-            <Settings style={{ fontSize: 50 }} />
-          </Button>
-        </Grid>
-      </Grid>
+      <Box
+        className={classes.config}
+        onClick={() => setOpenMasterPassword(true)}
+      />
+
       <Grid
         className={classes.login}
         container
@@ -151,7 +152,7 @@ function Login() {
       >
         <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
           <Typography
-            style={{ fontWeight: 900 }}
+            style={{ fontWeight: 900, marginTop: 40 }}
             variant="h4"
             align="left"
             component="h2"
