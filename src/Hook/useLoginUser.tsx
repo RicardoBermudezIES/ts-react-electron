@@ -49,11 +49,13 @@ export default function useLoginUser() {
           // eslint-disable-next-line no-console
           setMessageError('intente de nuevo, por favor.');
           setOpenError(true);
+          return;
         }
         if (res?.statusDTO?.code !== '00') {
           // eslint-disable-next-line no-console
           setMessageError(res?.statusDTO?.message);
           setOpenError(true);
+          return;
         }
         // eslint-disable-next-line no-console
         const numeroDocumento = localStorage.getItem('numeroDocumento');
