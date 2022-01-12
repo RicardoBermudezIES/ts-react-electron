@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Odometer from 'react-odometerjs';
@@ -32,6 +32,7 @@ function Home() {
 
   const {
     CallbackCloseSession,
+    CallbackUserNull,
     messageError,
     openError,
     setOpenError,
@@ -40,6 +41,13 @@ function Home() {
   const leaveLobby = () => {
     CallbackCloseSession();
   };
+
+  useEffect(() => {
+    if (user === null) {
+      CallbackUserNull();
+    }
+    return () => user;
+  }, [CallbackUserNull, user]);
 
   const classes = useStyles();
   return (
