@@ -40,7 +40,7 @@ export default function useListarPedido() {
         return b.pk === p.idPremio;
       })
     );
-    setPedidos(results);
+    setPedidos([...results]);
   };
 
   const getListProducts = () => {
@@ -91,7 +91,6 @@ export default function useListarPedido() {
     };
 
     ipc.send('comprar-productos', args);
-
   };
 
   const doRedimir = (puk: string) => {

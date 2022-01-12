@@ -2,7 +2,7 @@ export const formatNumber = (number: number | string) =>
   new Intl.NumberFormat().format(Number(number));
 
 export const FormatDay = (date: Date): string => {
-  let newDate = new Date(date);
+  const newDate = new Date(date);
   return new Intl.DateTimeFormat('en-US').format(newDate);
 };
 
