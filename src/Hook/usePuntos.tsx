@@ -1,3 +1,4 @@
+/* eslint-disable promise/always-return */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
 import { useCallback, useEffect, useState } from 'react';
@@ -12,7 +13,6 @@ export default function usePuntos() {
     cantidadPuntosDisponibles: 0,
     cantidadPuntosRedimidos: 0,
   });
-  
 
   const sendPuntos = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -27,10 +27,44 @@ export default function usePuntos() {
       host: authConfig?.host,
       casino: localCasino,
       maquina: localMaquina,
-      numeroDocumento: user?.numeroDocumento ?? null,
+      numeroDocumento: user?.numeroDocumento,
       token: localToken,
     };
-    ipc.send('visualizarPuntos', args);
+    if (user !== null) {
+      // eslint-disable-next-line no-console
+      console.log('pidiendo puntos');
+
+      ipc
+        .invoke('visualizarPuntos', args)
+        .then((res) => {
+          if (res?.error === 'No se conecto al servidor') {
+            console.log(res);
+            return;
+          }
+          if (res?.statusDTO?.code === '38') {
+            CallbackCloseSession();
+            return;
+          }
+          if (res?.statusDTO?.code === '00') {
+            localStorage.setItem(
+              'puntos',
+              JSON.stringify({
+                cantidadPuntosDisponibles: res.cantidadPuntosDisponibles,
+                cantidadPuntosRedimidos: res.cantidadPuntosRedimidos,
+              })
+            );
+            setPuntos({
+              cantidadPuntosDisponibles: res.cantidadPuntosDisponibles,
+              cantidadPuntosRedimidos: res.cantidadPuntosRedimidos,
+            });
+          }
+        })
+        .catch((err) => {
+          if (err?.error === 'No se conecto al servidor') {
+            console.log(err);
+          }
+        });
+    }
   };
 
   const callback = useCallback(
@@ -39,13 +73,11 @@ export default function usePuntos() {
   );
 
   useEffect(() => {
-    const myInterval = callback();
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    myInterval;
+    callback();
     return () => {
-      clearInterval(myInterval);
+      clearInterval(callback());
     };
-  }, [callback]);
+  }, []);
 
   useEffect(() => {
     sendPuntos();
@@ -56,32 +88,5 @@ export default function usePuntos() {
       });
   }, []);
 
-  const getPuntos = () => {
-    ipc.on('visualizarPuntos', (_event, arg) => {
-      if (arg?.statusDTO?.code === '38') {
-        CallbackCloseSession();
-        return;
-      }
-      if (arg?.statusDTO?.code === '00') {
-        localStorage.setItem(
-          'puntos',
-          JSON.stringify({
-            cantidadPuntosDisponibles: arg.cantidadPuntosDisponibles,
-            cantidadPuntosRedimidos: arg.cantidadPuntosRedimidos,
-          })
-        );
-        setPuntos({
-          cantidadPuntosDisponibles: arg.cantidadPuntosDisponibles,
-          cantidadPuntosRedimidos: arg.cantidadPuntosRedimidos,
-        });
-      }
-    });
-  };
-
-  const callbackGetPuntos = useCallback(getPuntos, [CallbackCloseSession]);
-
-  useEffect(() => {
-    callbackGetPuntos();
-  }, [callbackGetPuntos]);
   return { puntos };
 }

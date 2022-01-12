@@ -21,6 +21,7 @@ import { formatNumber, shortName } from '../helpers/format';
 import Alert from '../component/Alert/Alert';
 import useProduct from '../Hook/useProduct';
 import usePuntosDia from '../Hook/usePuntosDia';
+import usePuntos from '../Hook/usePuntos';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,6 +61,7 @@ function Bar(): ReactElement {
   const classes = useStyles();
   const { productos, openError, messageError, setOpenError } = useProduct();
   const { puntosBar } = usePuntosDia();
+  const { puntos } = usePuntos();
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = JSON.parse(localStorage.getItem('user')!);
@@ -140,7 +142,7 @@ function Bar(): ReactElement {
                     component="p"
                     style={{ fontWeight: 'bold' }}
                   >
-                    {formatNumber(puntosBar)}
+                    {formatNumber(puntos.cantidadPuntosDisponibles)}
                   </Typography>
                   <Typography variant="h6" align="right" component="p">
                     Puntos
