@@ -45,9 +45,11 @@ export default function useLoginUser() {
     ipc
       .invoke('fidelizarMaquina', args)
       .then((res) => {
+        // eslint-disable-next-line no-console
+        console.log(res);
         if (res?.error === 'No se conecto al servidor') {
           // eslint-disable-next-line no-console
-          setMessageError('intente de nuevo, por favor.');
+          setMessageError(res?.error);
           setOpenError(true);
           history.push('/login');
           return;
