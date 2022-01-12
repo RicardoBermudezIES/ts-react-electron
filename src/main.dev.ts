@@ -192,12 +192,9 @@ ipc.handle('fidelizarMaquina', async (_event, arg) => {
 });
 
 // VisualizarPuntos
-ipc.on('visualizarPuntos', async (event, arg) => {
-  console.log(arg);
-  let res;
-  // eslint-disable-next-line prefer-const
-  res = await visualizarPuntos(arg);
-  event.reply('visualizarPuntos', res);
+ipc.handle('visualizarPuntos', async (_event, arg) => {
+  const res = await visualizarPuntos(arg);
+  return res;
 });
 
 ipc.handle('cerrar-sesion', async (_event, arg) => {
