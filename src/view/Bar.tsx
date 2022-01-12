@@ -132,17 +132,21 @@ function Bar(): ReactElement {
               </Typography>
             </Grid>
             <Grid item lg={3} md={3} sm={3} xs={3}>
-              <Typography
-                variant="h4"
-                align="right"
-                component="p"
-                style={{ fontWeight: 'bold' }}
-              >
-                {user ? formatNumber(puntosBar) : null}
-              </Typography>
-              <Typography variant="h6" align="right" component="p">
-                Puntos
-              </Typography>
+              {user ? (
+                <>
+                  <Typography
+                    variant="h4"
+                    align="right"
+                    component="p"
+                    style={{ fontWeight: 'bold' }}
+                  >
+                    {formatNumber(puntosBar)}
+                  </Typography>
+                  <Typography variant="h6" align="right" component="p">
+                    Puntos
+                  </Typography>
+                </>
+              ) : null}
             </Grid>
           </Grid>
         </Grid>
@@ -208,7 +212,10 @@ function Bar(): ReactElement {
       {messageError ? (
         <Alert
           open={openError}
-          onClose={() => setOpenError(false)}
+          onClose={() => {
+            setOpenError(false);
+            history.push('/login');
+          }}
           message={messageError}
         />
       ) : null}

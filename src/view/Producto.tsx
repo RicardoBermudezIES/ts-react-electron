@@ -95,7 +95,7 @@ export default function Io() {
     )
   );
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const puntos = JSON.parse(localStorage.getItem('puntosDiaxBar')!);
+  const puntosBar = JSON.parse(localStorage.getItem('puntosDiaxBar')!);
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = JSON.parse(localStorage.getItem('user')!);
 
@@ -176,17 +176,21 @@ export default function Io() {
               </Typography>
             </Grid>
             <Grid item lg={3} md={3} sm={3} xs={3}>
-              <Typography
-                variant="h4"
-                align="right"
-                component="p"
-                style={{ fontWeight: 'bold' }}
-              >
-                {user ? formatNumber(Number(puntos)) : null}
-              </Typography>
-              <Typography component="p" variant="h6" align="right">
-                Puntos
-              </Typography>
+              {user ? (
+                <>
+                  <Typography
+                    variant="h4"
+                    align="right"
+                    component="p"
+                    style={{ fontWeight: 'bold' }}
+                  >
+                    {formatNumber(puntosBar)}
+                  </Typography>
+                  <Typography variant="h6" align="right" component="p">
+                    Puntos
+                  </Typography>
+                </>
+              ) : null}
             </Grid>
           </Grid>
         </Grid>
