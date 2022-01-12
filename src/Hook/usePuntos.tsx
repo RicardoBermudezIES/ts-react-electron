@@ -9,9 +9,10 @@ export default function usePuntos() {
   const { CallbackCloseSession } = useCloseSession();
 
   const [puntos, setPuntos] = useState({
-    cantidadPuntosDisponibles: null,
-    cantidadPuntosRedimidos: null,
+    cantidadPuntosDisponibles: 0,
+    cantidadPuntosRedimidos: 0,
   });
+  
 
   const sendPuntos = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -26,15 +27,10 @@ export default function usePuntos() {
       host: authConfig?.host,
       casino: localCasino,
       maquina: localMaquina,
-      numeroDocumento: user?.numeroDocumento,
+      numeroDocumento: user?.numeroDocumento ?? null,
       token: localToken,
     };
-    if (user !== null) {
-      // eslint-disable-next-line no-console
-      console.log('pidiendo puntos');
-
-      ipc.send('visualizarPuntos', args);
-    }
+    ipc.send('visualizarPuntos', args);
   };
 
   const callback = useCallback(
@@ -44,6 +40,7 @@ export default function usePuntos() {
 
   useEffect(() => {
     const myInterval = callback();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     myInterval;
     return () => {
       clearInterval(myInterval);
@@ -54,8 +51,8 @@ export default function usePuntos() {
     sendPuntos();
     return () =>
       setPuntos({
-        cantidadPuntosDisponibles: null,
-        cantidadPuntosRedimidos: null,
+        cantidadPuntosDisponibles: 0,
+        cantidadPuntosRedimidos: 0,
       });
   }, []);
 
@@ -63,6 +60,7 @@ export default function usePuntos() {
     ipc.on('visualizarPuntos', (_event, arg) => {
       if (arg?.statusDTO?.code === '38') {
         CallbackCloseSession();
+        return;
       }
       if (arg?.statusDTO?.code === '00') {
         localStorage.setItem(
