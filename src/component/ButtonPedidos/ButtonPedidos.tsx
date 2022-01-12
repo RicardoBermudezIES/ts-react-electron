@@ -102,6 +102,7 @@ export default function ButtonPedidos(): ReactElement {
 
   const handleClickOpen = () => {
     setOpen(true);
+    getListProducts();
   };
 
   const handleClose = () => {
