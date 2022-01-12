@@ -1,7 +1,7 @@
 /* eslint-disable promise/always-return */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const ipc = ipcRenderer;
@@ -10,10 +10,6 @@ export default function useCloseSession() {
   const history = useHistory();
   const [openError, setOpenError] = useState(false);
   const [messageError, setmessageError] = useState('');
-
-  const user = JSON.parse(localStorage.getItem('user')!)
-    ? JSON.parse(localStorage.getItem('user')!)
-    : null;
 
   const CloseSession = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -58,21 +54,17 @@ export default function useCloseSession() {
 
   const CallbackCloseSession = useCallback(CloseSession, [history]);
 
-  useEffect(() => {
-    const goToLogin = () => {
-      localStorage.removeItem('user');
-      localStorage.removeItem('puntos');
-      history.push('/login');
-    };
+  const goToLogin = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('puntos');
+    history.push('/login');
+  };
 
-    if (user === null) {
-      goToLogin();
-    }
-    return () => user;
-  }, [history, user]);
+  const CallbackUserNull = useCallback(goToLogin, [history]);
 
   return {
     CallbackCloseSession,
+    CallbackUserNull,
     messageError,
     openError,
     setOpenError,
