@@ -88,7 +88,7 @@ export default function Io() {
   const classes = useStyles();
   const history = useHistory();
 
-  const param = useParams();
+  const param = useParams<{ id: string }>();
   const [Ios] = useState<IProduct[]>(
     barList.filter(
       (bar: { categoriaPremio: string }) => bar?.categoriaPremio === param?.id
