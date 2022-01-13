@@ -2,12 +2,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
 import { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { setTimeout } from 'timers';
 import useCloseSession from './useCloseSession';
 
 const ipc = ipcRenderer;
 
 export default function usePuntos() {
+  const history = useHistory();
   const { CallbackCloseSession } = useCloseSession();
 
   const [puntos, setPuntos] = useState({
@@ -35,12 +37,17 @@ export default function usePuntos() {
       numeroDocumento: user?.numeroDocumento,
       token: localToken,
     };
+
+    // eslint-disable-next-line no-console
+    console.log('visualizarPuntos');
     ipc
       .invoke('visualizarPuntos', args)
       .then((res) => {
+        // eslint-disable-next-line no-console
+        console.log(res);
         if (res?.statusDTO?.code === '38') {
           CallbackCloseSession();
-          return;
+          history.push('/login');
         }
         if (res?.statusDTO?.code === '00') {
           localStorage.setItem(
@@ -66,15 +73,16 @@ export default function usePuntos() {
 
   const callback = useCallback(sendPuntos, [
     CallbackCloseSession,
+    history,
     user?.numeroDocumento,
   ]);
 
   useEffect(() => {
     let id: any;
     if (user !== null) {
-      id = setTimeout(() => {
+      id = setInterval(() => {
         callback();
-      }, 1000 * 60);
+      }, 1000 * 30);
     }
     return () => clearInterval(id);
   }, [callback]);
