@@ -28,7 +28,12 @@ function Home() {
     ? JSON.parse(localStorage.getItem('user')!)
     : null;
 
-  const { puntos } = usePuntos();
+  const {
+    openPuntosError,
+    setOpenPuntosError,
+    msnPuntosError,
+    puntos,
+  } = usePuntos();
 
   const {
     CallbackCloseSession,
@@ -155,6 +160,14 @@ function Home() {
           open={openError}
           onClose={() => setOpenError(false)}
           message={messageError}
+        />
+      ) : null}
+
+      {msnPuntosError ? (
+        <Alert
+          open={openPuntosError}
+          onClose={() => setOpenPuntosError(false)}
+          message={msnPuntosError}
         />
       ) : null}
     </Box>
