@@ -2,14 +2,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
 import { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { setTimeout } from 'timers';
 import useCloseSession from './useCloseSession';
 
 const ipc = ipcRenderer;
 
 export default function usePuntos() {
-  const history = useHistory();
   const { CallbackCloseSession } = useCloseSession();
 
   const [puntos, setPuntos] = useState({
@@ -40,12 +38,6 @@ export default function usePuntos() {
     ipc
       .invoke('visualizarPuntos', args)
       .then((res) => {
-        if (res?.error === 'No se conecto al servidor') {
-          setMsnPuntosError(res?.error);
-          setOpenPuntosError(true);
-          history.push('/login');
-          return;
-        }
         if (res?.statusDTO?.code === '38') {
           CallbackCloseSession();
           return;
@@ -74,7 +66,6 @@ export default function usePuntos() {
 
   const callback = useCallback(sendPuntos, [
     CallbackCloseSession,
-    history,
     user?.numeroDocumento,
   ]);
 

@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useEffect, useState } from 'react';
-import { Button, Box, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
 import Odometer from 'react-odometerjs';
-import NavButton from '../component/NavButton';
+import { useHistory } from 'react-router-dom';
 import Alert from '../component/Alert/Alert';
-import usePuntos from '../Hook/usePuntos';
+import NavButton from '../component/NavButton';
 import useCloseSession from '../Hook/useCloseSession';
+import usePuntos from '../Hook/usePuntos';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -22,6 +23,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 function Home() {
+  const history = useHistory();
   const [isShow, setIsShow] = useState(false);
 
   const user = JSON.parse(localStorage.getItem('user')!)
@@ -166,7 +168,9 @@ function Home() {
       {msnPuntosError ? (
         <Alert
           open={openPuntosError}
-          onClose={() => setOpenPuntosError(false)}
+          onClose={() => {
+            setOpenPuntosError(false);
+          }}
           message={msnPuntosError}
         />
       ) : null}
