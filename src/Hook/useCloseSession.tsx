@@ -33,11 +33,13 @@ export default function useCloseSession() {
             localStorage.removeItem('user');
             localStorage.removeItem('puntos');
             history.push('/login');
+            return;
           }
 
           if (res?.statusDTO?.code !== '00') {
             setmessageError(res?.statusDTO?.message);
             setOpenError(true);
+            return;
           }
 
           localStorage.removeItem('user');
