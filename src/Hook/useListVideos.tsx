@@ -1,14 +1,17 @@
+/* eslint-disable promise/always-return */
+/* eslint-disable promise/no-nesting */
+/* eslint-disable promise/catch-or-return */
 import { useEffect, useState } from 'react';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
+const URL_BASE: string = path.join(os.homedir(), 'fidelizacion');
 export default function useListVideos(
+  // eslint-disable-next-line @typescript-eslint/ban-types
   setIsVideoPlay: Function,
   isVideoPlay: boolean
 ) {
-  const URL_BASE: string = path.join(os.homedir(), 'fidelizacion');
-
   const [listPromocional, setListPromocional] = useState<string[]>([]);
   const [error, setError] = useState('');
 
@@ -29,8 +32,9 @@ export default function useListVideos(
       .then((res: string[]) => setListPromocional(res))
       .catch(() => {
         setError('Volviendo a buscar videos');
-        // eslint-disable-next-line promise/catch-or-return
-        getListVideos(URL_BASE).then((res: string[]) => setListPromocional(res));
+        getListVideos().then((res: string[]) => {
+          setListPromocional(res);
+        });
       });
   }, []);
 
