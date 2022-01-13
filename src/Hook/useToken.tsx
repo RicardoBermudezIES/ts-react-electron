@@ -25,8 +25,6 @@ export default function useToken() {
 
   const getAuth = () => {
     ipc.on('allways-auth', (_event, arg) => {
-      // eslint-disable-next-line no-console
-      console.log('token'.arg);
       setToken(arg?.token);
       localStorage.setItem('token', arg.token);
     });

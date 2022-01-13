@@ -3,7 +3,6 @@ import { Box, Button, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import Odometer from 'react-odometerjs';
-import { useHistory } from 'react-router-dom';
 import Alert from '../component/Alert/Alert';
 import NavButton from '../component/NavButton';
 import useCloseSession from '../Hook/useCloseSession';
@@ -23,7 +22,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 function Home() {
-  const history = useHistory();
   const [isShow, setIsShow] = useState(false);
 
   const user = JSON.parse(localStorage.getItem('user')!)
