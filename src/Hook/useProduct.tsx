@@ -35,6 +35,13 @@ export default function useProduct() {
     ipc
       .invoke('bar', args)
       .then((res) => {
+
+        if (res?.error) {
+          // eslint-disable-next-line no-console
+          setmessageError(res?.error);
+          setOpenError(true);
+        }
+
         if (res?.statusDTO?.code !== '00') {
           // eslint-disable-next-line no-console
           setmessageError(res?.statusDTO?.message);
