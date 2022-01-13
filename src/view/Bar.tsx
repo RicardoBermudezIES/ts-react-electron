@@ -3,25 +3,22 @@ import {
   Button,
   Card,
   CardActions,
-  CardContent,
+  CircularProgress,
   Grid,
   makeStyles,
   Typography,
-  CircularProgress,
 } from '@material-ui/core';
+import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
 import React, {
-  ReactElement,
-  useState,
   JSXElementConstructor,
   memo,
+  ReactElement,
+  useState,
 } from 'react';
 import { useHistory } from 'react-router';
-import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
-import { formatNumber, shortName } from '../helpers/format';
 import Alert from '../component/Alert/Alert';
+import { formatNumber, shortName } from '../helpers/format';
 import useProduct from '../Hook/useProduct';
-import usePuntosDia from '../Hook/usePuntosDia';
-import usePuntos from '../Hook/usePuntos';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,9 +57,9 @@ function Bar(): ReactElement {
   const history = useHistory();
   const classes = useStyles();
   const { productos, openError, messageError, setOpenError } = useProduct();
-  const { puntosBar } = usePuntosDia();
-  const { puntos } = usePuntos();
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const puntosBar = JSON.parse(localStorage.getItem('puntos')!);
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = JSON.parse(localStorage.getItem('user')!);
 
@@ -142,7 +139,7 @@ function Bar(): ReactElement {
                     component="p"
                     style={{ fontWeight: 'bold' }}
                   >
-                    {formatNumber(puntos.cantidadPuntosDisponibles)}
+                    {formatNumber(puntosBar?.cantidadPuntosDisponibles)}
                   </Typography>
                   <Typography variant="h6" align="right" component="p">
                     Puntos
