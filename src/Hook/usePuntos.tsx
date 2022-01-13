@@ -2,17 +2,25 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ipcRenderer } from 'electron';
 import { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { setTimeout } from 'timers';
 import useCloseSession from './useCloseSession';
 
 const ipc = ipcRenderer;
 
 export default function usePuntos() {
+  const history = useHistory();
   const { CallbackCloseSession } = useCloseSession();
 
   const [puntos, setPuntos] = useState({
     cantidadPuntosDisponibles: 0,
     cantidadPuntosRedimidos: 0,
   });
+  const [openPuntosError, setOpenPuntosError] = useState(false);
+  const [msnPuntosError, setMsnPuntosError] = useState('');
+
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const user = JSON.parse(localStorage.getItem('user')!);
 
   const sendPuntos = () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -21,8 +29,7 @@ export default function usePuntos() {
     const localCasino = localStorage.getItem('casino');
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const localToken = localStorage.getItem('token');
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const user = JSON.parse(localStorage.getItem('user')!);
+
     const args = {
       host: authConfig?.host,
       casino: localCasino,
@@ -30,57 +37,61 @@ export default function usePuntos() {
       numeroDocumento: user?.numeroDocumento,
       token: localToken,
     };
-    if (user !== null) {
-      // eslint-disable-next-line no-console
-      console.log('pidiendo puntos');
-
-      ipc
-        .invoke('visualizarPuntos', args)
-        .then((res) => {
-          if (res?.error === 'No se conecto al servidor') {
-            console.log(res);
-            return;
-          }
-          if (res?.statusDTO?.code === '38') {
-            CallbackCloseSession();
-            return;
-          }
-          if (res?.statusDTO?.code === '00') {
-            localStorage.setItem(
-              'puntos',
-              JSON.stringify({
-                cantidadPuntosDisponibles: res.cantidadPuntosDisponibles,
-                cantidadPuntosRedimidos: res.cantidadPuntosRedimidos,
-              })
-            );
-            setPuntos({
+    ipc
+      .invoke('visualizarPuntos', args)
+      .then((res) => {
+        if (res?.error === 'No se conecto al servidor') {
+          setMsnPuntosError(res?.error);
+          setOpenPuntosError(true);
+          history.push('/login');
+          return;
+        }
+        if (res?.statusDTO?.code === '38') {
+          CallbackCloseSession();
+          return;
+        }
+        if (res?.statusDTO?.code === '00') {
+          localStorage.setItem(
+            'puntos',
+            JSON.stringify({
               cantidadPuntosDisponibles: res.cantidadPuntosDisponibles,
               cantidadPuntosRedimidos: res.cantidadPuntosRedimidos,
-            });
-          }
-        })
-        .catch((err) => {
-          if (err?.error === 'No se conecto al servidor') {
-            console.log(err);
-          }
-        });
-    }
+            })
+          );
+          setPuntos({
+            cantidadPuntosDisponibles: res.cantidadPuntosDisponibles,
+            cantidadPuntosRedimidos: res.cantidadPuntosRedimidos,
+          });
+        }
+      })
+      .catch((err) => {
+        if (err?.error === 'No se conecto al servidor') {
+          setMsnPuntosError(err?.error);
+          setOpenPuntosError(true);
+        }
+      });
   };
 
-  const callback = useCallback(
-    () => setInterval(() => sendPuntos(), 1000 * 30),
-    []
-  );
+  const callback = useCallback(sendPuntos, [
+    CallbackCloseSession,
+    history,
+    user?.numeroDocumento,
+  ]);
 
   useEffect(() => {
-    callback();
-    return () => {
-      clearInterval(callback());
-    };
-  }, []);
+    let id: any;
+    if (user !== null) {
+      id = setTimeout(() => {
+        callback();
+      }, 1000 * 60);
+    }
+    return () => clearInterval(id);
+  }, [callback]);
 
   useEffect(() => {
-    sendPuntos();
+    if (user !== null) {
+      callback();
+    }
     return () =>
       setPuntos({
         cantidadPuntosDisponibles: 0,
@@ -88,5 +99,5 @@ export default function usePuntos() {
       });
   }, []);
 
-  return { puntos };
+  return { openPuntosError, setOpenPuntosError, msnPuntosError, puntos };
 }
