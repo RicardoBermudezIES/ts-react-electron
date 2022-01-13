@@ -180,6 +180,7 @@ export default function ButtonPedidos(): ReactElement {
                             {pedido.categoriaPremio}
                           </Typography>
                           <Chip
+                            size="medium"
                             icon={
                               pedido.estado === 'EN_COLA' ? (
                                 <AlarmAddRounded />
@@ -208,7 +209,7 @@ export default function ButtonPedidos(): ReactElement {
                           </Typography>
                           {pedido.estado === 'EN_COLA' ? (
                             <Button
-                              size="small"
+                              size="medium"
                               variant="contained"
                               color="primary"
                               onClick={() => CancelPedido(pedido.pk)}
@@ -218,7 +219,7 @@ export default function ButtonPedidos(): ReactElement {
                             </Button>
                           ) : (
                             <Button
-                              size="small"
+                              size="medium"
                               variant="contained"
                               color="secondary"
                               onClick={() => ConfirmPedido(pedido.pk)}
