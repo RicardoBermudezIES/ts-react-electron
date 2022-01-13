@@ -16,7 +16,7 @@ export default function useToken() {
   const callback = useCallback(sendAuth, []);
 
   useEffect(() => {
-    let id: any;
+    let id: unknown | NodeJS.Timeout;
     if (localStorage.getItem('authConfig')) {
       id = callback();
     }
@@ -25,8 +25,9 @@ export default function useToken() {
 
   const getAuth = () => {
     ipc.on('allways-auth', (_event, arg) => {
-      setToken(arg.token);
-      console.log('token');
+      // eslint-disable-next-line no-console
+      console.log('token'.arg);
+      setToken(arg?.token);
       localStorage.setItem('token', arg.token);
     });
   };
