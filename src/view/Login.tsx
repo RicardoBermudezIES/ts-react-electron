@@ -58,6 +58,7 @@ function Login() {
 
   const [open, setOpen] = useState(false);
   const [openMasterPassword, setOpenMasterPassword] = useState(false);
+  const [counterMasterPassword, setCounterMasterPassword] = useState(0);
 
   const handleCloseMasterPassword = () => {
     setOpenMasterPassword(false);
@@ -136,12 +137,20 @@ function Login() {
     inputs.token != null && history.push('/');
   };
 
+  const masterClick = () => {
+    setCounterMasterPassword(counterMasterPassword + 1);
+    if (counterMasterPassword === 5) {
+      setOpenMasterPassword(true);
+    }
+
+    if (counterMasterPassword >= 5) {
+      setCounterMasterPassword(0);
+    }
+  };
+
   return (
     <Box paddingLeft={3} paddingTop={2}>
-      <Box
-        className={classes.config}
-        onClick={() => setOpenMasterPassword(true)}
-      />
+      <Box className={classes.config} onClick={masterClick} />
 
       <Grid
         className={classes.login}
