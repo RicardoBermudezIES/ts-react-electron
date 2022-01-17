@@ -109,6 +109,8 @@ export default function Io() {
     CloseModalBuy,
     redimirModal,
     buyModal,
+    setBuyModal,
+    setRedimirModal,
   } = useListarPedido();
 
   const prevSlide = () => {
@@ -243,7 +245,12 @@ export default function Io() {
         </Box>
       </Grid>
 
-      <Dialog fullWidth maxWidth="sm" open={buyModal} onClose={CloseModalBuy}>
+      <Dialog
+        fullWidth
+        maxWidth="sm"
+        open={buyModal}
+        onClose={() => setBuyModal(false)}
+      >
         <DialogTitle>Comprado</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -254,7 +261,14 @@ export default function Io() {
         </DialogContent>
         <DialogActions>
           <Button onClick={CloseModalBuy} color="primary">
-            Cerrar
+            Volver al home
+          </Button>
+          <Button
+            onClick={() => setBuyModal(false)}
+            variant="contained"
+            color="primary"
+          >
+            seguir comprando
           </Button>
         </DialogActions>
       </Dialog>
@@ -263,7 +277,7 @@ export default function Io() {
         fullWidth
         maxWidth="sm"
         open={redimirModal}
-        onClose={handleCloseRedimirModal}
+        onClose={() => setRedimirModal(false)}
       >
         <DialogTitle> Redimido</DialogTitle>
         <DialogContent>
@@ -274,8 +288,19 @@ export default function Io() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseRedimirModal} color="primary">
-            Cerrar
+          <Button
+            onClick={handleCloseRedimirModal}
+            color="secondary"
+            variant="contained"
+          >
+            Volver al home
+          </Button>
+          <Button
+            onClick={() => setRedimirModal(false)}
+            variant="contained"
+            color="primary"
+          >
+            seguir comprando
           </Button>
         </DialogActions>
       </Dialog>

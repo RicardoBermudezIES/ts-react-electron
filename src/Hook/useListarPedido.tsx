@@ -245,5 +245,7 @@ export default function useListarPedido() {
     buyModal,
     hasQueque,
     getListProducts,
+    setBuyModal,
+    setRedimirModal,
   };
 }
