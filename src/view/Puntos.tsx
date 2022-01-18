@@ -1,9 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router';
 import { formatNumber, shortName } from '../helpers/format';
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     overflowX: 'hidden',
     height: '100%',
@@ -28,6 +35,12 @@ const useStyles = makeStyles(() => ({
     top: -100,
     right: -150,
     zIndex: -1,
+  },
+  divider: {
+    width: '40%',
+    height: 1,
+    backgroundColor: theme.palette.error.main,
+    border: 'none',
   },
 }));
 
@@ -70,34 +83,135 @@ export default function Puntos() {
         <Box p={2}>
           <Grid container direction="row" spacing={3}>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography
-                variant="h1"
-                align="center"
-                component="p"
-                style={{ fontWeight: 'bold' }}
+              <Grid
+                container
+                direction="column"
+                spacing={3}
+                alignItems="flex-end"
               >
-                {puntos?.cantidadPuntosDisponibles
-                  ? formatNumber(puntos?.cantidadPuntosDisponibles)
-                  : 'cargando..'}
-              </Typography>
-              <Typography variant="h4" align="center" component="p">
-                Puntos Totales
-              </Typography>
+                <Grid item>
+                  <Grid
+                    container
+                    direction="row"
+                    spacing={3}
+                    alignItems="center"
+                    justify="center"
+                  >
+                    <Typography variant="h5" align="right" component="p">
+                      Puntos Totales
+                    </Typography>
+                    <Typography
+                      variant="h3"
+                      align="right"
+                      component="p"
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      {puntos?.cantidadPuntosDisponibles
+                        ? formatNumber(puntos?.cantidadPuntosDisponibles)
+                        : 'cargando..'}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid item>
+                  <Grid
+                    container
+                    direction="row"
+                    spacing={3}
+                    alignItems="center"
+                    justify="center"
+                  >
+                    <Typography variant="h5" align="right" component="p">
+                      Puntos hoy
+                    </Typography>
+                    <Typography
+                      variant="h3"
+                      align="right"
+                      component="p"
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      {puntos?.cantidadPuntosDisponibles
+                        ? formatNumber(puntos?.cantidadPuntosDisponibles)
+                        : 'cargando..'}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid item>
+                  <Grid
+                    container
+                    direction="row"
+                    spacing={3}
+                    alignItems="center"
+                    justify="center"
+                  >
+                    <Typography variant="h5" align="right" component="p">
+                      - Puntos Redimidos
+                    </Typography>
+                    <Typography
+                      variant="h3"
+                      align="right"
+                      component="p"
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      {puntos?.cantidadPuntosDisponibles
+                        ? formatNumber(puntos?.cantidadPuntosDisponibles)
+                        : 'cargando..'}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                <Divider variant="fullWidth" className={classes.divider} />
+
+                <Grid item>
+                  <Grid
+                    container
+                    direction="row"
+                    spacing={3}
+                    alignItems="center"
+                    justify="center"
+                  >
+                    <Typography variant="h5" align="right" component="p">
+                      Puntos Disponibles
+                    </Typography>
+                    <Typography
+                      variant="h3"
+                      align="right"
+                      component="p"
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      {puntos?.cantidadPuntosDisponibles
+                        ? formatNumber(puntos?.cantidadPuntosDisponibles)
+                        : 'cargando..'}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Typography
-                variant="h1"
-                align="center"
-                component="p"
-                style={{ fontWeight: 'bold' }}
+              <Box
+                padding={4}
+                justifyContent="center"
+                alignItems="center"
+                justifyItems="center"
               >
-                {puntos?.cantidadPuntosRedimidos
-                  ? formatNumber(puntos?.cantidadPuntosRedimidos)
-                  : 'cargando..'}
-              </Typography>
-              <Typography variant="h4" align="center" component="p">
-                Puntos hoy
-              </Typography>
+                <Typography
+                  variant="h3"
+                  align="right"
+                  component="p"
+                  style={{ fontWeight: 'bold' }}
+                >
+                  {puntos?.cantidadPuntosRedimidos
+                    ? formatNumber(puntos?.cantidadPuntosRedimidos)
+                    : 'cargando..'}
+                </Typography>
+                <Typography variant="h5" align="right" component="p">
+                  Puntos a vencer
+                </Typography>
+                <Typography variant="h5" align="right" component="p">
+                  01/05/2021
+                </Typography>
+              </Box>
             </Grid>
           </Grid>
         </Box>
