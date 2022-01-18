@@ -1,12 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router';
 import { formatNumber, shortName } from '../helpers/format';
@@ -36,10 +29,16 @@ const useStyles = makeStyles((theme) => ({
     right: -150,
     zIndex: -1,
   },
-  divider: {
-    width: '40%',
-    height: 1,
-    backgroundColor: theme.palette.error.main,
+  items: {
+    padding: theme.spacing(1),
+  },
+  vence: {
+    fontWeight: 'bold',
+    color: theme.palette.secondary.main,
+  },
+  disponibles: {
+    backgroundColor: theme.palette.primary.main,
+    padding: theme.spacing(1),
     border: 'none',
   },
 }));
@@ -89,13 +88,14 @@ export default function Puntos() {
                 spacing={3}
                 alignItems="flex-end"
               >
-                <Grid item>
+                <Grid item style={{ width: '75%' }}>
                   <Grid
                     container
                     direction="row"
                     spacing={3}
                     alignItems="center"
-                    justify="center"
+                    justify="space-between"
+                    className={classes.items}
                   >
                     <Typography variant="h5" align="right" component="p">
                       Puntos Totales
@@ -104,7 +104,7 @@ export default function Puntos() {
                       variant="h3"
                       align="right"
                       component="p"
-                      style={{ fontWeight: 'bold' }}
+                      style={{ fontWeight: 'normal' }}
                     >
                       {puntos?.cantidadPuntosDisponibles
                         ? formatNumber(puntos?.cantidadPuntosDisponibles)
@@ -113,13 +113,14 @@ export default function Puntos() {
                   </Grid>
                 </Grid>
 
-                <Grid item>
+                <Grid item style={{ width: '75%' }}>
                   <Grid
                     container
                     direction="row"
                     spacing={3}
                     alignItems="center"
-                    justify="center"
+                    justify="space-between"
+                    className={classes.items}
                   >
                     <Typography variant="h5" align="right" component="p">
                       Puntos hoy
@@ -128,7 +129,7 @@ export default function Puntos() {
                       variant="h3"
                       align="right"
                       component="p"
-                      style={{ fontWeight: 'bold' }}
+                      style={{ fontWeight: 'normal' }}
                     >
                       {puntos?.cantidadPuntosDisponibles
                         ? formatNumber(puntos?.cantidadPuntosDisponibles)
@@ -137,23 +138,25 @@ export default function Puntos() {
                   </Grid>
                 </Grid>
 
-                <Grid item>
+                <Grid item style={{ width: '75%' }}>
                   <Grid
                     container
                     direction="row"
                     spacing={3}
                     alignItems="center"
-                    justify="center"
+                    justify="space-between"
+                    className={classes.items}
                   >
                     <Typography variant="h5" align="right" component="p">
-                      - Puntos Redimidos
+                      Puntos Redimidos
                     </Typography>
                     <Typography
                       variant="h3"
                       align="right"
                       component="p"
-                      style={{ fontWeight: 'bold' }}
+                      style={{ fontWeight: 'normal' }}
                     >
+                      -{' '}
                       {puntos?.cantidadPuntosDisponibles
                         ? formatNumber(puntos?.cantidadPuntosDisponibles)
                         : 'cargando..'}
@@ -161,24 +164,28 @@ export default function Puntos() {
                   </Grid>
                 </Grid>
 
-                <Divider variant="fullWidth" className={classes.divider} />
-
-                <Grid item>
+                <Grid item style={{ width: '75%' }}>
                   <Grid
                     container
                     direction="row"
                     spacing={3}
                     alignItems="center"
-                    justify="center"
+                    justify="space-between"
+                    className={classes.disponibles}
                   >
-                    <Typography variant="h5" align="right" component="p">
+                    <Typography
+                      variant="h5"
+                      align="right"
+                      component="p"
+                      style={{ fontWeight: 'bolder' }}
+                    >
                       Puntos Disponibles
                     </Typography>
                     <Typography
                       variant="h3"
                       align="right"
                       component="p"
-                      style={{ fontWeight: 'bold' }}
+                      style={{ fontWeight: 'bolder' }}
                     >
                       {puntos?.cantidadPuntosDisponibles
                         ? formatNumber(puntos?.cantidadPuntosDisponibles)
@@ -195,18 +202,18 @@ export default function Puntos() {
                 alignItems="center"
                 justifyItems="center"
               >
+                <Typography variant="h5" align="right" component="p">
+                  Puntos a vencer
+                </Typography>
                 <Typography
                   variant="h3"
                   align="right"
                   component="p"
-                  style={{ fontWeight: 'bold' }}
+                  className={classes.vence}
                 >
                   {puntos?.cantidadPuntosRedimidos
                     ? formatNumber(puntos?.cantidadPuntosRedimidos)
                     : 'cargando..'}
-                </Typography>
-                <Typography variant="h5" align="right" component="p">
-                  Puntos a vencer
                 </Typography>
                 <Typography variant="h5" align="right" component="p">
                   01/05/2021
