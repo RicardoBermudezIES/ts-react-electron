@@ -140,7 +140,7 @@ export default function ButtonPedidos(): ReactElement {
         )}
         <Cart />
         <Typography component="p" variant="h6" style={{ color: 'white' }}>
-          Órdenes
+          Pedidos
         </Typography>
       </Button>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
