@@ -3,6 +3,7 @@ import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import { useHistory } from 'react-router';
 import { formatNumber, shortName } from '../helpers/format';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     overflowX: 'hidden',
@@ -15,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
     background:
       'linear-gradient(180deg, rgba(250, 93, 185, 1) 0%, rgba(239, 35, 35, 1) 100% )',
     position: 'absolute',
-    bottom: -150,
-    left: -100,
+    bottom: -140,
+    right: -110,
     zIndex: -1,
   },
   blue: {
@@ -25,12 +26,12 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 999,
     background: 'linear-gradient(180deg, #3af0b0 0%, #029af9 100%)',
     position: 'absolute',
-    top: -100,
+    top: -150,
     right: -150,
     zIndex: -1,
   },
   items: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(0.5),
   },
   vence: {
     fontWeight: 'bold',
@@ -38,8 +39,11 @@ const useStyles = makeStyles((theme) => ({
   },
   disponibles: {
     backgroundColor: theme.palette.primary.main,
-    padding: theme.spacing(1),
+    padding: theme.spacing(0.5),
     border: 'none',
+  },
+  itemGrid: {
+    width: '96%',
   },
 }));
 
@@ -53,7 +57,7 @@ export default function Puntos() {
     <Box p={2} className={classes.root}>
       <Box className={classes.red} />
       <Box className={classes.blue} />
-      <Grid container direction="column" spacing={3}>
+      <Grid container direction="column" spacing={1}>
         <Grid item lg={12} md={12} sm={12} xs={12}>
           <Grid container direction="row" spacing={2} alignItems="center">
             <Grid item lg={2} md={2} sm={2} xs={2}>
@@ -81,14 +85,19 @@ export default function Puntos() {
         {/* fin del header */}
         <Box p={2}>
           <Grid container direction="row" spacing={3}>
-            <Grid item lg={6} md={6} sm={6} xs={6}>
+            <Grid item lg={8} md={8} sm={8} xs={8}>
+              <Grid container alignItems="flex-end" style={{ marginBottom: 5 }}>
+                <Typography variant="h4" align="right" component="p">
+                  Detalle de puntos
+                </Typography>
+              </Grid>
               <Grid
                 container
                 direction="column"
-                spacing={3}
+                spacing={2}
                 alignItems="flex-end"
               >
-                <Grid item style={{ width: '75%' }}>
+                <Grid item className={classes.itemGrid}>
                   <Grid
                     container
                     direction="row"
@@ -98,7 +107,7 @@ export default function Puntos() {
                     className={classes.items}
                   >
                     <Typography variant="h5" align="right" component="p">
-                      Puntos Totales
+                      Iniciales hoy
                     </Typography>
                     <Typography
                       variant="h3"
@@ -113,7 +122,7 @@ export default function Puntos() {
                   </Grid>
                 </Grid>
 
-                <Grid item style={{ width: '75%' }}>
+                <Grid item className={classes.itemGrid}>
                   <Grid
                     container
                     direction="row"
@@ -123,7 +132,7 @@ export default function Puntos() {
                     className={classes.items}
                   >
                     <Typography variant="h5" align="right" component="p">
-                      Puntos hoy
+                      Acomulados hoy
                     </Typography>
                     <Typography
                       variant="h3"
@@ -138,7 +147,7 @@ export default function Puntos() {
                   </Grid>
                 </Grid>
 
-                <Grid item style={{ width: '75%' }}>
+                <Grid item className={classes.itemGrid}>
                   <Grid
                     container
                     direction="row"
@@ -148,7 +157,7 @@ export default function Puntos() {
                     className={classes.items}
                   >
                     <Typography variant="h5" align="right" component="p">
-                      Puntos Redimidos
+                      Redimidos hoy
                     </Typography>
                     <Typography
                       variant="h3"
@@ -164,7 +173,7 @@ export default function Puntos() {
                   </Grid>
                 </Grid>
 
-                <Grid item style={{ width: '75%' }}>
+                <Grid item className={classes.itemGrid}>
                   <Grid
                     container
                     direction="row"
@@ -179,7 +188,7 @@ export default function Puntos() {
                       component="p"
                       style={{ fontWeight: 'bolder' }}
                     >
-                      Puntos Disponibles
+                      Disponibles
                     </Typography>
                     <Typography
                       variant="h3"
@@ -195,7 +204,7 @@ export default function Puntos() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item lg={6} md={6} sm={6} xs={6}>
+            <Grid item lg={4} md={4} sm={4} xs={4}>
               <Box
                 padding={4}
                 justifyContent="center"
