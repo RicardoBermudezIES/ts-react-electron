@@ -28,7 +28,7 @@ export default function useProduct() {
     const localToken = localStorage.getItem('token');
 
     const args = {
-      host: auth.host,
+      host: auth?.host,
       casino: localCasino,
       token: localToken,
     };

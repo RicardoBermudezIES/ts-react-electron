@@ -36,7 +36,7 @@ export default function useLoginUser() {
     const localMaquina = localStorage.getItem('maquina');
     localStorage.setItem('numeroDocumento', inputs?.username);
     const args = {
-      host: authConfig.host,
+      host: authConfig?.host,
       serial: localMaquina,
       numeroDocumento: inputs?.username!,
       token: localToken,
@@ -66,9 +66,9 @@ export default function useLoginUser() {
           'user',
           JSON.stringify({
             numeroDocumento,
-            nombre: res.nombreCompleto,
-            clave: res.clave,
-            billetero: res.enableBilletero,
+            nombre: res?.nombreCompleto,
+            clave: res?.clave,
+            billetero: res?.enableBilletero,
           })
         );
 

@@ -51,7 +51,7 @@ export default function useListarPedido() {
     const maquina = localStorage.getItem('maquina');
     const localToken = localStorage.getItem('token');
     const args = {
-      host: auth.host,
+      host: auth?.host,
       numeroDocumento: user?.numeroDocumento ?? null,
       maquina,
       token: localToken,
@@ -83,7 +83,7 @@ export default function useListarPedido() {
     const localToken = localStorage.getItem('token');
 
     const args = {
-      host: auth.host,
+      host: auth?.host,
       numeroDocumento: user?.numeroDocumento ?? null,
       maquina,
       token: localToken,
@@ -102,7 +102,7 @@ export default function useListarPedido() {
     const localToken = localStorage.getItem('token');
 
     const args = {
-      host: auth.host,
+      host: auth?.host,
       numeroDocumento: user?.numeroDocumento ?? null,
       maquina,
       token: localToken,
@@ -123,7 +123,7 @@ export default function useListarPedido() {
     const localToken = localStorage.getItem('token');
 
     const args = {
-      host: auth.host,
+      host: auth?.host,
       numeroDocumento: auth?.numeroDocumento,
       maquina,
       token: localToken,
