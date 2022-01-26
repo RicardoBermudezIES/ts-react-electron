@@ -31,27 +31,21 @@ export default function Form2({
   maquina,
 }) {
   //estado Globales
-  const {  config } = useContext(DataContext);
+  const { config } = useContext(DataContext);
 
   const classes = useStyles2();
   const [casinos, setCasinos] = useState([]);
   const [maquinas, setMaquinas] = useState([]);
 
   //hacer peticiones para obtener los casinos
-  const localToken = localStorage.getItem('token')
-    console.log(localToken)
+  const localToken = localStorage.getItem('token');
 
-    const authConfig = JSON.parse(localStorage.getItem('authConfig'))
-    console.log(authConfig)
-
+  const authConfig = JSON.parse(localStorage.getItem('authConfig'));
 
   const getCasinos = () => {
-
-
-
     let arg = {
       token: localToken,
-      host: authConfig.host,
+      host: authConfig?.host,
     };
     ipc.send('get-casinos', arg);
   };
@@ -59,16 +53,16 @@ export default function Form2({
   useEffect(() => {
     ipc.on('get-casinos', (event, arg) => {
       console.log(arg, 'casinos configuracion.tsx');
-      setCasinos(arg)
-    })
+      setCasinos(arg);
+    });
   }, []);
 
   const getMaquinas = () => {
     let arg = {
-        token: localToken,
-        host: authConfig.host,
-        idCasino:casino
-      };
+      token: localToken,
+      host: authConfig?.host,
+      idCasino: casino,
+    };
 
     ipc.send('get-maquinas', arg);
   };
@@ -95,9 +89,12 @@ export default function Form2({
               labelId="Casino"
               onChange={handleChangeCasino}
             >
-              {casinos  ? (
-                casinos.map((c,i) => (
-                  <MenuItem key={i} value={c.codigoCasino}> {c.nombreCasino} </MenuItem>
+              {casinos ? (
+                casinos.map((c, i) => (
+                  <MenuItem key={i} value={c?.codigoCasino}>
+                    {' '}
+                    {c?.nombreCasino}{' '}
+                  </MenuItem>
                 ))
               ) : (
                 <MenuItem value="">
@@ -119,9 +116,12 @@ export default function Form2({
               labelId="Maquina"
               onChange={handleChangeMaquina}
             >
-              {maquinas  ? (
+              {maquinas ? (
                 maquinas.map((m) => (
-                  <MenuItem key={m.numeroDispositivo} value={m.serial}> {m.numeroDispositivo} </MenuItem>
+                  <MenuItem key={m.numeroDispositivo} value={m.serial}>
+                    {' '}
+                    {m.numeroDispositivo}{' '}
+                  </MenuItem>
                 ))
               ) : (
                 <MenuItem value="">
