@@ -179,7 +179,7 @@ export default function Configuracion() {
   const handleFidelizar = () => {
     const localToken = localStorage.getItem('token');
     const args = {
-      host: inputs.host,
+      host: inputs?.host,
       token: localToken,
       serial: maquina,
     };
@@ -190,23 +190,23 @@ export default function Configuracion() {
     ipc.on('VincularMaquina', (_event, arg) => {
       // eslint-disable-next-line no-console
       console.log(arg, 'VincularMaquina configuracion.tsx');
-      if (arg.statusDTO.code !== '00') {
+      if (arg?.statusDTO?.code !== '00') {
         setErrorVinculacion(arg.statusDTO.message);
         setOpen(true);
       }
-      if (arg.statusDTO.code === '00') setVinculacion(true);
-      handleNext();
+      if (arg?.statusDTO?.code === '00') {
+        setVinculacion(true);
+        handleNext();
+      }
     });
-
-    console.log(vinculacion);
   }, []);
 
   const handleChangeCasino = (event) => {
-    localStorage.setItem('casino', event.target.value)
+    localStorage.setItem('casino', event.target.value);
     setCasino(event.target.value);
   };
   const handleChangeMaquina = (event) => {
-    localStorage.setItem('maquina', event.target.value)
+    localStorage.setItem('maquina', event.target.value);
     setMaquina(event.target.value);
   };
 
@@ -237,9 +237,7 @@ export default function Configuracion() {
         {activeStep === steps.length ? (
           <Grid>
             <Typography>
-              {errorVinculacion
-                ? errorVinculacion
-                : 'Ya configuraste la Fidelizacion'}
+              {errorVinculacion || 'Ya configuraste la Fidelizacion'}
             </Typography>
             <Button
               variant="text"
@@ -249,7 +247,7 @@ export default function Configuracion() {
               Reiniciar
             </Button>
             <Button
-            disabled={errorVinculacion}
+              disabled={errorVinculacion}
               variant="contained"
               color="primary"
               onClick={handleApp}
