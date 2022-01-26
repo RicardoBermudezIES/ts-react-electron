@@ -132,7 +132,7 @@ export default function Puntos() {
                     className={classes.items}
                   >
                     <Typography variant="h5" align="right" component="p">
-                      Acomulados hoy
+                      Acumulados hoy
                     </Typography>
                     <Typography
                       variant="h3"
