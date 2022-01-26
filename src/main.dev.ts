@@ -105,7 +105,7 @@ const createWindow = async () => {
 
   // @TODO: Use 'ready-to-show' event
   //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
@@ -183,31 +183,34 @@ ipc.on('get-maquinas', async (event, arg) => {
 // vincularMaquina
 ipc.on('VincularMaquina', async (event, arg) => {
   const res = await VincularMaquina(arg);
+  console.log(res);
   event.reply('VincularMaquina', res);
 });
 
 // fidelizarMaquina
 ipc.handle('fidelizarMaquina', async (_event, arg) => {
   const res = await fidelzarMaquina(arg);
+  console.log(res);
   return res;
 });
 
 // VisualizarPuntos
 ipc.handle('visualizarPuntos', async (_event, arg) => {
   const res = await visualizarPuntos(arg);
+  console.log(res);
   return res;
 });
 
 ipc.handle('cerrar-sesion', async (_event, arg) => {
   const res = await closeSession(arg);
-
+  console.log(res);
   return res;
 });
 
 // consultar bar
 ipc.handle('bar', async (_event, arg) => {
   const res = await barServices(arg);
-
+  console.log(res);
   return res;
 });
 
@@ -216,7 +219,7 @@ ipc.on('comprar-productos', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
   res = await comprarPremio(arg);
-
+  console.log(res);
   event.reply('comprar-productos', res);
 });
 
@@ -225,24 +228,20 @@ ipc.on('realizar-peticion', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
   res = await realizarPeticion(arg);
-
+  console.log(res);
   event.reply('realizar-peticion', res);
 });
 
 // consulta listar peticion por peticiones
 ipc.handle('listar-peticiones', async (_event, arg) => {
-  let res;
-  // eslint-disable-next-line prefer-const
-  res = await listarPeticionesXCliente(arg);
-
+  const res = await listarPeticionesXCliente(arg);
+  console.log(res);
   return res;
 });
 
 // consulta anular peticiones
 ipc.on('anular-peticiones', async (event, arg) => {
-  let res;
-  // eslint-disable-next-line prefer-const
-  res = await anularPeticion(arg);
+  const res = await anularPeticion(arg);
   event.reply('anular-peticiones', res);
 });
 
@@ -251,25 +250,28 @@ ipc.on('confirmar-peticiones', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
   res = await confirmarPeticion(arg);
-
+  console.log(res);
   event.reply('confirmar-peticiones', res);
 });
 
 // VisualizarPuntos
 ipc.handle('visualizarPuntosxDia', async (_event, arg) => {
   const res = await visualizarPuntosDia(arg);
+  console.log(res);
   return res;
 });
 
 // soporte ***** crear solicitud
 ipc.handle('crearSolicitud', async (_event, arg) => {
   const res = await crearSolicitud(arg);
+  console.log(res);
   return res;
 });
 
 /// todas-solicitudes
 ipc.handle('todas-solicitudes', async (_event, arg) => {
   const res = await todasSolicitudes(arg);
+  console.log(res);
   return res;
 });
 

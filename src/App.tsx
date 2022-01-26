@@ -21,7 +21,7 @@ export default function App() {
         <Promocional />
         <ThemeProvider theme={theme}>
           <Box position="absolute" bottom="5px" left="5px">
-            <img style={{ width: 110 }} src={Juego} alt="juego Responsable" />
+            <img style={{ width: 150 }} src={Juego} alt="juego Responsable" />
           </Box>
 
           {!open ? null : (
