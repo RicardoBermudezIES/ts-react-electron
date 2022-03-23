@@ -40,8 +40,6 @@ export const comprarPremio = (arg) => {
 
     })
     .catch((error: AxiosError) => {
-      return {
-        error: 'No se conecto al servidor',
-      };
+      return  error;
     });
 };

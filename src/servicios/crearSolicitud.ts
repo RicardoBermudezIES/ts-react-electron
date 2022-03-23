@@ -50,8 +50,6 @@ export const crearSolicitud = async (arg) => {
     const res = await axios(config);
     return res.data;
   } catch (error) {
-    return {
-      error: 'No se conecto al servidor',
-    };;
+    return  error;
   }
 };

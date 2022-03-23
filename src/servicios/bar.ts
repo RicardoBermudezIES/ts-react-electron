@@ -29,8 +29,6 @@ export const barServices = (arg) => {
       return res.data;
     })
     .catch((error: AxiosError) => {
-      return {
-        error: 'No se conecto al servidor',
-      };
+      return  error;
     });
 };

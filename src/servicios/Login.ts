@@ -39,8 +39,6 @@ export const fidelzarMaquina = (arg: {
       return res.data;
     })
     .catch(() => {
-      return {
-        error: 'No se conecto al servidor',
-      };
+      return  error;
     });
 };

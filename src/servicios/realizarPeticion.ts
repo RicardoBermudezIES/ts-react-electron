@@ -1,5 +1,5 @@
 import Https from 'https';
-import axios, {  AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 
 export const realizarPeticion = (arg) => {
   const { host, numeroDocumento, maquina, token, puk } = arg;
@@ -9,12 +9,12 @@ export const realizarPeticion = (arg) => {
     parametros: [
       {
         nombreParametro: 'numeroDocumento',
-        valorParametro: numeroDocumento ? numeroDocumento+"" : null,
+        valorParametro: numeroDocumento ? numeroDocumento + "" : null,
 
-      },{
+      }, {
         nombreParametro: 'serial',
         valorParametro: `${maquina}`
-      },{
+      }, {
         nombreParametro: 'idPeticion',
         valorParametro: `${puk}`
       },
@@ -40,8 +40,6 @@ export const realizarPeticion = (arg) => {
 
     })
     .catch((error: AxiosError) => {
-      return {
-        error: 'No se conecto al servidor',
-      };
-        });
+      return error;
+    });
 };
