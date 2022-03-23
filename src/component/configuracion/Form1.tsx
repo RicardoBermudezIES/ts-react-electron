@@ -4,10 +4,17 @@ import {
   Box,
   Grid,
   TextField,
+  FormControl,
+  IconButton,
+  Input,
+  InputAdornment,
+  InputLabel,
 } from '@material-ui/core';
 import Keyboard from 'react-simple-keyboard';
 import { ipcRenderer } from 'electron';
 import Alert from '../Alert/Alert';
+import { Visibility,  VisibilityOff } from '@material-ui/icons'
+
 
 const ipc = ipcRenderer;
 
@@ -17,6 +24,7 @@ export default function Form1({ setInputs, inputs, setIsSync }) {
     //estado Globales
     const [openModal, setOpenModal] = useState(false);
     const [message, setMessage] = useState('default');
+    const [showPassword, setShowPassword]= useState(false);
 
     const [layoutName, setLayoutName] = useState('default');
     const [inputName, setInputName] = useState();
@@ -104,6 +112,14 @@ export default function Form1({ setInputs, inputs, setIsSync }) {
       setkeyboardOpen(true);
     };
 
+    const handleClickShowPassword = () => {
+      setShowPassword(!showPassword );
+    };
+  
+    const handleMouseDownPassword = (event) => {
+      event.preventDefault();
+    };
+
     return (
       <Box p={2}>
         {
@@ -127,16 +143,29 @@ export default function Form1({ setInputs, inputs, setIsSync }) {
               />
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={4}>
-              <TextField
+            <FormControl style={{ width:'100%', height: '100%' ,backgroundColor:'#fff'}}>
+              <InputLabel  style={{fontSize: 22,  padding:4  }}>Password</InputLabel>
+              <Input
                 fullWidth
-                type="password"
+                style={{height: '100%' }}
                 name="password"
-                label="password"
-                variant="filled"
+                type={showPassword ? 'text' : 'password'}
                 value={getInputValue('password')}
                 onFocus={() => setActiveInput('password')}
                 onChange={onChangeInput}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
+            </FormControl>
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={4}>
               <TextField
