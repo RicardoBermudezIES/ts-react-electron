@@ -120,17 +120,17 @@ function Home() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
+        <Grid item xl={8} lg={8} md={8} sm={8} xs={8}>
           <Grid
             container
             alignItems="flex-end"
             justify="flex-end"
-            direction="column"
+            direction="row"
           >
             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-              <Box display="flex" flexDirection="column" alignItems="flex-end">
+              <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="space-between" p={2}>
                 <Typography
-                  variant="h2"
+                  variant="h4"
                   component="h2"
                   color="secondary"
                   align="right"
@@ -143,17 +143,17 @@ function Home() {
                   onClick={() => setIsShow(!isShow)}
                   variant="contained"
                   color="secondary"
-                  style={{ maxWidth: 240, fontSize: 24 }}
                 >
                   {isShow ? 'Ocultar nombre' : 'Mostrar nombre'}
                 </Button>
               </Box>
             </Grid>
           </Grid>
+          <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+            <NavButton />
+          </Grid>
         </Grid>
-        <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
-          <NavButton />
-        </Grid>
+
       </Grid>
       {messageError ? (
         <Alert

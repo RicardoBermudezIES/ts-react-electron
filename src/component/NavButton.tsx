@@ -20,8 +20,6 @@ export default function NavButton() {
   return (
     <>
       <Grid justify="flex-end" container spacing={1}>
-        <Grid item>
-          <Grid container alignItems="flex-end" direction="column" spacing={1}>
             <Grid item>
               <Button style={{ display: 'grid' }} onClick={goPuntos}>
                 <PuntosIcon />
@@ -40,10 +38,6 @@ export default function NavButton() {
                 </Typography>
               </Button>
             </Grid>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <Grid container alignItems="flex-end" direction="column" spacing={1}>
             <Grid item>
               <ButtonHelper />
             </Grid>
@@ -56,15 +50,7 @@ export default function NavButton() {
                 </Typography>
               </Button>
             </Grid>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <Grid container alignItems="flex-end" direction="column" spacing={1}>
-            <Grid item>
               <ButtonPedidos />
-            </Grid>
-          </Grid>
-        </Grid>
       </Grid>
     </>
   );
