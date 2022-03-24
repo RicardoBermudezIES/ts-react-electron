@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router';
+import SingleBar from '../component/SingleBar/SingleBar';
 import { formatNumber, shortName } from '../helpers/format';
 
 const useStyles = makeStyles((theme) => ({
@@ -47,12 +48,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const max = 150;
+
 export default function Puntos() {
   const classes = useStyles();
   const history = useHistory();
 
   const user = JSON.parse(localStorage.getItem('user')!);
   const puntos = JSON.parse(localStorage.getItem('puntos')!);
+
+  const [list, setList] = useState([
+    { data: 15, label: 'hoy' },
+    { data: 80, label: '+1' },
+    { data: 233, label: '+3' },
+    { data: 344, label: '+5' },
+    { data: 455, label: '+7' }])
+
   return (
     <Box p={2} className={classes.root}>
       <Box className={classes.red} />
@@ -85,7 +96,7 @@ export default function Puntos() {
         {/* fin del header */}
         <Box p={2}>
           <Grid container direction="row" spacing={3}>
-            <Grid item lg={8} md={8} sm={8} xs={8}>
+            <Grid item lg={6} md={6} sm={6} xs={6}>
               <Grid container alignItems="flex-end" style={{ marginBottom: 5 }}>
                 <Typography variant="h4" align="right" component="p">
                   Detalle de puntos
@@ -220,13 +231,23 @@ export default function Puntos() {
                   component="p"
                   className={classes.vence}
                 >
-                  {puntos?.cantidadPuntosRedimidos
-                    ? formatNumber(puntos?.cantidadPuntosRedimidos)
-                    : 'cargando..'}
+                  {list[list.length -1].data}
                 </Typography>
-                <Typography variant="h5" align="right" component="p">
-                  01/05/2021
-                </Typography>
+                <div style={{ display: "flex", justifyContent:"flex-end" }}>
+                  {list.map((e, i) => {
+                    const y = max- (e.data * max / list[list.length -1].data );
+                    return (
+                      <SingleBar
+                        key={i}
+                        width="40px"
+                        height="150px"
+                        color="#EF2425"
+                        percentage={`${e.label}`}
+                        data={`M 0 ${max} L 0  ${y} L 60 ${y} l 60 ${max} Z`}
+                      />
+                    );
+                  })}
+                </div>
               </Box>
             </Grid>
           </Grid>
