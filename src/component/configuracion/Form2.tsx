@@ -53,6 +53,10 @@ export default function Form2({
   useEffect(() => {
     ipc.on('get-casinos', (event, arg) => {
       console.log(arg, 'casinos configuracion.tsx');
+      if(arg === 'Error: Request failed with status code 404'){
+        setCasinos([]);
+        return 
+      }
       setCasinos(arg);
     });
   }, []);
@@ -89,8 +93,8 @@ export default function Form2({
               labelId="Casino"
               onChange={handleChangeCasino}
             >
-              {casinos ? (
-                casinos.map((c, i) => (
+              {casinos?.length > 0 ? (
+                casinos?.map((c, i) => (
                   <MenuItem key={i} value={c?.codigoCasino}>
                     {' '}
                     {c?.nombreCasino}{' '}
@@ -116,11 +120,11 @@ export default function Form2({
               labelId="Maquina"
               onChange={handleChangeMaquina}
             >
-              {maquinas ? (
-                maquinas.map((m) => (
-                  <MenuItem key={m.numeroDispositivo} value={m.serial}>
+              {maquinas?.length > 0 ? (
+                maquinas?.map((m) => (
+                  <MenuItem key={m?.numeroDispositivo} value={m?.serial}>
                     {' '}
-                    {m.numeroDispositivo}{' '}
+                    {m?.numeroDispositivo}{' '}
                   </MenuItem>
                 ))
               ) : (
