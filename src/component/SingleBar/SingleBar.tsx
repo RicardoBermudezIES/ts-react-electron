@@ -1,6 +1,6 @@
 import React from "react";
 
-function SingleBar({ width, height, data, color, percentage }) {
+function SingleBar({ width, height, data, color, percentage, label }) {
   return (
     <div
       style={{
@@ -9,7 +9,9 @@ function SingleBar({ width, height, data, color, percentage }) {
         alignItems: "center"
       }}
     >
+      
       <svg style={{ marginLeft: 5 }} width={width} height={height}>
+        
         <path
           style={{
             animation: "bounce linear 600ms",
@@ -20,7 +22,8 @@ function SingleBar({ width, height, data, color, percentage }) {
           fill={color}
         />
       </svg>
-      <p style={{ fontSize: 12 }}>{percentage}</p>
+      <p style={{ fontSize: 14, margin:0 ,marginTop:4}}>{label} </p>
+      <p style={{ fontSize: 20, margin:0, marginTop:4 }}>{percentage} </p>
     </div>
   );
 }

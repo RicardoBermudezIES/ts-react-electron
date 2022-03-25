@@ -60,7 +60,7 @@ export default function Puntos() {
   const [list, setList] = useState([
     { data: 15, label: 'hoy' },
     { data: 80, label: '+1' },
-    { data: 233, label: '+3' },
+    { data: 200, label: '+3' },
     { data: 344, label: '+5' },
     { data: 455, label: '+7' }])
 
@@ -242,11 +242,17 @@ export default function Puntos() {
                         width="40px"
                         height="150px"
                         color="#EF2425"
+                        label={e.data}
                         percentage={`${e.label}`}
                         data={`M 0 ${max} L 0  ${y} L 60 ${y} l 60 ${max} Z`}
                       />
                     );
                   })}
+                  <div style={{ display: "flex", alignSelf:"flex-end" }}>
+                  <Typography style={{ lineHeight:1 }} variant="h5" align="right" component="p">
+                  dias
+                </Typography>
+                  </div>
                 </div>
               </Box>
             </Grid>
