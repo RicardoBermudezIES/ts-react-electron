@@ -22,8 +22,8 @@ function SingleBar({ width, height, data, color, percentage, label }) {
           fill={color}
         />
       </svg>
-      <p style={{ fontSize: 14, margin:0 ,marginTop:4}}>{label} </p>
-      <p style={{ fontSize: 20, margin:0, marginTop:4 }}>{percentage} </p>
+      <p style={{ fontSize: 14, margin:0 ,marginTop:4 }}>{ label } </p>
+      <p style={{ fontSize: 20, margin:0, marginTop:4 }}>{ percentage } </p>
     </div>
   );
 }

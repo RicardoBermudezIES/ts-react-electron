@@ -95,8 +95,8 @@ export default function Puntos() {
         </Grid>
         {/* fin del header */}
         <Box p={2}>
-          <Grid container direction="row" spacing={3}>
-            <Grid item lg={6} md={6} sm={6} xs={6}>
+          <Grid container direction="row" spacing={2}>
+            <Grid item lg={6} md={6} sm={6} xs={6} style={{ paddingLeft: 20 }}>
               <Grid container alignItems="flex-end" style={{ marginBottom: 5 }}>
                 <Typography variant="h4" align="right" component="p">
                   Detalle de puntos
@@ -215,9 +215,9 @@ export default function Puntos() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item lg={4} md={4} sm={4} xs={4}>
+            <Grid item lg={5} md={5} sm={5} xs={5}>
               <Box
-                padding={4}
+                padding={2}
                 justifyContent="center"
                 alignItems="center"
                 justifyItems="center"
