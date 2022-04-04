@@ -126,8 +126,8 @@ export default function Puntos() {
                       component="p"
                       style={{ fontWeight: 'normal' }}
                     >
-                      {puntos?.cantidadPuntosDisponibles
-                        ? formatNumber(puntos?.cantidadPuntosDisponibles)
+                      {puntos?.puntosIniciales
+                        ? formatNumber(puntos?.puntosIniciales)
                         : 'cargando..'}
                     </Typography>
                   </Grid>
@@ -151,8 +151,8 @@ export default function Puntos() {
                       component="p"
                       style={{ fontWeight: 'normal' }}
                     >
-                      {puntos?.cantidadPuntosDisponibles
-                        ? formatNumber(puntos?.cantidadPuntosDisponibles)
+                      {puntos?.puntosAcumuladosHoy
+                        ? formatNumber(puntos?.puntosAcumuladosHoy)
                         : 'cargando..'}
                     </Typography>
                   </Grid>
@@ -177,8 +177,8 @@ export default function Puntos() {
                       style={{ fontWeight: 'normal' }}
                     >
                       -{' '}
-                      {puntos?.cantidadPuntosDisponibles
-                        ? formatNumber(puntos?.cantidadPuntosDisponibles)
+                      {puntos?.puntosRedimidosHoy
+                        ? formatNumber(puntos?.puntosRedimidosHoy)
                         : 'cargando..'}
                     </Typography>
                   </Grid>
