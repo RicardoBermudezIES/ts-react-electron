@@ -14,7 +14,9 @@ export default function usePuntos() {
 
   const [puntos, setPuntos] = useState({
     cantidadPuntosDisponibles: 0,
-    cantidadPuntosRedimidos: 0,
+    puntosAcumuladosHoy: 0,
+    puntosIniciales: 0,
+    puntosRedimidosHoy:0
   });
   const [openPuntosError, setOpenPuntosError] = useState(false);
   const [msnPuntosError, setMsnPuntosError] = useState('');
@@ -53,13 +55,17 @@ export default function usePuntos() {
           localStorage.setItem(
             'puntos',
             JSON.stringify({
-              cantidadPuntosDisponibles: res.cantidadPuntosDisponibles,
-              cantidadPuntosRedimidos: res.cantidadPuntosRedimidos,
+              cantidadPuntosDisponibles: res?.cantidadPuntosDisponibles,
+              puntosAcumuladosHoy: res?.puntosAcumuladosHoy,
+              puntosIniciales: res?.puntosIniciales,
+              puntosRedimidosHoy: res?.puntosRedimidosHoy,
             })
           );
           setPuntos({
-            cantidadPuntosDisponibles: res.cantidadPuntosDisponibles,
-            cantidadPuntosRedimidos: res.cantidadPuntosRedimidos,
+            cantidadPuntosDisponibles: res?.cantidadPuntosDisponibles,
+            puntosAcumuladosHoy: res?.puntosAcumuladosHoy,
+            puntosIniciales: res?.puntosIniciales,
+            puntosRedimidosHoy: res?.puntosRedimidosHoy,
           });
         }
       })
@@ -94,7 +100,9 @@ export default function usePuntos() {
     return () =>
       setPuntos({
         cantidadPuntosDisponibles: 0,
-        cantidadPuntosRedimidos: 0,
+        puntosAcumuladosHoy: 0,
+        puntosIniciales: 0,
+        puntosRedimidosHoy:0
       });
   }, []);
 
