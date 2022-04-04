@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import SingleBar from '../component/SingleBar/SingleBar';
 import { formatNumber, shortName } from '../helpers/format';
+import usepuntosVencer from '../Hook/usePuntosAVencer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,12 +58,7 @@ export default function Puntos() {
   const user = JSON.parse(localStorage.getItem('user')!);
   const puntos = JSON.parse(localStorage.getItem('puntos')!);
 
-  const [list, setList] = useState([
-    { data: 15, label: 'hoy' },
-    { data: 80, label: '+1' },
-    { data: 200, label: '+3' },
-    { data: 344, label: '+5' },
-    { data: 455, label: '+7' }])
+  const { openPuntosVencerError, setOpenPuntosVencerrror, msnPuntosVencerError, dataVencer } = usepuntosVencer()
 
   return (
     <Box p={2} className={classes.root}>
@@ -231,11 +227,11 @@ export default function Puntos() {
                   component="p"
                   className={classes.vence}
                 >
-                  {list[list.length -1].data}
+                  {dataVencer[dataVencer.length - 1].data}
                 </Typography>
-                <div style={{ display: "flex", justifyContent:"flex-end" }}>
-                  {list.map((e, i) => {
-                    const y = max- (e.data * max / list[list.length -1].data );
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  {dataVencer.map((e, i) => {
+                    const y = max - (e.data * max / dataVencer[dataVencer.length - 1].data);
                     return (
                       <SingleBar
                         key={i}
@@ -248,10 +244,10 @@ export default function Puntos() {
                       />
                     );
                   })}
-                  <div style={{ display: "flex", alignSelf:"flex-end" }}>
-                  <Typography style={{ lineHeight:1 }} variant="h5" align="right" component="p">
-                  dias
-                </Typography>
+                  <div style={{ display: "flex", alignSelf: "flex-end" }}>
+                    <Typography style={{ lineHeight: 1 }} variant="h5" align="right" component="p">
+                      dias
+                    </Typography>
                   </div>
                 </div>
               </Box>

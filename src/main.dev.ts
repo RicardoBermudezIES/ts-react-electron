@@ -33,6 +33,7 @@ import { visualizarPuntosDia } from './servicios/visualizarPuntosDia';
 import { confirmarPeticion } from './servicios/confirmarPeticion';
 import { crearSolicitud } from './servicios/crearSolicitud';
 import { todasSolicitudes } from './servicios/todasSolicitudes';
+import { visualizarPuntosVencer } from './servicios/PuntosAVencer';
 
 const ipc = ipcMain;
 
@@ -197,6 +198,13 @@ ipc.handle('fidelizarMaquina', async (_event, arg) => {
 // VisualizarPuntos
 ipc.handle('visualizarPuntos', async (_event, arg) => {
   const res = await visualizarPuntos(arg);
+  console.log(res);
+  return res;
+});
+
+// visualizarPuntosVencer
+ipc.handle('visualizarPuntosVencer', async (_event, arg) => {
+  const res = await visualizarPuntosVencer(arg);
   console.log(res);
   return res;
 });
