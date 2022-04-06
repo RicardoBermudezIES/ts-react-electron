@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import Odometer from 'react-odometerjs';
 import Alert from '../component/Alert/Alert';
+import ChangePassowrd from '../component/ChangePassword';
 import NavButton from '../component/NavButton';
 import useCloseSession from '../Hook/useCloseSession';
 import usePuntos from '../Hook/usePuntos';
@@ -138,6 +139,7 @@ function Home() {
                 >
                   {isShow && user ? user?.nombre : ''}
                 </Typography>
+                <Box display="flex" flexDirection="row" alignItems="flex-end" justifyContent="space-between">
                 <Button
                   size="small"
                   onClick={() => setIsShow(!isShow)}
@@ -146,6 +148,8 @@ function Home() {
                 >
                   {isShow ? 'Ocultar nombre' : 'Mostrar nombre'}
                 </Button>
+                <ChangePassowrd />
+                </Box>
               </Box>
             </Grid>
           </Grid>

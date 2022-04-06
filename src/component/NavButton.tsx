@@ -46,7 +46,7 @@ export default function NavButton() {
                 <BarIcon />
                 <Typography variant="h5" style={{ color: 'white' }}>
                   {' '}
-                  Bar{' '}
+                  Redención{' '}
                 </Typography>
               </Button>
             </Grid>
