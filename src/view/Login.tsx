@@ -209,7 +209,7 @@ function Login() {
           >
             <BarIcon />
             <Typography variant="h6" style={{ color: 'white' }}>
-              Bar
+              Redención
             </Typography>
           </Button>
         </Grid>
