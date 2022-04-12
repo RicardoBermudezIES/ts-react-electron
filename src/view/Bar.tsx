@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   item: {
     minWidth: 300,
     maxWidth: 300,
-    height: '250px',
+    height: 250,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -170,14 +170,18 @@ function Bar(): ReactElement {
                     onClick={() => history.push(`/producto/${c}`)}
                     key={c}
                     className={classes.item}
-                    style={{
-                      background: `url(${__dirname}/../assets/images/categorias/${c}.png)`,
-                      objectFit: 'cover',
-                      backgroundSize: 'cover',
-                      backgroundRepeat: 'no-repeat',
-                      backdropFilter: 'opacity(50%)',
-                    }}
                   >
+                    <div style={{
+                      height: 200,
+                      width:250,
+                      background: `url(${__dirname}/../assets/images/categorias/${c}.png)`,
+
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'center',
+                      backdropFilter: 'opacity(50%)',
+                    }}>
+
+                    </div>
                     <CardActions className={classes.cardAction}>
                       <Grid container justify="center">
                         <Grid item lg={12} style={{ width: '100%' }}>
