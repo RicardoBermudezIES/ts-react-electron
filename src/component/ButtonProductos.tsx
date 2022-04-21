@@ -157,7 +157,7 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
                 <Button
                   disabled={
                     user === null ||
-                    !(puntos?.cantidadPuntosDisponibles >= p?.puntosParaCanjear)
+                    !(Number(puntos?.cantidadPuntosDisponibles) >= Number(p?.puntosParaCanjear))
                   }
                   onClick={() => doRedimir(p?.pk)}
                   variant="contained"
