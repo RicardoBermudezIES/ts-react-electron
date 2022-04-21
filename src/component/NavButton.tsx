@@ -21,7 +21,7 @@ export default function NavButton() {
     <>
       <Grid justify="flex-end" container spacing={1}>
             <Grid item>
-              <Button style={{ display: 'grid' }} onClick={goPuntos}>
+              <Button style={{ display: 'grid', justifyItems:'center' }} onClick={goPuntos}>
                 <PuntosIcon />
                 <Typography variant="h5" style={{ color: 'white' }}>
                   {' '}
@@ -30,7 +30,7 @@ export default function NavButton() {
               </Button>
             </Grid>
             <Grid item>
-              <Button style={{ display: 'grid', opacity: 0.5 }}>
+              <Button style={{ display: 'grid', opacity: 0.5, justifyItems:'center' }}>
                 <BilleteraIcon />
                 <Typography variant="h5" style={{ color: 'white' }}>
                   {' '}
@@ -42,7 +42,7 @@ export default function NavButton() {
               <ButtonHelper />
             </Grid>
             <Grid item>
-              <Button onClick={goBar} style={{ display: 'grid' }}>
+              <Button onClick={goBar} style={{ display: 'grid', justifyItems:'center' }}>
                 <BarIcon />
                 <Typography variant="h5" style={{ color: 'white' }}>
                   {' '}

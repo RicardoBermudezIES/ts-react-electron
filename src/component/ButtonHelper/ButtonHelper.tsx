@@ -11,7 +11,7 @@ function ButtonHelper(): ReactElement {
   return (
     <>
       {hasSolicitudes() ? (
-        <Button style={{ display: 'grid' }} disabled>
+        <Button style={{  display: 'grid', justifyItems:'center' }} disabled>
           <PhoneIcon color="#efb810" />
           <Typography variant="h6" style={{ color: 'white' }}>
             En camino
@@ -20,7 +20,7 @@ function ButtonHelper(): ReactElement {
       ) : (
         <Button
           disabled={hasPending}
-          style={{ display: 'grid' }}
+          style={{  display: 'grid', justifyItems:'center' }}
           className={`${hasPending === true ? 'inactive' : ''}`}
           onClick={solicitar}
         >
