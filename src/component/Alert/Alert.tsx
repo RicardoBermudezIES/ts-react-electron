@@ -9,7 +9,7 @@ import { Button, Typography } from '@material-ui/core';
 export default function Alert({ open, onClose, message }) {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle id="alert-dialog-title">Error</DialogTitle>
+      <DialogTitle id="alert-dialog-title">MENSAJE</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           <Typography variant="h5"> {message} </Typography>
