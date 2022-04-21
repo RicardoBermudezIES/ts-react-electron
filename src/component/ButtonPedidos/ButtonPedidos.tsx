@@ -110,6 +110,7 @@ export default function ButtonPedidos(): ReactElement {
   };
 
   const CancelPedido = (pk: string) => {
+    
     cancelarPeticion(pk);
     getListProducts();
   };

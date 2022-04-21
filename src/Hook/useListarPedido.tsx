@@ -89,7 +89,6 @@ export default function useListarPedido() {
       token: localToken,
       puk,
     };
-
     ipc.send('comprar-productos', args);
   };
 
@@ -130,6 +129,7 @@ export default function useListarPedido() {
       puk: product?.idPeticion,
     };
 
+    
     ipc.send('anular-peticiones', args);
   };
 
@@ -187,6 +187,7 @@ export default function useListarPedido() {
 
   useEffect(() => {
     ipc.on('comprar-productos', (_event, arg) => {
+      
       // eslint-disable-next-line no-console
 
       if (arg?.statusDTO?.code !== '00') {
