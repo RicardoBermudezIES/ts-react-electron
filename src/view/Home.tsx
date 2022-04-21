@@ -8,6 +8,7 @@ import ChangePassowrd from '../component/ChangePassword';
 import NavButton from '../component/NavButton';
 import useCloseSession from '../Hook/useCloseSession';
 import usePuntos from '../Hook/usePuntos';
+import { Iclave } from '../types/clave';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -148,7 +149,11 @@ function Home() {
                 >
                   {isShow ? 'Ocultar nombre' : 'Mostrar nombre'}
                 </Button>
-                <ChangePassowrd />
+                
+                {
+                  user?.clave === Iclave.FIJA ? <ChangePassowrd /> : null
+                }
+                
                 </Box>
               </Box>
             </Grid>
