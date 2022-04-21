@@ -27,6 +27,8 @@ import {
 } from '@material-ui/icons';
 import Keyboard from 'react-simple-keyboard';
 import React, { ReactElement, RefObject, useRef, useState } from 'react';
+import useChangePassowrdSet from '../Hook/useChangePassSet';
+import Alert from './Alert/Alert';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,8 +101,10 @@ const useStyles = makeStyles((theme) => ({
 export default function ChangePassowrd(): ReactElement {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-
+  const [errorPassword, setErrorPassword] = React.useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+  const [showPassword3, setShowPassword3] = useState(false);
   const [layoutName, setLayoutName] = useState('shift');
   const [inputName, setInputName] = useState();
   const [keyboardOpen, setkeyboardOpen] = useState(false);
@@ -116,6 +120,13 @@ export default function ChangePassowrd(): ReactElement {
     confirmPassword: '',
   });
 
+  const {
+    callBackChangePassowrd,
+    messageError,
+    openError,
+    setOpenError,
+  } = useChangePassowrdSet();
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -124,8 +135,31 @@ export default function ChangePassowrd(): ReactElement {
     setOpen(false);
   };
 
+  const handleSend = () => {
+    console.log(inputs?.newPassword === inputs?.confirmPassword, inputs?.newPassword ,  inputs?.confirmPassword);
+    
+    if (inputs?.newPassword === inputs?.ConfirmPassword) {
+      callBackChangePassowrd(inputs?.password, inputs?.newPassword);
+      handleClose();
+      closeKeyboard();
+      return;
+    }
+    if (inputs?.newPassword !== inputs?.ConfirmPassword) {
+      setErrorPassword(true);
+      return;
+    }
+
+    
+  };
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+  const handleClickShowPassword2 = () => {
+    setShowPassword2(!showPassword2);
+  };
+  const handleClickShowPassword3 = () => {
+    setShowPassword3(!showPassword3);
   };
 
   const handleMouseDownPassword = (event) => {
@@ -177,7 +211,6 @@ export default function ChangePassowrd(): ReactElement {
     setkeyboardOpen(true);
   };
 
-
   return (
     <div style={{ marginLeft: 4 }}>
       <Button
@@ -189,7 +222,12 @@ export default function ChangePassowrd(): ReactElement {
       >
         Cambiar contraseña
       </Button>
-      <Dialog open={open} onClose={handleClose} maxWidth="xs"   style={{ left: -500 }}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="xs"
+        style={{ left: -500 }}
+      >
         <DialogTitle>Cambiar contraseña</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -248,7 +286,7 @@ export default function ChangePassowrd(): ReactElement {
                   fullWidth
                   style={{ height: '100%' }}
                   name="newPassword"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword2 ? 'text' : 'password'}
                   value={getInputValue('newPassword')}
                   onChange={onChangeInput}
                   onFocus={() => setActiveInput('newPassword')}
@@ -256,10 +294,9 @@ export default function ChangePassowrd(): ReactElement {
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
+                        onClick={handleClickShowPassword2}
                       >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                        {showPassword2 ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
                   }
@@ -281,7 +318,7 @@ export default function ChangePassowrd(): ReactElement {
                   fullWidth
                   style={{ height: '100%' }}
                   name="ConfirmPassword"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword3 ? 'text' : 'password'}
                   value={getInputValue('ConfirmPassword')}
                   onChange={onChangeInput}
                   onFocus={() => setActiveInput('ConfirmPassword')}
@@ -289,10 +326,10 @@ export default function ChangePassowrd(): ReactElement {
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
+                        onClick={handleClickShowPassword3}
                         onMouseDown={handleMouseDownPassword}
                       >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                        {showPassword3 ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
                   }
@@ -300,10 +337,13 @@ export default function ChangePassowrd(): ReactElement {
               </FormControl>
             </Grid>
           </DialogContentText>
+          {errorPassword ? (
+            <span> Las contraseñas no estan iguales</span>
+          ) : null}
         </DialogContent>
         <DialogActions>
           <Button
-          size="small"
+            size="small"
             onClick={handleClose}
             variant="contained"
             color="primary"
@@ -312,8 +352,8 @@ export default function ChangePassowrd(): ReactElement {
             Cerrar
           </Button>
           <Button
-          size="small"
-            onClick={handleClose}
+            size="small"
+            onClick={handleSend}
             variant="contained"
             color="secondary"
             autoFocus
@@ -322,6 +362,14 @@ export default function ChangePassowrd(): ReactElement {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {messageError ? (
+        <Alert
+          open={openError}
+          onClose={() => setOpenError(false)}
+          message={messageError}
+        />
+      ) : null}
 
       <Grid
         className={`keyboardContainer-login ${!keyboardOpen ? 'hidden' : ''}`}
