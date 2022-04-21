@@ -34,6 +34,14 @@ const useStyles = makeStyles(() => ({
   },
   login: {},
   input: {},
+  content: {
+    display: 'grid',
+    justifyContent: 'center',
+    justifyItems:'center',
+    '& span.MuiButton-label':  {
+      justifyItems:'center',
+    }
+  },
 }));
 
 function Login() {
@@ -205,7 +213,7 @@ function Login() {
         <Grid item lg={2} md={2} sm={2} xs={2}>
           <Button
             onClick={() => history.push('/bar')}
-            style={{  display: 'grid', justifyItems:'center', alignItems:'center' }}
+            className={classes.content}
           >
             <BarIcon />
             <Typography variant="h6" style={{ color: 'white' }}>
