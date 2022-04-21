@@ -205,7 +205,7 @@ function Login() {
         <Grid item lg={2} md={2} sm={2} xs={2}>
           <Button
             onClick={() => history.push('/bar')}
-            style={{ display: 'grid' }}
+            style={{  display: 'grid', justifyItems:'center', alignItems:'center' }}
           >
             <BarIcon />
             <Typography variant="h6" style={{ color: 'white' }}>
