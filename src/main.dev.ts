@@ -34,6 +34,7 @@ import { confirmarPeticion } from './servicios/confirmarPeticion';
 import { crearSolicitud } from './servicios/crearSolicitud';
 import { todasSolicitudes } from './servicios/todasSolicitudes';
 import { visualizarPuntosVencer } from './servicios/PuntosAVencer';
+import { changePassowrdSet } from './servicios/changePasswordfija';
 
 const ipc = ipcMain;
 
@@ -250,6 +251,8 @@ ipc.handle('listar-peticiones', async (_event, arg) => {
 // consulta anular peticiones
 ipc.on('anular-peticiones', async (event, arg) => {
   const res = await anularPeticion(arg);
+  console.log(res);
+  
   event.reply('anular-peticiones', res);
 });
 
@@ -279,6 +282,13 @@ ipc.handle('crearSolicitud', async (_event, arg) => {
 /// todas-solicitudes
 ipc.handle('todas-solicitudes', async (_event, arg) => {
   const res = await todasSolicitudes(arg);
+  console.log(res);
+  return res;
+});
+
+/// change-password
+ipc.handle('change-password', async (_event, arg) => {
+  const res = await changePassowrdSet(arg);
   console.log(res);
   return res;
 });
