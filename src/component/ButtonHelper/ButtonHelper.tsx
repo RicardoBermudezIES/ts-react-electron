@@ -14,6 +14,15 @@ const useStyles = makeStyles(() => ({
       justifyItems:'center',
     }
   },
+  contentInactive: {
+    display: 'grid',
+    justifyContent: 'center',
+    justifyItems:'center',
+    opacity: 0.5,
+    '& span.MuiButton-label':  {
+      justifyItems:'center',
+    }
+  }
 }));
 
 function ButtonHelper(): ReactElement {
@@ -32,8 +41,8 @@ function ButtonHelper(): ReactElement {
       ) : (
         <Button
           disabled={hasPending}
-
-          className={ `${hasPending === true ? 'inactive' : ''} classes.content`}
+          style={{ display:'grid' }}
+          className={ `${hasPending === true ? classes.contentInactive : ''}`}
           onClick={solicitar}
         >
           <PhoneIcon color="" />

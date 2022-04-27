@@ -1,11 +1,5 @@
 import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Chip,
-  Dialog,
+  Button, Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
@@ -16,17 +10,14 @@ import {
   Input,
   InputAdornment,
   InputLabel,
-  makeStyles,
-  Typography,
+  makeStyles
 } from '@material-ui/core';
 import {
-  AlarmAddRounded,
-  SendRounded,
   Visibility,
-  VisibilityOff,
+  VisibilityOff
 } from '@material-ui/icons';
-import Keyboard from 'react-simple-keyboard';
 import React, { ReactElement, RefObject, useRef, useState } from 'react';
+import Keyboard from 'react-simple-keyboard';
 import useChangePassowrdSet from '../Hook/useChangePassSet';
 import Alert from './Alert/Alert';
 
@@ -402,7 +393,7 @@ export default function ChangePassowrd(): ReactElement {
             shift: ['1 2 3', '4 5 6', '7 8 9', '{shift} 0 {bksp}'],
           }}
           display={{
-            '{bksp}': 'del',
+            '{bksp}': 'Borrar',
             '{shift1}': '123',
             '{shift}': 'abc',
           }}

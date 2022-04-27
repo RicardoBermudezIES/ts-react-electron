@@ -1,12 +1,19 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable import/prefer-default-export */
-import React from 'react';
-import { Button, Chip, Grid, makeStyles, Typography } from '@material-ui/core';
+import {
+  Button,
+  Chip, Grid,
+  makeStyles, Typography
+} from '@material-ui/core';
 import { AlarmAddRounded, SendRounded } from '@material-ui/icons';
+import React from 'react';
 import { formatMoney, formatNumber } from '../helpers/format';
+import useDinamica from '../Hook/useDinamica';
 import useListarPedido from '../Hook/useListarPedido';
+import { Iclave } from '../types/clave';
 import { IProduct } from '../types/Products';
-
+import ValidarClaveDinamicaComponent from './ClaveDinamica/ClaveDinamica';
+import ValidarClaveFijaComponent from './validarClaveFija/ValidarClaveFija';
 interface Props {
   p: IProduct;
 }
@@ -35,6 +42,39 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
   const user = JSON.parse(localStorage.getItem('user')!);
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const puntos = JSON.parse(localStorage.getItem('puntos')!);
+
+  const [openFija, setOpenFija] = React.useState(false);
+
+  const [openDinamica, setOpenDinamica] = React.useState(false);
+
+  const [pk, setPk] = React.useState('');
+
+  const {
+    callbackSolictarClave
+  } = useDinamica();
+
+  const handleCloseFija = () => {
+    setOpenFija(false);
+  };
+
+  const handleCloseDinamica = () => {
+    setOpenDinamica(false);
+  };
+
+  const redimir = (pk: string) => {
+    setPk(pk);
+    if (user?.clave === Iclave.FIJA) {
+      setOpenFija(true);
+    }
+    if (user?.clave === Iclave.DINAMICA) {
+      callbackSolictarClave()
+      setOpenDinamica(true);
+    }
+    if (user?.clave === Iclave.NINGUNA) {
+      doRedimir(p?.pk);
+    }
+  };
+
   return (
     <>
       {hasQueque(p?.pk, 'EN_COLA') ? (
@@ -157,9 +197,12 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
                 <Button
                   disabled={
                     user === null ||
-                    !(Number(puntos?.cantidadPuntosDisponibles) >= Number(p?.puntosParaCanjear))
+                    !(
+                      Number(puntos?.cantidadPuntosDisponibles) >=
+                      Number(p?.puntosParaCanjear)
+                    )
                   }
-                  onClick={() => doRedimir(p?.pk)}
+                  onClick={() => redimir(p?.pk)}
                   variant="contained"
                   color="secondary"
                   size="medium"
@@ -205,6 +248,11 @@ export const ButtonProductos = ({ p }: Props): JSX.Element => {
               </Grid>
             </Grid>
           </Grid>
+
+          <ValidarClaveFijaComponent  pk={pk} openFija={openFija} handleCloseFija={handleCloseFija} />
+
+         <ValidarClaveDinamicaComponent pk={pk} openDinamica={openDinamica} handleCloseDinamica={handleCloseDinamica}   />
+         
         </>
       )}
     </>

@@ -52,7 +52,7 @@ export default function NavButton() {
             <BilleteraIcon />
             <Typography variant="h5" style={{ color: 'white' }}>
               {' '}
-              Billtera{' '}
+              Billetera{' '}
             </Typography>
           </Button>
         </Grid>
