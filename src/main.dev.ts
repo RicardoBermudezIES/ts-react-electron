@@ -35,6 +35,8 @@ import { crearSolicitud } from './servicios/crearSolicitud';
 import { todasSolicitudes } from './servicios/todasSolicitudes';
 import { visualizarPuntosVencer } from './servicios/PuntosAVencer';
 import { changePassowrdSet } from './servicios/changePasswordfija';
+import { ValidarClaveFija } from './servicios/validarClaveFija';
+import { reenviarClaveDinamica } from './servicios/reenviarClaveDinamica';
 
 const ipc = ipcMain;
 
@@ -236,8 +238,9 @@ ipc.on('comprar-productos', async (event, arg) => {
 ipc.on('realizar-peticion', async (event, arg) => {
   let res;
   // eslint-disable-next-line prefer-const
+  console.log('redimir',arg);
   res = await realizarPeticion(arg);
-  console.log(res);
+  console.log('redimir',res);
   event.reply('realizar-peticion', res);
 });
 
@@ -289,6 +292,19 @@ ipc.handle('todas-solicitudes', async (_event, arg) => {
 /// change-password
 ipc.handle('change-password', async (_event, arg) => {
   const res = await changePassowrdSet(arg);
+  console.log(res);
+  return res;
+});
+
+/// Validar Clave Fija
+ipc.handle('validar-fija', async (_event, arg) => {
+  const res = await ValidarClaveFija(arg);
+  console.log(res);
+  return res;
+});
+//reenviarClaveDinamica
+ipc.handle('reenviar-dinamica', async (_event, arg) => {
+  const res = await reenviarClaveDinamica(arg);
   console.log(res);
   return res;
 });
