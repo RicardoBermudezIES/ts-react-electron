@@ -58,7 +58,7 @@ function Home() {
 
   const classes = useStyles();
   return (
-    <Box height="100vh" p={1}>
+    <Box  position="relativo" height="100vh" p={1}>
       <Box
         position="absolute"
         top="-20%"
@@ -77,7 +77,7 @@ function Home() {
             variant="contained"
             color="secondary"
           >
-            Salir
+            Cerrar Sesión
           </Button>
         </Grid>
       </Grid>
@@ -110,7 +110,7 @@ function Home() {
                   />
                 ) : (
                   <Typography variant="body2" component="span" align="right">
-                    cargando puntos
+                    ...
                   </Typography>
                 )}
               </Typography>
@@ -132,7 +132,7 @@ function Home() {
             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
               <Box display="flex" flexDirection="column" alignItems="flex-end" justifyContent="space-between" p={2}>
                 <Typography
-                  variant="h4"
+                  variant="h3"
                   component="h2"
                   color="secondary"
                   align="right"
@@ -144,10 +144,10 @@ function Home() {
                 <Button
                   size="small"
                   onClick={() => setIsShow(!isShow)}
-                  variant="contained"
+                  variant="text"
                   color="secondary"
                 >
-                  {isShow ? 'Ocultar nombre' : 'Mostrar nombre'}
+                  {isShow ? 'Ocultar' : 'Mostrar'}
                 </Button>
                 
                 {

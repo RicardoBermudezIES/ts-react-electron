@@ -58,7 +58,12 @@ export default function Puntos() {
   const user = JSON.parse(localStorage.getItem('user')!);
   const puntos = JSON.parse(localStorage.getItem('puntos')!);
 
-  const { openPuntosVencerError, setOpenPuntosVencerrror, msnPuntosVencerError, dataVencer } = usepuntosVencer()
+  const {
+    openPuntosVencerError,
+    setOpenPuntosVencerrror,
+    msnPuntosVencerError,
+    dataVencer,
+  } = usepuntosVencer();
 
   return (
     <Box p={2} className={classes.root}>
@@ -124,7 +129,7 @@ export default function Puntos() {
                     >
                       {puntos?.puntosIniciales
                         ? formatNumber(puntos?.puntosIniciales)
-                        : 'cargando..'}
+                        : '0'}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -149,7 +154,7 @@ export default function Puntos() {
                     >
                       {puntos?.puntosAcumuladosHoy
                         ? formatNumber(puntos?.puntosAcumuladosHoy)
-                        : 'cargando..'}
+                        : '0'}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -172,10 +177,10 @@ export default function Puntos() {
                       component="p"
                       style={{ fontWeight: 'normal' }}
                     >
-                      -{' '}
+                      {puntos?.puntosRedimidosHoy > 0 ? '-' : null}
                       {puntos?.puntosRedimidosHoy
                         ? formatNumber(puntos?.puntosRedimidosHoy)
-                        : 'cargando..'}
+                        : '0'}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -205,7 +210,7 @@ export default function Puntos() {
                     >
                       {puntos?.cantidadPuntosDisponibles
                         ? formatNumber(puntos?.cantidadPuntosDisponibles)
-                        : 'cargando..'}
+                        : '0'}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -219,9 +224,10 @@ export default function Puntos() {
                 justifyItems="center"
               >
                 <Typography variant="h5" align="right" component="p">
-                  Puntos a vencer
+                  Puntos a vencer 
                 </Typography>
                 <Typography
+                  style={{ marginBottom: 10 }}
                   variant="h3"
                   align="right"
                   component="p"
@@ -229,9 +235,11 @@ export default function Puntos() {
                 >
                   {dataVencer[dataVencer.length - 1].data}
                 </Typography>
-                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {dataVencer.map((e, i) => {
-                    const y = max - (e.data * max / dataVencer[dataVencer.length - 1].data);
+                    const y =
+                      max -
+                      (e.data * max) / dataVencer[dataVencer.length - 1].data;
                     return (
                       <SingleBar
                         key={i}
@@ -244,8 +252,13 @@ export default function Puntos() {
                       />
                     );
                   })}
-                  <div style={{ display: "flex", alignSelf: "flex-end" }}>
-                    <Typography style={{ lineHeight: 1 }} variant="h5" align="right" component="p">
+                  <div style={{ display: 'flex', alignSelf: 'flex-end' }}>
+                    <Typography
+                      style={{ lineHeight: 1 }}
+                      variant="h5"
+                      align="right"
+                      component="p"
+                    >
                       dias
                     </Typography>
                   </div>

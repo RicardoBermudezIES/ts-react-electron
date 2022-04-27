@@ -339,7 +339,7 @@ function Login() {
             shift: ['1 2 3', '4 5 6', '7 8 9', '{shift} 0 {bksp}'],
           }}
           display={{
-            '{bksp}': 'del',
+            '{bksp}': 'Borrar',
             '{shift1}': '123',
             '{shift}': 'abc',
           }}
