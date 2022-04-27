@@ -207,8 +207,8 @@ export default function Io() {
 
           <Box id="content" className={classes.root}>
             {Ios
-              ? itemsSourcesToDisplay().map((p) => (
-                  <Card key={p.nombre} className={classes.item}>
+              ? itemsSourcesToDisplay().map((p, i) => (
+                  <Card key={p.nombre+i} className={classes.item}>
                     <CardContent className={classes.content}>
                       <CardMedia
                         className={classes.cover}
@@ -261,7 +261,7 @@ export default function Io() {
         </DialogContent>
         <DialogActions>
           <Button onClick={CloseModalBuy} color="primary">
-            Volver al home
+            Volver al  {user?.nombre ? 'Inicio': 'Registro'}
           </Button>
           <Button
             onClick={() => setBuyModal(false)}
@@ -293,7 +293,7 @@ export default function Io() {
             color="secondary"
             variant="contained"
           >
-            Volver al home
+            Volver al  {user?.nombre ? 'Inicio': 'Registro'}
           </Button>
           <Button
             onClick={() => setRedimirModal(false)}
