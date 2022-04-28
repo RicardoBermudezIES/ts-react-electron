@@ -1,5 +1,5 @@
 export const formatNumber = (number: number | string) =>
-  new Intl.NumberFormat().format(Number(number));
+  new Intl.NumberFormat('es-CO').format(Number(number));
 
 export const FormatDay = (date: Date): string => {
   const newDate = new Date(date);

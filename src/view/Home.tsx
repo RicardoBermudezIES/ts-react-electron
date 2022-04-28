@@ -19,7 +19,11 @@ const useStyles = makeStyles(() => ({
     height: '90%',
   },
   NumberPoint: {
-    fontWeight: 900,
+    display:'flex',
+    fontWeight: 600,
+    marginRight:-70,
+    fontSize:45
+
   },
 }));
 
@@ -62,7 +66,7 @@ function Home() {
       <Box
         position="absolute"
         top="-20%"
-        left="-33%"
+        left="-30%"
         zIndex="-9999"
         minHeight="160vh"
         width="70%"
@@ -86,7 +90,7 @@ function Home() {
         direction="row"
         justify="space-between"
         alignItems="center"
-        spacing={2}
+        spacing={1}
         className={classes.grid}
       >
         <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
@@ -110,13 +114,13 @@ function Home() {
                   />
                 ) : (
                   <Typography variant="body2" component="span" align="right">
-                    ...
+                    0
                   </Typography>
                 )}
               </Typography>
             </Grid>
             <Grid item>
-              <Typography variant="h4" component="p">
+              <Typography style={{ marginRight:-70 }} variant="h4" component="p">
                 Puntos Totales{' '}
               </Typography>
             </Grid>
