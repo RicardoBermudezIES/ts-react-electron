@@ -140,9 +140,9 @@ function Home() {
                   component="h2"
                   color="secondary"
                   align="right"
-                  className={classes.NumberPoint}
+                  style={{ wordWrap: 'break-word', fontWeight: 800 }}
                 >
-                  {isShow && user ? user?.nombre : ''}
+                  {isShow && user ? user?.nombre : null}
                 </Typography>
                 <Box display="flex" flexDirection="row" alignItems="flex-end" justifyContent="space-between">
                 <Button

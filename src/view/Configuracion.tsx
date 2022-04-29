@@ -195,6 +195,7 @@ export default function Configuracion() {
         setOpen(true);
       }
       if (arg?.statusDTO?.code === '00') {
+        setErrorVinculacion('');
         setVinculacion(true);
         handleNext();
       }
