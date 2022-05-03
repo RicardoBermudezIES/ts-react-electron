@@ -104,6 +104,7 @@ function Login() {
 
   const onSubmit = () => {
     callBackFidelizar();
+    setkeyboardOpen(false);
   };
 
   const onChangeInput = (event: HTMLInputElement) => {

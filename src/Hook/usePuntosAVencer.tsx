@@ -5,7 +5,6 @@ const ipc = ipcRenderer;
 
 export default function usepuntosVencer() {
 
-  const [puntosVencer, setPuntosVencer] = useState([]);
   const [openPuntosVencerError, setOpenPuntosVencerrror] = useState(false);
   const [msnPuntosVencerError, setMsnPuntosVencerError] = useState('');
 
@@ -16,14 +15,15 @@ export default function usepuntosVencer() {
     { data: 0, label: '+20' },
     { data: 0, label: '+30' }
   ]);
-  const transformPuntos = () => {
-    setDataVencer([
-      { data: puntosVencer[0], label: 'hoy' },
-      { data: puntosVencer[1], label: '+1' },
-      { data: puntosVencer[2], label: '+10' },
-      { data: puntosVencer[3], label: '+20' },
-      { data: puntosVencer[4], label: '+30' }])
-  }
+  // const transformPuntos = () => {
+  //   setDataVencer([
+  //     { data: puntosVencer[0], label: 'hoy' },
+  //     { data: puntosVencer[1], label: '+1' },
+  //     { data: puntosVencer[2], label: '+10' },
+  //     { data: puntosVencer[3], label: '+20' },
+  //     { data: puntosVencer[4], label: '+30' }
+  //   ])
+  // }
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const user = JSON.parse(localStorage.getItem('user')!);
@@ -53,7 +53,7 @@ export default function usepuntosVencer() {
         // eslint-disable-next-line no-console
         console.log(res);
         if (res?.statusDTO?.code === '00') {
-          setPuntosVencer(res?.puntosVencer);
+          setDataVencer(res?.puntosVencer);
         }
       })
       .catch((err) => {
@@ -71,18 +71,11 @@ export default function usepuntosVencer() {
   useEffect(() => {
     if (user !== null) {
       callback();
-      transformPuntos();
     }
     return () =>
-      setPuntosVencer([]);
+    setDataVencer([]);
   }, []);
 
-  useEffect(() => {
-
-    transformPuntos();
-
-
-  }, [puntosVencer]);
 
   return { openPuntosVencerError, setOpenPuntosVencerrror, msnPuntosVencerError, dataVencer };
 }

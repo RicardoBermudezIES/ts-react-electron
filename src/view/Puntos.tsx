@@ -224,7 +224,7 @@ export default function Puntos() {
                 justifyItems="center"
               >
                 <Typography variant="h5" align="right" component="p">
-                  Puntos a vencer 
+                  Puntos a vencer en 30 dias
                 </Typography>
                 <Typography
                   style={{ marginBottom: 10 }}
@@ -233,21 +233,21 @@ export default function Puntos() {
                   component="p"
                   className={classes.vence}
                 >
-                  {dataVencer[dataVencer.length - 1].data}
+                  {dataVencer[dataVencer.length - 1]?.data}
                 </Typography>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {dataVencer.map((e, i) => {
-                    const y =
-                      max -
-                      (e.data * max) / dataVencer[dataVencer.length - 1].data;
+                    const y =  max - (e?.data * max) / dataVencer[dataVencer.length - 1]?.data;
+                    //max - ((max * e?.data) / 100);
+
                     return (
                       <SingleBar
                         key={i}
                         width="40px"
                         height="150px"
                         color="#EF2425"
-                        label={e.data}
-                        percentage={`${e.label}`}
+                        label={e?.data}
+                        percentage={`${e?.label}`}
                         data={`M 0 ${max} L 0  ${y} L 60 ${y} l 60 ${max} Z`}
                       />
                     );
