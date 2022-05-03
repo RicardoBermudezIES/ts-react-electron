@@ -205,10 +205,6 @@ body {
   margin: 0;
 }
 
-.simple-keyboard.hg-layout-default .hg-button.hg-red {
-  background: #ff0000b3;
-  color: white;
-}
 
 .keyboardContainer {
   position: relative;
