@@ -187,7 +187,7 @@ export default function Form1({ setInputs, inputs, setIsSync }) {
             </Grid>
           </Grid>
         </form>
-        <Grid className={`keyboardContainer ${!keyboardOpen ? 'hidden' : ''}`}>
+        <Grid className={`keyboardContainer-config ${!keyboardOpen ? 'hidden' : ''}`}>
           <button className="closeKeyBoard" onClick={closeKeyboard}>
             x
           </button>

@@ -217,6 +217,7 @@ body {
   font-weight: 900;
   color: black;
   bottom: 85px;
+  font-size: 32px;
 }
 
 .keyboardContainer-config {
@@ -246,6 +247,11 @@ body {
 }
 
 .hg-button {
+  font-size: 2em;
+}
+
+
+.keyboardContainer-config > .hg-button {
   font-size: 1.2em;
 }
 
